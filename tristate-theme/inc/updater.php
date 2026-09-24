@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /** GitHub "owner/repo" the releases are published to. */
-define( 'TRISTATE_GITHUB_REPO', 'Fagbayibo/tristate-theme' );
+define( 'TRISTATE_GITHUB_REPO', 'Fagbayibo/tristate-wp-theme' );
 
 /** Name of the zip the release workflow attaches (never GitHub's "Source code" zip). */
 define( 'TRISTATE_RELEASE_ASSET', 'tristate-theme.zip' );
