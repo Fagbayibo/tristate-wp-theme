@@ -4,7 +4,8 @@
 	"description": "Tristate Healthcare WordPress theme — local development via WordPress Playground",
 	"scripts": {
 		"dev": "wp-playground-cli server --port=9400 --mount-dir ./tristate-theme /wordpress/wp-content/themes/tristate-theme --mount-dir ./dev /dev-seed --blueprint=./blueprint.json",
-		"zip": "node dev/make-zip.js"
+		"zip": "node dev/make-zip.js",
+		"release": "node dev/release.js"
 	},
 	"devDependencies": {
 		"@wp-playground/cli": "^3.1.54",
