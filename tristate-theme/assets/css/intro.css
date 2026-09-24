@@ -1,0 +1,118 @@
+/* ==========================================================================
+   Intro statement — Figma 25:4
+   ========================================================================== */
+
+.intro {
+	padding-block: 120px;
+	background: var(--color-white);
+}
+
+.intro .container {
+	display: flex;
+	flex-direction: column;
+	gap: 56px;
+}
+
+.intro__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 80px;
+}
+
+.intro__row .section-label {
+	flex-shrink: 0;
+	padding-top: 10px; /* optical alignment with the first line of the statement */
+}
+
+.intro__statement {
+	max-width: 1000px;
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: clamp(28px, 3.06vw, 44px);
+	line-height: 1.35;
+	color: var(--color-ink);
+}
+
+.intro__statement strong {
+	font-weight: 700;
+}
+
+.intro__statement em {
+	font-style: italic;
+	font-weight: 700;
+	color: var(--color-burgundy-600);
+}
+
+/* Word-scrub spans (added by animations.js) */
+.intro__statement .scrub-word {
+	display: inline;
+}
+
+/* Image row — widths 380 / 520 / 332, heights 340 / 420 / 300, bottom-aligned */
+.intro__images {
+	display: flex;
+	align-items: flex-end;
+	gap: 24px;
+}
+
+.intro__image {
+	position: relative;
+	margin: 0;
+	overflow: hidden;
+	border-radius: var(--radius-media);
+	background: var(--color-cream);
+}
+
+.intro__image--1 { flex: 380 1 0; aspect-ratio: 380 / 340; }
+.intro__image--2 { flex: 520 1 0; aspect-ratio: 520 / 420; }
+.intro__image--3 { flex: 332 1 0; aspect-ratio: 332 / 300; }
+
+.intro__image img {
+	position: absolute;
+	left: 0;
+	top: -8%;
+	width: 100%;
+	height: 116%; /* extra height gives parallax room without exposing edges */
+	object-fit: cover;
+}
+
+@media (max-width: 1080px) {
+	.intro {
+		padding-block: 96px;
+	}
+
+	.intro__row {
+		flex-direction: column;
+		gap: 24px;
+	}
+
+	.intro__row .section-label {
+		padding-top: 0;
+	}
+}
+
+@media (max-width: 760px) {
+	.intro {
+		padding-block: 72px;
+	}
+
+	.intro .container {
+		gap: 40px;
+	}
+
+	.intro__images {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 12px;
+	}
+
+	.intro__image--2 {
+		grid-column: 1 / -1;
+		order: -1;
+	}
+
+	.intro__image--1,
+	.intro__image--3 {
+		aspect-ratio: 4 / 5;
+	}
+}

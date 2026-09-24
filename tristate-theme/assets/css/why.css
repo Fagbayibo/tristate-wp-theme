@@ -1,0 +1,208 @@
+/* ==========================================================================
+   Why Tristate — Figma 25:8
+   Media box is 600 × 610 starting at x=760; children are placed in % of it.
+   ========================================================================== */
+
+.why {
+	padding-block: 110px;
+	background: var(--color-white);
+}
+
+.why__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 600px) minmax(0, 600px);
+	justify-content: space-between;
+	align-items: start;
+	gap: 80px;
+}
+
+.why__copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 28px;
+}
+
+.why__head {
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+}
+
+.why__lead {
+	max-width: 560px;
+	font-size: 17px;
+	line-height: 1.7;
+	color: var(--color-slate);
+}
+
+.why__values {
+	width: 100%;
+	max-width: 560px;
+}
+
+.why__value {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+	padding-block: 18px;
+	border-bottom: 1px solid rgba(27, 31, 36, 0.1);
+}
+
+.why__check {
+	display: grid;
+	flex-shrink: 0;
+	place-items: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--radius-pill);
+	background: var(--color-burgundy-600);
+	transition: transform var(--dur-base) var(--ease-out);
+}
+
+.why__value:hover .why__check {
+	transform: scale(1.12) rotate(-8deg);
+}
+
+.why__value-title {
+	display: block;
+	margin-bottom: 2px;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 19px;
+	line-height: normal;
+	color: var(--color-ink);
+}
+
+.why__value-text {
+	display: block;
+	font-size: 14px;
+	line-height: normal;
+	color: var(--color-slate);
+}
+
+/* Media collage ------------------------------------------------------------- */
+.why__media {
+	position: relative;
+	aspect-ratio: 600 / 610;
+}
+
+.why__pill {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 66.667%;           /* 400 / 600 */
+	aspect-ratio: 400 / 560;
+	margin: 0;
+	overflow: hidden;
+	border-radius: 200px;
+	background: var(--color-cream);
+}
+
+.why__pill img {
+	position: absolute;
+	left: 0;
+	top: -6%;
+	width: 100%;
+	height: 112%;
+	object-fit: cover;
+}
+
+.why__small {
+	position: absolute;
+	left: 56.667%;            /* 340 / 600 */
+	top: 47.541%;             /* 290 / 610 */
+	width: 43.333%;           /* 260 / 600 */
+}
+
+.why__small figure {
+	aspect-ratio: 260 / 320;
+	margin: 0;
+	overflow: hidden;
+	border: 10px solid var(--color-white);
+	border-radius: var(--radius-media);
+	background: var(--color-white);
+}
+
+.why__small img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 18px;
+}
+
+.why__badge {
+	position: absolute;
+	left: 65%;                /* 390 / 600 */
+	top: 6.557%;              /* 40 / 610 */
+	width: 25%;               /* 150 / 600 */
+	aspect-ratio: 1;
+}
+
+.why__badge-inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	border-radius: var(--radius-pill);
+	background: var(--color-burgundy-600);
+	box-shadow: 0 0 0 6px var(--color-white), 0 16px 40px rgba(135, 19, 32, 0.3); /* white ring separates it from the photo */
+	text-align: center;
+	animation: why-float 5s ease-in-out infinite;
+}
+
+.why__badge-num {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(26px, 2.36vw, 34px);
+	line-height: normal;
+	color: var(--color-white);
+}
+
+.why__badge-label {
+	width: 100px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--color-blush-100);
+}
+
+@keyframes why-float {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50%      { transform: translateY(-10px) rotate(4deg); }
+}
+
+@media (max-width: 1080px) {
+	.why {
+		padding-block: 88px;
+	}
+
+	.why__inner {
+		grid-template-columns: 1fr;
+		gap: 64px;
+	}
+
+	.why__media {
+		width: 100%;
+		max-width: 560px;
+		justify-self: center;
+	}
+}
+
+@media (max-width: 520px) {
+	.why__badge-label {
+		width: 76px;
+		font-size: 10px;
+	}
+
+	.why__small figure {
+		border-width: 6px;
+		border-radius: 18px;
+	}
+
+	.why__small img {
+		border-radius: 12px;
+	}
+}

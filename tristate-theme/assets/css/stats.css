@@ -1,0 +1,72 @@
+/* ==========================================================================
+   Stats band — Figma 25:7
+   ========================================================================== */
+
+.stats {
+	padding-block: 88px;
+	background: var(--color-burgundy-600);
+	color: var(--color-white);
+}
+
+.stats__list {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.stat {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.stat + .stat {
+	padding-left: 36px;
+	border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat__value {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(40px, 3.89vw, 56px);
+	line-height: normal;
+	color: var(--color-white);
+	white-space: nowrap;
+}
+
+.stat__label {
+	width: 120px;
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 1.4;
+	color: var(--color-blush-100);
+}
+
+@media (max-width: 1180px) {
+	.stats {
+		padding-block: 64px;
+	}
+
+	.stats__list {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 40px;
+	}
+
+	.stat:nth-child(odd) {
+		padding-left: 0;
+		border-left: 0;
+	}
+}
+
+@media (max-width: 520px) {
+	.stats__list {
+		grid-template-columns: 1fr;
+		row-gap: 28px;
+	}
+
+	.stat + .stat {
+		padding-left: 0;
+		padding-top: 28px;
+		border-left: 0;
+		border-top: 1px solid rgba(255, 255, 255, 0.2);
+	}
+}

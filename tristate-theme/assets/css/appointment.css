@@ -1,0 +1,350 @@
+/* ==========================================================================
+   Appointment booking — Figma 25:11
+   ========================================================================== */
+
+.appointment {
+	padding-block: 80px;
+	background: var(--color-cream);
+}
+
+.appointment__inner {
+	display: grid;
+	grid-template-columns: minmax(0, 640px) minmax(0, 600px);
+	justify-content: space-between;
+	align-items: center;
+	gap: 40px;
+}
+
+/* Image + hours card ---------------------------------------------------------- */
+.appointment__media {
+	position: relative;
+}
+
+.appointment__image {
+	position: relative;
+	height: 520px;
+	margin: 0;
+	overflow: hidden;
+	border-radius: 32px;
+	background: var(--color-night-card);
+}
+
+.appointment__image img {
+	position: absolute;
+	left: 0;
+	top: -5%;
+	width: 100%;
+	height: 110%;
+	object-fit: cover;
+}
+
+.appointment__hours {
+	position: absolute;
+	left: 32px;
+	top: calc(100% - 80px);
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 16px 24px 16px 20px;
+	border-radius: 20px;
+	background: var(--color-white);
+	box-shadow: 0 14px 30px rgba(77, 13, 20, 0.15);
+	line-height: normal;
+	white-space: nowrap;
+}
+
+.appointment__hours strong {
+	display: block;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--color-ink);
+}
+
+.appointment__hours strong + span {
+	font-size: 13px;
+	color: var(--color-slate);
+}
+
+.appointment__dot {
+	position: relative;
+	display: block;
+	width: 12px;
+	height: 12px;
+}
+
+.appointment__dot::after { /* "live" ping */
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: var(--radius-pill);
+	background: #1fa46a;
+	animation: appt-ping 2s var(--ease-out) infinite;
+}
+
+@keyframes appt-ping {
+	from { transform: scale(1); opacity: 0.6; }
+	to   { transform: scale(2.6); opacity: 0; }
+}
+
+/* Form card --------------------------------------------------------------------- */
+.appointment__card {
+	padding: 48px;
+	border-radius: 32px;
+	background: var(--color-white);
+	box-shadow: 0 20px 50px rgba(77, 13, 20, 0.08);
+}
+
+.appointment__form-wrap,
+.appointment-form {
+	display: flex;
+	flex-direction: column;
+	gap: 22px;
+}
+
+.appointment__form-wrap[hidden],
+.appointment__success[hidden] {
+	display: none;
+}
+
+.appointment-form__row {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.appointment-form__hp {
+	position: absolute;
+	left: -9999px;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.field {
+	position: relative;
+}
+
+.field__control {
+	display: block;
+	width: 100%;
+	height: 53px;
+	padding: 0 20px;
+	border: 1px solid rgba(135, 19, 32, 0.12);
+	border-radius: 14px;
+	background: var(--color-cream);
+	font-family: var(--font-body);
+	font-size: 15px;
+	line-height: normal;
+	color: var(--color-ink);
+	transition: border-color var(--dur-fast), background-color var(--dur-fast), box-shadow var(--dur-fast);
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.field__control::placeholder {
+	color: var(--color-slate);
+	opacity: 1;
+}
+
+.field__control:hover {
+	border-color: rgba(135, 19, 32, 0.3);
+}
+
+.field__control:focus {
+	outline: none;
+	border-color: var(--color-burgundy-600);
+	background: var(--color-white);
+	box-shadow: 0 0 0 4px rgba(135, 19, 32, 0.1);
+}
+
+.field.is-invalid .field__control {
+	border-color: #c0392b;
+	box-shadow: 0 0 0 4px rgba(192, 57, 43, 0.1);
+}
+
+/* Select & date: ▾ indicator from the design */
+.field--select::after {
+	content: "▾";
+	position: absolute;
+	top: 50%;
+	right: 20px;
+	font-family: system-ui, sans-serif;
+	font-size: 14px;
+	color: var(--color-slate);
+	transform: translateY(-50%);
+	pointer-events: none;
+}
+
+.field--select select {
+	padding-right: 44px;
+	cursor: pointer;
+}
+
+.field--select select:invalid {
+	color: var(--color-slate);
+}
+
+/* Date: show "Preferred date" until a value is picked; whole field opens the picker. */
+.field--date input {
+	padding-right: 44px;
+	cursor: pointer;
+}
+
+.field--date::before {
+	content: attr(data-placeholder);
+	position: absolute;
+	top: 50%;
+	left: 21px;
+	font-size: 15px;
+	line-height: normal;
+	color: var(--color-slate);
+	transform: translateY(-50%);
+	pointer-events: none;
+}
+
+.field--date.has-value::before {
+	content: none;
+}
+
+.field--date:not(.has-value) input::-webkit-datetime-edit {
+	color: transparent;
+}
+
+.field--date input::-webkit-calendar-picker-indicator {
+	position: absolute;
+	inset: 0;
+	width: auto;
+	height: auto;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.appointment-form__submit {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: 100%;
+	padding: 18px;
+	border-radius: var(--radius-pill); /* matches every other button on the site */
+	background: var(--color-burgundy-600);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: normal;
+	color: var(--color-white);
+	transition: background-color var(--dur-fast), box-shadow var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+
+.appointment-form__submit:hover {
+	background: var(--color-burgundy-800);
+	box-shadow: 0 12px 30px rgba(135, 19, 32, 0.28);
+}
+
+.appointment-form__submit:hover .btn__arrow {
+	transform: translateX(4px);
+}
+
+.appointment-form__submit:active {
+	transform: scale(0.99);
+}
+
+.appointment-form__submit[disabled] {
+	cursor: progress;
+	opacity: 0.75;
+}
+
+.appointment-form__error {
+	margin-top: -8px;
+	font-size: 14px;
+	color: #b42318;
+}
+
+.appointment__note {
+	font-size: 14px;
+	font-weight: 500;
+	line-height: normal;
+	color: var(--color-slate);
+}
+
+.appointment__note a {
+	transition: color var(--dur-fast);
+}
+
+.appointment__note a:hover {
+	color: var(--color-burgundy-600);
+}
+
+/* Success state */
+.appointment__success {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 18px;
+	padding-block: 24px;
+}
+
+.appointment__success:focus {
+	outline: none;
+}
+
+.appointment__success > p:not(.appointment__note) {
+	max-width: 440px;
+	font-size: 17px;
+	line-height: 1.7;
+	color: var(--color-slate);
+}
+
+.appointment__success-icon {
+	display: grid;
+	place-items: center;
+	width: 64px;
+	height: 64px;
+	border-radius: var(--radius-pill);
+	background: var(--color-burgundy-600);
+}
+
+@media (max-width: 1180px) {
+	.appointment__inner {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.appointment__card {
+		padding: 36px;
+	}
+}
+
+@media (max-width: 960px) {
+	.appointment {
+		padding-block: 72px;
+	}
+
+	.appointment__inner {
+		grid-template-columns: 1fr;
+		gap: 56px;
+	}
+
+	.appointment__image {
+		height: auto;
+		aspect-ratio: 640 / 520;
+	}
+}
+
+@media (max-width: 560px) {
+	.appointment__card {
+		padding: 28px 22px;
+		border-radius: 24px;
+	}
+
+	.appointment-form__row {
+		grid-template-columns: 1fr;
+	}
+
+	.appointment__image {
+		border-radius: 24px;
+	}
+
+	.appointment__hours {
+		left: 16px;
+		top: calc(100% - 44px);
+	}
+}

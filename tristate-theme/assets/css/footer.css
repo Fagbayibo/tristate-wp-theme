@@ -1,0 +1,366 @@
+/* ==========================================================================
+   Footer — Figma 25:12
+   ========================================================================== */
+
+.site-footer {
+	padding: 96px 0 32px;
+	background: var(--color-burgundy-800);
+	color: var(--color-blush-200);
+	line-height: normal;
+}
+
+.site-footer .container {
+	display: flex;
+	flex-direction: column;
+	gap: 56px;
+}
+
+/* Brochures & flyers --------------------------------------------------------- */
+.footer-downloads {
+	display: grid;
+	grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+	align-items: center;
+	gap: 64px;
+	padding-bottom: 56px;
+	border-bottom: 1px solid var(--line-on-dark);
+}
+
+.footer-downloads__intro {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.footer-downloads__text {
+	font-size: 15px;
+	line-height: 1.7;
+}
+
+.footer-downloads__list {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 16px;
+}
+
+.download-card {
+	position: relative; /* contains the absolutely-positioned screen-reader label inside the scroll row */
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	height: 100%;
+	padding: 14px 18px 14px 14px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 20px;
+	background: rgba(255, 255, 255, 0.05);
+	transition: background-color var(--dur-base), border-color var(--dur-base), transform var(--dur-base) var(--ease-out);
+}
+
+.download-card__cover {
+	position: relative;
+	flex-shrink: 0;
+	width: 72px;
+	height: 96px;
+	overflow: hidden;
+	border-radius: 10px;
+	background: rgba(255, 255, 255, 0.1);
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+	transition: transform 0.6s var(--ease-out);
+}
+
+.download-card__cover img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.download-card__format {
+	position: absolute;
+	left: 6px;
+	bottom: 6px;
+	padding: 2px 6px;
+	border-radius: 4px;
+	background: var(--color-white);
+	font-size: 9px;
+	font-weight: 600;
+	line-height: 1.4;
+	letter-spacing: 0.04em;
+	color: var(--color-ink);
+}
+
+.download-card__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.download-card__type {
+	font-size: 11px;
+	font-weight: 600;
+	line-height: normal;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--color-blush-100);
+}
+
+.download-card__title {
+	display: -webkit-box;
+	overflow: hidden;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 17px;
+	line-height: 1.3;
+	color: var(--color-white);
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.download-card__meta {
+	font-size: 13px;
+	line-height: normal;
+}
+
+.download-card__button {
+	display: grid;
+	flex-shrink: 0;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	overflow: hidden;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-radius: var(--radius-pill);
+	font-size: 18px;
+	color: var(--color-white);
+	transition: background-color var(--dur-base), border-color var(--dur-base), color var(--dur-base);
+}
+
+.download-card:hover,
+.download-card:focus-visible {
+	border-color: rgba(255, 255, 255, 0.4);
+	background: rgba(255, 255, 255, 0.09);
+	transform: translateY(-3px);
+}
+
+.download-card:hover .download-card__cover {
+	transform: rotate(-4deg) scale(1.04);
+}
+
+.download-card:hover .download-card__button,
+.download-card:focus-visible .download-card__button {
+	border-color: var(--color-white);
+	background: var(--color-white);
+	color: var(--color-burgundy-600);
+}
+
+/* Arrow drops out the bottom and back in from the top */
+.download-card:hover .download-card__button span {
+	animation: download-drop 0.6s var(--ease-out);
+}
+
+@keyframes download-drop {
+	0%   { transform: translateY(0); }
+	45%  { transform: translateY(160%); }
+	46%  { transform: translateY(-160%); }
+	100% { transform: translateY(0); }
+}
+
+/* CTA row ------------------------------------------------------------------ */
+.footer-cta {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 32px;
+	padding-bottom: 56px;
+	border-bottom: 1px solid var(--line-on-dark);
+}
+
+.footer-cta__line {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.footer-cta__label {
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.footer-cta__number {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(44px, 5.84vw, 84px);
+	line-height: 1.333; /* Playfair's "normal" line height, as in Figma */
+	color: var(--color-white);
+	transition: color var(--dur-fast);
+}
+
+.footer-cta__number:hover {
+	color: var(--color-blush-100);
+}
+
+/* Columns ------------------------------------------------------------------ */
+.footer-cols {
+	display: flex;
+	align-items: flex-start;
+	gap: 64px;
+}
+
+.footer-brand {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	width: 420px;
+	flex-shrink: 0;
+}
+
+.footer-brand img {
+	width: 198px;
+	height: 60px;
+	object-fit: contain;
+}
+
+.footer-brand p {
+	font-size: 14px;
+	line-height: 1.75;
+}
+
+.footer-col {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.footer-col__title {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 17px;
+	line-height: normal;
+	color: var(--color-white);
+	white-space: nowrap;
+}
+
+.footer-links {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	font-size: 15px;
+	white-space: nowrap;
+}
+
+.footer-links a,
+.footer-legal a {
+	background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+	transition: color var(--dur-fast), background-size var(--dur-base) var(--ease-out);
+}
+
+.footer-links a:hover,
+.footer-legal a:hover {
+	color: var(--color-white);
+	background-size: 100% 1px;
+}
+
+.footer-socials {
+	display: flex;
+	gap: 10px;
+}
+
+.footer-socials a {
+	display: grid;
+	place-items: center;
+	width: 40px;
+	height: 40px;
+	border-radius: var(--radius-pill);
+	background: rgba(255, 255, 255, 0.1);
+	transition: background-color var(--dur-fast), transform var(--dur-fast) var(--ease-out);
+}
+
+.footer-socials a:hover {
+	background: var(--color-burgundy-600);
+	transform: translateY(-3px);
+}
+
+/* Bottom bar --------------------------------------------------------------- */
+.footer-bottom {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	padding-top: 24px;
+	border-top: 1px solid var(--line-on-dark);
+	font-size: 13px;
+}
+
+.footer-legal {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.footer-legal li + li::before {
+	content: "·";
+	margin-right: 10px;
+}
+
+/* Responsive ---------------------------------------------------------------- */
+@media (max-width: 1080px) {
+	.footer-downloads {
+		grid-template-columns: minmax(0, 1fr); /* minmax(0) lets the card row scroll instead of widening the page */
+		gap: 32px;
+	}
+
+	.footer-cols {
+		flex-wrap: wrap;
+		gap: 40px 56px;
+	}
+
+	.footer-brand {
+		width: 100%;
+		max-width: 520px;
+	}
+}
+
+@media (max-width: 760px) {
+	.site-footer {
+		padding-top: 72px;
+	}
+
+	.footer-cta {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	/* Cards become a swipeable row on phones */
+	.footer-downloads__list {
+		display: flex;
+		gap: 12px;
+		margin-inline: calc(var(--gutter) * -1);
+		padding-inline: var(--gutter);
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-padding-inline: var(--gutter);
+		scrollbar-width: none;
+	}
+
+	.footer-downloads__list::-webkit-scrollbar {
+		display: none;
+	}
+
+	.footer-downloads__list > li {
+		flex: 0 0 min(300px, 82%);
+		scroll-snap-align: start;
+	}
+
+	.download-card {
+		gap: 14px;
+	}
+
+	.download-card__title {
+		font-size: 16px;
+		-webkit-line-clamp: 3;
+	}
+
+	.footer-bottom {
+		flex-direction: column;
+	}
+}

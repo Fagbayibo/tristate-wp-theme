@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Mission & Vision — Figma 25:5
+   Image bleeds to the left edge (680 of 1440), copy starts at x=780.
+   ========================================================================== */
+
+.mission {
+	display: grid;
+	grid-template-columns: calc(50% - 40px) 1fr;
+	min-height: 720px;
+	background: var(--color-cream);
+}
+
+.mission__media {
+	position: relative;
+	overflow: hidden;
+	border-radius: 0 40px 40px 0;
+	background: var(--color-night-card);
+}
+
+.mission__media > img {
+	position: absolute;
+	left: 0;
+	top: -8%;
+	width: 100%;
+	height: 116%;
+	object-fit: cover;
+}
+
+.mission__quote {
+	position: absolute;
+	left: var(--gutter);
+	bottom: 60px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 0;
+	padding: 24px 28px;
+	border-radius: var(--radius-card);
+	background: var(--color-burgundy-600);
+	color: var(--color-white);
+}
+
+.mission__quote p {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-style: italic;
+	font-size: 22px;
+	line-height: 1.3;
+}
+
+.mission__quote cite {
+	font-size: 13px;
+	font-weight: 500;
+	font-style: normal;
+	color: var(--accent);
+}
+
+.mission__copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 40px;
+	max-width: calc(560px + 100px + var(--gutter));
+	padding: 110px var(--gutter) 110px 100px;
+}
+
+.mission__head {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	max-width: 560px;
+}
+
+.mission__items {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.mission__item {
+	display: flex;
+	align-items: flex-start;
+	gap: 28px;
+	padding-top: 28px;
+	border-top: 1px solid var(--line-on-light);
+}
+
+.mission__num {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 44px;
+	line-height: normal;
+	color: var(--accent);
+}
+
+.mission__item-title {
+	margin-bottom: 10px;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 24px;
+	line-height: normal;
+	color: var(--color-ink);
+}
+
+.mission__item-text {
+	max-width: 460px;
+	font-size: 16px;
+	line-height: 1.7;
+	color: var(--color-slate);
+}
+
+@media (max-width: 1180px) {
+	.mission__copy {
+		padding-left: 64px;
+	}
+}
+
+@media (max-width: 960px) {
+	.mission {
+		grid-template-columns: 1fr;
+	}
+
+	.mission__media {
+		aspect-ratio: 4 / 3.4;
+		margin-right: var(--gutter);
+	}
+
+	.mission__copy {
+		max-width: none;
+		padding: 72px var(--gutter);
+	}
+}
+
+@media (max-width: 560px) {
+	.mission__quote {
+		bottom: 24px;
+		padding: 18px 22px;
+	}
+
+	.mission__quote p {
+		font-size: 18px;
+	}
+
+	.mission__item {
+		gap: 18px;
+	}
+
+	.mission__num {
+		font-size: 34px;
+	}
+}

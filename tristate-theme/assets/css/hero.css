@@ -1,0 +1,356 @@
+/* ==========================================================================
+   Home hero — Figma 25:3 (1440 × 900)
+   ========================================================================== */
+
+.hero {
+	position: relative;
+	isolation: isolate;
+	min-height: 900px;
+	overflow: hidden;
+	background: var(--color-burgundy-950);
+	color: var(--color-white);
+}
+
+/* Media & overlays --------------------------------------------------------- */
+.hero__media {
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+}
+
+.hero__image {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0;
+}
+
+.hero__image.is-active {
+	opacity: 1;
+}
+
+.hero__overlay {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, rgba(41, 5, 13, 0.92) 0%, rgba(77, 10, 20, 0.55) 55%, rgba(51, 5, 13, 0.15) 100%);
+}
+
+.hero__overlay-top {
+	position: absolute;
+	inset: 0 0 auto;
+	height: 200px;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+}
+
+/* Layout ------------------------------------------------------------------- */
+.hero__inner {
+	position: relative;
+	min-height: inherit;
+	padding-top: 230px;   /* copy starts at y=230 in the frame */
+	padding-bottom: 170px; /* room for the tabs */
+}
+
+.hero__copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 28px;
+}
+
+.hero__slides {
+	display: grid;
+}
+
+/* Slides share one grid cell so the tallest sets the height — no jumping. */
+.hero__slide {
+	grid-area: 1 / 1;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+	visibility: hidden;
+}
+
+.hero__slide.is-active {
+	visibility: visible;
+}
+
+.hero__title {
+	max-width: 720px;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(44px, 5.56vw, 80px);
+	line-height: 1.05;
+	letter-spacing: 0;
+}
+
+.hero__word {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: top;
+	padding-bottom: 0.08em; /* keeps italic descenders inside the mask */
+	margin-bottom: -0.08em;
+}
+
+.hero__word > span {
+	display: inline-block;
+}
+
+.hero__word.is-italic {
+	font-style: italic;
+	padding-right: 0.06em; /* italic overhang */
+	margin-right: -0.06em;
+}
+
+.hero__text {
+	max-width: 560px;
+	font-size: 19px;
+	line-height: 1.65;
+	color: var(--color-blush-100);
+}
+
+.hero__buttons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px;
+}
+
+/* Ghost button with play badge — Figma 26:31 */
+.btn--ghost {
+	gap: 12px;
+	padding: 8px 24px 8px 8px;
+	background: rgba(255, 255, 255, 0.1);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: var(--color-white);
+}
+
+.btn--ghost:hover {
+	background: rgba(255, 255, 255, 0.18);
+	border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn--ghost__play {
+	position: relative;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: var(--radius-pill);
+	background: var(--color-white);
+}
+
+/* Soft pulse ring */
+.btn--ghost__play::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	border: 2px solid rgba(255, 255, 255, 0.6);
+	animation: hero-pulse 2.4s var(--ease-out) infinite;
+}
+
+@keyframes hero-pulse {
+	from { transform: scale(1); opacity: 0.9; }
+	to   { transform: scale(1.6); opacity: 0; }
+}
+
+/* Emergency glass card — Figma 26:36 (x=1087, y=520) */
+.hero__emergency {
+	position: absolute;
+	top: 520px;
+	right: var(--gutter);
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	padding: 24px 28px;
+	border: 1px solid rgba(255, 255, 255, 0.22);
+	border-radius: var(--radius-card);
+	/* Dark tinted glass: the card sits over the brightest part of the photo, so a
+	   light glass washed out the white number. */
+	background: rgba(42, 10, 16, 0.62);
+	-webkit-backdrop-filter: blur(14px) saturate(140%);
+	backdrop-filter: blur(14px) saturate(140%);
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+	line-height: normal;
+	white-space: nowrap;
+	transition: background-color var(--dur-base), border-color var(--dur-base), transform var(--dur-base) var(--ease-out);
+}
+
+.hero__emergency:hover {
+	background: rgba(42, 10, 16, 0.78);
+	border-color: rgba(255, 255, 255, 0.45);
+	transform: translateY(-3px);
+}
+
+.hero__emergency-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: var(--color-blush-100);
+}
+
+/* Small "live" dot beside the label */
+.hero__emergency-label::before {
+	content: "";
+	width: 8px;
+	height: 8px;
+	border-radius: var(--radius-pill);
+	background: #1fa46a;
+	box-shadow: 0 0 0 0 rgba(31, 164, 106, 0.6);
+	animation: hero-live 2s var(--ease-out) infinite;
+}
+
+@keyframes hero-live {
+	from { box-shadow: 0 0 0 0 rgba(31, 164, 106, 0.6); }
+	to   { box-shadow: 0 0 0 8px rgba(31, 164, 106, 0); }
+}
+
+.hero__emergency-number {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 30px;
+}
+
+.hero__emergency-alt {
+	font-size: 14px;
+	color: var(--color-blush-100);
+}
+
+/* Slider tabs — Figma 26:40 (y=778) */
+.hero__tabs {
+	position: absolute;
+	left: var(--gutter);
+	right: var(--gutter);
+	bottom: 46px;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.hero__tab {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 20px 24px 0 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.25);
+	text-align: left;
+	line-height: normal;
+	color: var(--color-blush-200);
+	transition: color var(--dur-base);
+}
+
+.hero__tab:hover {
+	color: var(--color-white);
+}
+
+.hero__tab-progress {
+	position: absolute;
+	top: -2px; /* centres the 3px bar on the 1px rule */
+	left: 0;
+	right: 0;
+	height: 3px;
+	background: var(--color-white);
+	transform: scaleX(0);
+	transform-origin: left;
+}
+
+.hero__tab-num {
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.hero__tab-title {
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.hero__tab.is-active {
+	color: var(--color-white);
+}
+
+.hero__tab.is-active .hero__tab-num {
+	color: var(--color-white);
+}
+
+/* Without JS (or reduced motion) the active bar is simply full. */
+.hero:not(.is-ready) .hero__tab.is-active .hero__tab-progress {
+	transform: none;
+}
+
+/* Responsive ---------------------------------------------------------------- */
+@media (max-width: 1180px) {
+	.hero__emergency {
+		position: static;
+		align-self: flex-start;
+		margin-top: 40px;
+	}
+
+	.hero__inner {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+@media (max-width: 1080px) {
+	.hero {
+		min-height: 0;
+	}
+
+	.hero__inner {
+		padding-top: 200px;
+		padding-bottom: 150px;
+	}
+}
+
+@media (max-width: 640px) {
+	.hero__inner {
+		padding-top: 170px;
+		padding-bottom: 120px;
+	}
+
+	.hero__copy,
+	.hero__slide {
+		gap: 22px;
+	}
+
+	.hero__text {
+		font-size: 16px;
+	}
+
+	.hero__buttons .btn--primary {
+		padding: 16px 26px;
+		font-size: 15px;
+	}
+
+	.hero__emergency {
+		margin-top: 32px;
+		padding: 18px 22px;
+		border-radius: 18px;
+	}
+
+	.hero__emergency-number {
+		font-size: 24px;
+	}
+
+	.hero__tabs {
+		bottom: 32px;
+		gap: 12px;
+	}
+
+	.hero__tab {
+		padding-right: 0;
+		padding-top: 14px;
+	}
+
+	.hero__tab-title {
+		display: none; /* numbers only on phones */
+	}
+}

@@ -1,0 +1,45 @@
+# Publishing a GitHub release (tag like v1.0.1) builds tristate-theme.zip and
+# attaches it to that release. The live site's theme updater (inc/updater.php)
+# then shows "Update now" in Appearance → Themes.
+name: Build theme zip
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write # needed to upload the zip to the release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # WordPress only offers the update if the tag is newer than the installed
+      # version, so a tag that disagrees with style.css would ship a zip that
+      # re-offers itself forever. Fail loudly instead.
+      - name: Check tag matches style.css Version
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION="$(grep -m1 '^Version:' tristate-theme/style.css | awk '{print $2}' | tr -d '\r')"
+          echo "tag=$TAG style.css=$VERSION"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "::error::Release tag v$TAG does not match Version: $VERSION in style.css. Bump style.css, push, and re-tag."
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Only archiver is needed for the build; skip the heavy Playground dev server.
+      - name: Build zip
+        run: |
+          npm install --prefix "$RUNNER_TEMP/zip" archiver@^8
+          NODE_PATH="$RUNNER_TEMP/zip/node_modules" node dev/make-zip.js
+
+      - name: Attach zip to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" tristate-theme.zip --clobber
