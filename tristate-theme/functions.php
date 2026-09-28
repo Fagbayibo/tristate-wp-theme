@@ -15,6 +15,11 @@ require TRISTATE_DIR . '/inc/appointments.php';
 require TRISTATE_DIR . '/inc/downloads.php';
 require TRISTATE_DIR . '/inc/updater.php';
 
+// Plugins load before the theme, so Elementor has already announced itself here.
+if ( did_action( 'elementor/loaded' ) ) {
+	require TRISTATE_DIR . '/inc/elementor-compat.php';
+}
+
 /**
  * Site-wide contact details. Kept in one place so the header, hero and footer
  * never drift apart. (Candidates for an ACF options page later.)
