@@ -84,6 +84,11 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_enqueue_script( 'tristate-testimonials', TRISTATE_URI . '/assets/js/testimonials.js', array( 'gsap' ), tristate_asset_version( '/assets/js/testimonials.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-appointment', TRISTATE_URI . '/assets/js/appointment.js', array(), tristate_asset_version( '/assets/js/appointment.js' ), array( 'strategy' => 'defer' ) );
 	}
+
+	// Frictionless chat widget (usefrictionless.com). The workspace ID is public by design.
+	// Footer rather than defer: WordPress drops the defer strategy when an inline "after" script is attached.
+	wp_enqueue_script( 'frictionless', 'https://usefrictionless.com/widget/v1.js', array(), null, array( 'in_footer' => true ) );
+	wp_add_inline_script( 'frictionless', 'Frictionless.init({ company_id: "62107b4e-e09a-4c94-8960-309af27dea94" });' );
 } );
 
 /**
