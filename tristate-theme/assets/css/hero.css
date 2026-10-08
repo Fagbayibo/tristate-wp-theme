@@ -80,7 +80,7 @@
 	max-width: 720px;
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: clamp(44px, 5.56vw, 80px);
+	font-size: var(--fs-display);
 	line-height: 1.05;
 	letter-spacing: 0;
 }
@@ -105,7 +105,7 @@
 
 .hero__text {
 	max-width: 560px;
-	font-size: 19px;
+	font-size: 17px;
 	line-height: 1.65;
 	color: var(--color-blush-100);
 }
@@ -119,10 +119,10 @@
 
 /* Ghost button with play badge — Figma 26:31 */
 .btn--ghost {
-	gap: 12px;
-	padding: 8px 24px 8px 8px;
+	gap: 10px;
+	padding: 4px 20px 4px 4px;
 	background: rgba(255, 255, 255, 0.1);
-	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-color: rgba(255, 255, 255, 0.3);
 	color: var(--color-white);
 }
 
@@ -135,8 +135,8 @@
 	position: relative;
 	display: grid;
 	place-items: center;
-	width: 44px;
-	height: 44px;
+	width: 34px;
+	height: 34px;
 	border-radius: var(--radius-pill);
 	background: var(--color-white);
 }
@@ -214,7 +214,7 @@
 .hero__emergency-number {
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: 30px;
+	font-size: 26px;
 }
 
 .hero__emergency-alt {
@@ -311,6 +311,15 @@
 }
 
 @media (max-width: 640px) {
+	.btn--ghost {
+		padding: 3px 18px 3px 3px;
+	}
+
+	.btn--ghost__play {
+		width: 30px;
+		height: 30px;
+	}
+
 	.hero__inner {
 		padding-top: 170px;
 		padding-bottom: 120px;
@@ -323,11 +332,6 @@
 
 	.hero__text {
 		font-size: 16px;
-	}
-
-	.hero__buttons .btn--primary {
-		padding: 16px 26px;
-		font-size: 15px;
 	}
 
 	.hero__emergency {

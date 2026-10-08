@@ -146,3 +146,19 @@ update_post_meta( $legacy_id, '_elementor_edit_mode', 'builder' );
 update_post_meta( $legacy_id, '_elementor_template_type', 'wp-page' );
 update_post_meta( $legacy_id, '_elementor_version', '3.0.0' );
 update_post_meta( $legacy_id, '_elementor_data', wp_slash( $elementor_data ) );
+
+/* Designed pages: About Us and Our Services use their page templates ----------- */
+
+foreach ( array(
+	array( 'About Us', 'about-us', 'page-templates/about-us.php' ),
+	array( 'Our Services', 'services', 'page-templates/our-services.php' ),
+) as $page ) {
+	list( $title, $slug, $template ) = $page;
+	$page_id = wp_insert_post( array(
+		'post_type'   => 'page',
+		'post_title'  => $title,
+		'post_name'   => $slug,
+		'post_status' => 'publish',
+	) );
+	update_post_meta( $page_id, '_wp_page_template', $template );
+}

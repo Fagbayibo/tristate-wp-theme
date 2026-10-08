@@ -53,7 +53,39 @@ function tristate_asset_version( $path ) {
 	return file_exists( $file ) ? (string) filemtime( $file ) : TRISTATE_VERSION;
 }
 
+/** Designed inner-page templates → their stylesheet (assets/css/<name>.css). */
+function tristate_landing_template() {
+	$templates = array(
+		'page-templates/about-us.php'     => 'about',
+		'page-templates/our-services.php' => 'our-services',
+	);
+	foreach ( $templates as $template => $name ) {
+		if ( is_page_template( $template ) ) {
+			return $name;
+		}
+	}
+	return '';
+}
+
+/**
+ * URL of the first published page using a page template, so templates can link
+ * to each other whatever slug the page was given.
+ */
+function tristate_template_url( $template, $fallback_path ) {
+	$pages = get_posts( array(
+		'post_type'   => 'page',
+		'post_status' => 'publish',
+		'meta_key'    => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery
+		'meta_value'  => $template, // phpcs:ignore WordPress.DB.SlowDBQuery
+		'numberposts' => 1,
+		'fields'      => 'ids',
+	) );
+	return $pages ? get_permalink( $pages[0] ) : home_url( $fallback_path );
+}
+
 add_action( 'wp_enqueue_scripts', function () {
+	$landing = tristate_landing_template();
+
 	// Fonts: Playfair Display (headings) + Poppins (UI/body).
 	wp_enqueue_style(
 		'tristate-fonts',
@@ -67,6 +99,9 @@ add_action( 'wp_enqueue_scripts', function () {
 		array_push( $css, 'hero', 'intro', 'mission', 'services', 'stats', 'why', 'testimonials', 'news', 'appointment' );
 	} else {
 		$css[] = 'pages'; // Inner pages, blog, search, 404.
+		if ( $landing ) {
+			array_push( $css, 'landing', $landing );
+		}
 	}
 	$deps = array( 'tristate-fonts' );
 	foreach ( $css as $file ) {
@@ -83,6 +118,10 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_enqueue_script( 'tristate-hero', TRISTATE_URI . '/assets/js/hero.js', array( 'gsap' ), tristate_asset_version( '/assets/js/hero.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-testimonials', TRISTATE_URI . '/assets/js/testimonials.js', array( 'gsap' ), tristate_asset_version( '/assets/js/testimonials.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-appointment', TRISTATE_URI . '/assets/js/appointment.js', array(), tristate_asset_version( '/assets/js/appointment.js' ), array( 'strategy' => 'defer' ) );
+	}
+
+	if ( $landing ) {
+		wp_enqueue_script( 'tristate-landing', TRISTATE_URI . '/assets/js/landing.js', array( 'gsap-scrolltrigger', 'tristate-animations' ), tristate_asset_version( '/assets/js/landing.js' ), array( 'strategy' => 'defer' ) );
 	}
 
 	// Frictionless chat widget (usefrictionless.com). The workspace ID is public by design.

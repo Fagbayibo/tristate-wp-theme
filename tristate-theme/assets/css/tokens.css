@@ -4,12 +4,14 @@
 	/* Brand */
 	--color-burgundy-950: #2a0a10; /* hero backdrop */
 	--color-burgundy-800: #5e0d17; /* footer */
-	--color-burgundy-600: #871320; /* brand red: buttons, accents on light */
+	--color-burgundy-700: #6e0c15; /* brand red, one shade down: depth in red gradients */
+	--color-burgundy-600: #8c101b; /* brand red: buttons, accents, header, footer */
 	--color-blush-100: #f3dadd;    /* light text on dark */
 	--color-blush-200: #e8c9cd;    /* muted text on dark */
 	--color-ink: #1b1f24;          /* dark text */
 	--color-slate: #5b6470;        /* body text on light */
 	--color-cream: #fbf6f4;        /* soft section background */
+	--color-paper: #f3e6e7;        /* blush panel background */
 	--color-night: #1e0a0e;        /* services background */
 	--color-night-card: #3a1a20;   /* image placeholder on dark */
 	--color-rose-muted: #cdb9bc;   /* body text on night */
@@ -18,15 +20,17 @@
 	/* Accent: eyebrows, highlights, active states. Burgundy by default; dark
 	   sections redefine it as white (see "Dark surfaces" below). */
 	--accent: var(--color-burgundy-600);
-	--accent-soft: rgba(135, 19, 32, 0.08);
+	--accent-soft: rgba(140, 16, 27, 0.08);
 
 	--line-on-dark: rgba(255, 255, 255, 0.14);
 	--line-on-dark-soft: rgba(255, 255, 255, 0.12);
-	--line-on-light: rgba(135, 19, 32, 0.15);
+	--line-on-light: rgba(140, 16, 27, 0.15);
 
 	/* Type */
 	--font-display: "Playfair Display", Georgia, "Times New Roman", serif;
 	--font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+	--fs-display: clamp(34px, 4.45vw, 64px); /* page-level h1: homepage hero, inner page heroes */
+	--fs-lead: clamp(16px, 1.2vw, 17px);     /* intro paragraph under a heading */
 
 	/* Layout — 1440 frame, 80px gutters → 1280 content */
 	--container: 1280px;
@@ -34,6 +38,7 @@
 
 	/* Shape & motion */
 	--radius-pill: 999px;
+	--radius-button: 10px; /* text buttons: a soft corner, not a full pill */
 	--radius-card: 24px;
 	--radius-media: 28px;
 	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);

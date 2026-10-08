@@ -2,9 +2,11 @@
  * Declarative scroll animations (GSAP + ScrollTrigger).
  *
  * Mark up elements in templates; no per-section JS needed:
- *   data-reveal="up|fade|pop|clip-up|clip-left"  animate in when scrolled into view
- *   data-delay="0.2"                          optional delay (seconds) for data-reveal
+ *   data-reveal="up|left|right|scale|fade|pop|clip-up|clip-left"  animate in when scrolled into view
+ *   data-delay="0.2"                          optional delay (seconds) for data-reveal / data-split
  *   data-reveal-stagger                       children animate up one after another
+ *   data-split                                heading words rise out of a mask, one after another
+ *   data-observe                              gets `is-in` once visible (CSS drives the effect)
  *   data-parallax="0.06"                      drift while scrolling (fraction of own height)
  *   data-count="5000" data-suffix="+"         count up from 0 when visible
  *   data-words-scrub                          words brighten as the text scrolls through
@@ -26,6 +28,9 @@
 	// Reveal ------------------------------------------------------------------
 	const revealFrom = {
 		up: { opacity: 0, y: 40 },
+		left: { opacity: 0, x: -60 },
+		right: { opacity: 0, x: 60 },
+		scale: { opacity: 0, scale: 0.92 },
 		fade: { opacity: 0 },
 		pop: { opacity: 0, scale: 0.4, rotation: -30 },
 		'clip-up': { clipPath: 'inset(100% 0% 0% 0%)' },
@@ -50,11 +55,10 @@
 			gsap.set(el, { opacity: 1 });
 			to.clipPath = 'inset(0% 0% 0% 0%)';
 			to.clearProps = 'clipPath';
-		} else if (type === 'up') {
-			to.y = 0;
-			to.clearProps = 'transform';
 		} else if (type === 'pop') {
 			Object.assign(to, { scale: 1, rotation: 0, duration: 1.1, ease: 'back.out(1.7)', clearProps: 'transform' });
+		} else if (type !== 'fade') {
+			Object.assign(to, { x: 0, y: 0, scale: 1, clearProps: 'transform' });
 		}
 
 		gsap.fromTo(el, from, to);
@@ -70,6 +74,54 @@
 			clearProps: 'transform',
 			scrollTrigger: { trigger: group, start: START, once: true },
 		});
+	});
+
+	// Split headings ----------------------------------------------------------------
+	// Each word sits in an overflow mask and rises into place (keeps <em> intact).
+	const wrapWords = (node, words) => {
+		[...node.childNodes].forEach((child) => {
+			if (child.nodeType === Node.TEXT_NODE) {
+				const frag = document.createDocumentFragment();
+				child.textContent.split(/(\s+)/).forEach((part) => {
+					if (!part) return;
+					if (/^\s+$/.test(part)) {
+						frag.appendChild(document.createTextNode(' '));
+						return;
+					}
+					const mask = document.createElement('span');
+					const word = document.createElement('span');
+					mask.className = 'split-word';
+					word.textContent = part;
+					mask.appendChild(word);
+					frag.appendChild(mask);
+					words.push(word);
+				});
+				child.replaceWith(frag);
+			} else if (child.nodeType === Node.ELEMENT_NODE && child.tagName !== 'BR') {
+				wrapWords(child, words);
+			}
+		});
+		return words;
+	};
+
+	gsap.utils.toArray('[data-split]').forEach((el) => {
+		const words = wrapWords(el, []);
+		gsap.set(el, { opacity: 1 });
+		gsap.fromTo(words, { yPercent: 115, rotation: 4 }, {
+			yPercent: 0,
+			rotation: 0,
+			duration: 1.1,
+			stagger: 0.055,
+			delay: parseFloat(el.dataset.delay) || 0,
+			ease: 'expo.out',
+			clearProps: 'transform',
+			scrollTrigger: { trigger: el, start: START, once: true },
+		});
+	});
+
+	// Observe ---------------------------------------------------------------------
+	gsap.utils.toArray('[data-observe]').forEach((el) => {
+		ScrollTrigger.create({ trigger: el, start: START, once: true, onEnter: () => el.classList.add('is-in') });
 	});
 
 	// Parallax ------------------------------------------------------------------

@@ -44,18 +44,6 @@
 	color: var(--color-slate);
 }
 
-.btn--outline-brand {
-	padding: 15px 28px;
-	font-size: 15px;
-	border: 1.5px solid var(--color-burgundy-600);
-	color: var(--color-burgundy-600);
-}
-
-.btn--outline-brand:hover {
-	background: var(--color-burgundy-600);
-	color: var(--color-white);
-}
-
 /* Bento grid ------------------------------------------------------------------ */
 .services__bento {
 	display: grid;
@@ -132,12 +120,12 @@
 .service-tile__title {
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: 26px;
+	font-size: 22px;
 	line-height: 1.15;
 }
 
 .service-tile--large .service-tile__title {
-	font-size: clamp(30px, 2.78vw, 40px);
+	font-size: clamp(26px, 2.4vw, 34px);
 }
 
 .service-tile__text {
@@ -231,7 +219,7 @@
 	align-items: center;
 	gap: 8px;
 	padding: 11px 18px;
-	border: 1px solid rgba(135, 19, 32, 0.12);
+	border: 1px solid rgba(140, 16, 27, 0.12);
 	border-radius: var(--radius-pill);
 	background: var(--color-white);
 	font-size: 14px;

@@ -28,7 +28,7 @@
 	max-width: 1000px;
 	font-family: var(--font-display);
 	font-weight: 400;
-	font-size: clamp(28px, 3.06vw, 44px);
+	font-size: clamp(21px, 2.4vw, 34px);
 	line-height: 1.35;
 	color: var(--color-ink);
 }

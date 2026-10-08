@@ -87,7 +87,7 @@ button {
 	padding: 10px 16px;
 	background: var(--color-white);
 	color: var(--color-burgundy-600);
-	border-radius: var(--radius-pill);
+	border-radius: var(--radius-button);
 }
 
 /* Layout */
@@ -104,12 +104,14 @@ button {
 	align-items: center;
 	justify-content: center;
 	gap: 10px;
+	padding: 10px 22px; /* one size site-wide (~45px tall); variants only change colour */
+	border: 1.5px solid transparent; /* outline and filled buttons line up exactly */
 	font-family: var(--font-body);
 	font-weight: 600;
-	font-size: 16px;
+	font-size: 15px;
 	line-height: normal;
 	white-space: nowrap;
-	border-radius: var(--radius-pill);
+	border-radius: var(--radius-button);
 	transition: background-color var(--dur-fast), color var(--dur-fast), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast);
 }
 
@@ -128,7 +130,6 @@ button {
 
 /* Primary CTA sits on dark surfaces (hero, footer): solid white, burgundy text. */
 .btn--primary {
-	padding: 19px 34px;
 	background: var(--color-white);
 	color: var(--color-burgundy-600);
 }
@@ -139,8 +140,6 @@ button {
 }
 
 .btn--light {
-	padding: 15px 28px;
-	font-size: 15px;
 	background: var(--color-white);
 	color: var(--color-burgundy-600);
 }
@@ -151,20 +150,17 @@ button {
 }
 
 .btn--brand {
-	padding: 18px 32px;
 	background: var(--color-burgundy-600);
 	color: var(--color-white);
 }
 
 .btn--brand:hover {
 	background: var(--color-burgundy-800);
-	box-shadow: 0 10px 30px rgba(135, 19, 32, 0.3);
+	box-shadow: 0 10px 30px rgba(140, 16, 27, 0.3);
 }
 
 .btn--outline-light {
-	padding: 15px 28px;
-	font-size: 15px;
-	border: 1.5px solid rgba(255, 255, 255, 0.4);
+	border-color: rgba(255, 255, 255, 0.4);
 	color: var(--color-white);
 }
 
@@ -172,6 +168,16 @@ button {
 	border-color: var(--color-white);
 	background: var(--color-white);
 	color: var(--color-burgundy-600);
+}
+
+.btn--outline-brand {
+	border-color: var(--color-burgundy-600);
+	color: var(--color-burgundy-600);
+}
+
+.btn--outline-brand:hover {
+	background: var(--color-burgundy-600);
+	color: var(--color-white);
 }
 
 .text-link {
@@ -219,11 +225,12 @@ button {
 	background: var(--accent);
 }
 
-/* --title-size is the Figma px size at 1440; it scales down with the viewport. */
+/* --title-size is the Figma px size at 1440, rendered at 84% (the Figma sizes read
+   too large on screen); it scales down with the viewport to a 26px floor. */
 .section-title {
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: clamp(32px, calc(var(--title-size, 48) * 100vw / 1440), calc(var(--title-size, 48) * 1px));
+	font-size: clamp(26px, calc(var(--title-size, 48) * 0.84 * 100vw / 1440), calc(var(--title-size, 48) * 0.84px));
 	line-height: 1.15;
 	color: var(--title-color, var(--color-ink));
 }
@@ -245,7 +252,8 @@ button {
 	color: var(--accent);
 }
 
-.eyebrow::before {
+.eyebrow::before,
+.eyebrow--center::after {
 	content: "";
 	width: 40px;
 	height: 2px;
@@ -255,8 +263,23 @@ button {
 /* Scroll reveals: hidden only when the `anim` class is present (set in <head>
    when motion is allowed, and removed again if GSAP fails to load). */
 .anim [data-reveal],
-.anim [data-reveal-stagger] > * {
+.anim [data-reveal-stagger] > *,
+.anim [data-split] {
 	opacity: 0;
+}
+
+/* data-split: one mask per word; padding keeps italic descenders/overhang visible. */
+.split-word {
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: top;
+	padding: 0 0.06em 0.1em 0;
+	margin: 0 -0.06em -0.1em 0;
+}
+
+.split-word > span {
+	display: inline-block;
+	transform-origin: 0 100%;
 }
 
 /* Set by JS while GSAP intro animations run. */
@@ -264,6 +287,23 @@ button {
 .is-intro .hero__tab,
 .is-intro .hero__emergency {
 	transition: none !important;
+}
+
+@media (max-width: 600px) {
+	.btn {
+		padding: 9px 20px;
+		font-size: 14px;
+	}
+
+	.eyebrow {
+		gap: 10px;
+		font-size: 13px;
+	}
+
+	.eyebrow::before,
+	.eyebrow--center::after {
+		width: 24px;
+	}
 }
 
 @media (prefers-reduced-motion: reduce) {

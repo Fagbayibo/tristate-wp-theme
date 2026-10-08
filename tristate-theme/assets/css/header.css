@@ -5,7 +5,7 @@
 .site-header {
 	position: relative;
 	z-index: 50;
-	background: var(--color-burgundy-800);
+	background: var(--color-burgundy-600);
 	color: var(--color-white);
 }
 
@@ -179,7 +179,7 @@
 	position: fixed;
 	inset: 0 0 auto;
 	height: 76px;
-	background: rgba(42, 10, 16, 0.92);
+	background: rgba(140, 16, 27, 0.95);
 	-webkit-backdrop-filter: blur(12px);
 	backdrop-filter: blur(12px);
 	box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
@@ -265,7 +265,7 @@
 		justify-content: center;
 		gap: 40px;
 		padding: 120px var(--gutter) 40px;
-		background: var(--color-burgundy-950);
+		background: var(--color-burgundy-600);
 		overflow-y: auto;
 		clip-path: circle(0 at calc(100% - var(--gutter) - 24px) 48px);
 		visibility: hidden;
@@ -283,7 +283,7 @@
 		align-items: flex-start;
 		gap: 6px;
 		font-family: var(--font-display);
-		font-size: clamp(28px, 7vw, 40px);
+		font-size: clamp(24px, 6vw, 32px);
 		font-weight: 700;
 	}
 

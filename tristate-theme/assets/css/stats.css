@@ -27,7 +27,7 @@
 .stat__value {
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: clamp(40px, 3.89vw, 56px);
+	font-size: clamp(32px, 3.2vw, 46px);
 	line-height: normal;
 	color: var(--color-white);
 	white-space: nowrap;
