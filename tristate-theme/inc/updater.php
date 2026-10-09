@@ -2,8 +2,8 @@
 /**
  * Theme updates from GitHub Releases.
  *
- * Publishing a release on GitHub (tag e.g. v1.0.1) makes a workflow build
- * tristate-theme.zip and attach it to the release. This file tells WordPress
+ * `npm run release` publishes a GitHub release (tag e.g. v1.0.1) with
+ * tristate-theme.zip attached. This file tells WordPress
  * about it, so Appearance → Themes shows "New version available. Update now"
  * exactly like a WordPress.org theme.
  *
@@ -24,9 +24,11 @@ define( 'TRISTATE_RELEASE_ASSET', 'tristate-theme.zip' );
 /**
  * Latest release as { version, package, url }, or null.
  *
- * Cached for six hours: WordPress runs its update check on many admin page
- * loads, and GitHub allows 60 unauthenticated API calls per hour per server IP.
- * "Check again" on Dashboard → Updates skips the cache.
+ * Reads github.com's /releases/latest redirect (→ /releases/tag/v1.2.3) rather
+ * than the GitHub API: the API allows 60 calls an hour per server IP, shared by
+ * every site on a shared host, and once that ran out updates silently vanished.
+ *
+ * Cached for an hour; "Check again" on Dashboard → Updates skips the cache.
  */
 function tristate_latest_release() {
 	$cache_key = 'tristate_latest_release';
@@ -37,45 +39,33 @@ function tristate_latest_release() {
 		return $cached ?: null; // '' = cached failure
 	}
 
-	$response = wp_remote_get(
-		'https://api.github.com/repos/' . TRISTATE_GITHUB_REPO . '/releases/latest',
-		array(
-			'timeout' => 10,
-			'headers' => array(
-				'Accept'     => 'application/vnd.github+json',
-				'User-Agent' => 'tristate-theme-updater', // GitHub rejects requests without one
-			),
-		)
-	);
-
-	if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
-		set_site_transient( $cache_key, '', 30 * MINUTE_IN_SECONDS ); // back off, don't hammer the API
+	$fail = static function () use ( $cache_key ) {
+		set_site_transient( $cache_key, '', 15 * MINUTE_IN_SECONDS ); // back off briefly, then retry
 		return null;
+	};
+
+	$base   = 'https://github.com/' . TRISTATE_GITHUB_REPO . '/releases';
+	$latest = wp_remote_head( "$base/latest", array( 'timeout' => 10, 'redirection' => 0 ) );
+	$tag    = is_wp_error( $latest ) ? '' : basename( (string) wp_remote_retrieve_header( $latest, 'location' ) );
+
+	if ( ! preg_match( '/^v?\d+(\.\d+)*$/', $tag ) ) {
+		return $fail();
 	}
 
-	$body    = json_decode( wp_remote_retrieve_body( $response ), true );
-	$package = '';
-
-	foreach ( (array) ( $body['assets'] ?? array() ) as $asset ) {
-		if ( TRISTATE_RELEASE_ASSET === ( $asset['name'] ?? '' ) ) {
-			$package = $asset['browser_download_url'];
-			break;
-		}
-	}
-
-	// No built zip yet (workflow still running or failed): offer nothing rather than a broken package.
-	if ( empty( $body['tag_name'] ) || ! $package ) {
-		set_site_transient( $cache_key, '', 30 * MINUTE_IN_SECONDS );
-		return null;
+	// Offer nothing until the built zip is attached (GitHub answers 302 to its storage).
+	$package = "$base/download/$tag/" . TRISTATE_RELEASE_ASSET;
+	$asset   = wp_remote_head( $package, array( 'timeout' => 10, 'redirection' => 0 ) );
+	if ( is_wp_error( $asset ) || 302 !== (int) wp_remote_retrieve_response_code( $asset ) ) {
+		return $fail();
 	}
 
 	$release = array(
-		'version' => ltrim( $body['tag_name'], 'vV' ),
+		'version' => ltrim( $tag, 'vV' ),
 		'package' => $package,
-		'url'     => $body['html_url'],
+		'url'     => "$base/tag/$tag",
 	);
 
-	set_site_transient( $cache_key, $release, 6 * HOUR_IN_SECONDS );
+	set_site_transient( $cache_key, $release, HOUR_IN_SECONDS );
 	return $release;
 }
 
