@@ -42,7 +42,7 @@ $tristate_overlay = is_front_page();
 					<img src="<?php echo esc_url( TRISTATE_URI . '/assets/images/logo-white.png' ); ?>" width="198" height="60" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 				</a>
 
-				<nav class="navbar__nav" id="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'tristate' ); ?>">
+				<nav class="navbar__nav" id="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'tristate' ); ?>" data-lenis-prevent>
 					<?php
 					wp_nav_menu( array(
 						'theme_location' => 'primary',
@@ -50,9 +50,22 @@ $tristate_overlay = is_front_page();
 						'menu_class'     => 'nav-menu',
 						'depth'          => 2,
 						'fallback_cb'    => 'tristate_primary_menu_fallback',
+						'walker'         => new Tristate_Primary_Walker(),
 					) );
 					?>
-					<a class="btn btn--light navbar__cta navbar__cta--mobile" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></a>
+					<div class="drawer-foot">
+						<a class="btn btn--light navbar__cta navbar__cta--mobile" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
+						<div class="drawer-foot__contacts">
+							<a href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">
+								<span><?php esc_html_e( '24/7 Emergency', 'tristate' ); ?></span>
+								<strong><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></strong>
+							</a>
+							<a href="tel:<?php echo esc_attr( preg_replace( '/\s+/', '', tristate_contact( 'phone' ) ) ); ?>">
+								<span><?php esc_html_e( 'Call us', 'tristate' ); ?></span>
+								<strong><?php echo esc_html( tristate_contact( 'phone_alt' ) ); ?></strong>
+							</a>
+						</div>
+					</div>
 				</nav>
 
 				<a class="btn btn--light navbar__cta" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></a>

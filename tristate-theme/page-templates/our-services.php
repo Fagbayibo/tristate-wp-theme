@@ -13,22 +13,7 @@ $tristate_about       = tristate_template_url( 'page-templates/about-us.php', '/
 $tristate_img         = TRISTATE_URI . '/assets/images/';
 $tristate_arrow       = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
 
-// Icon paths are 24×24, stroked with currentColor.
-$tristate_icons = array(
-	'flask'    => '<path d="M9 3h6M10 3v6l-5.6 9.6A2 2 0 0 0 6.1 21.5h11.8a2 2 0 0 0 1.7-2.9L14 9V3"/><path d="M7.2 15h9.6"/>',
-	'venus'    => '<circle cx="12" cy="9" r="5"/><path d="M12 14v7M9 18h6"/>',
-	'capsule'  => '<path d="M10.5 20.5 3.5 13.5a5 5 0 0 1 7-7l7 7a5 5 0 0 1-7 7Z"/><path d="m8.5 8.5 7 7"/>',
-	'monitor'  => '<rect x="3" y="4" width="18" height="13" rx="2"/><path d="M6 11h3l2-3 2 6 2-3h3M8 21h8M12 17v4"/>',
-	'stetho'   => '<path d="M6 3v5a4 4 0 0 0 8 0V3"/><path d="M10 12v2.5a5 5 0 0 0 10 0V13"/><circle cx="20" cy="11" r="2"/>',
-	'cap'      => '<path d="m2 9 10-5 10 5-10 5-10-5Z"/><path d="M6 11v5c3 2 9 2 12 0v-5M22 9v6"/>',
-	'cross'    => '<path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7Z"/>',
-	'doctor'   => '<circle cx="12" cy="7" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/><path d="M17 4.5 19 3M19.5 8H22"/>',
-	'pathway'  => '<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 6H15a3.5 3.5 0 0 1 0 7H9a3.5 3.5 0 0 0 0 7h7.5"/>',
-);
-
-$tristate_icon = static function ( $name, $width = '1.7' ) use ( $tristate_icons ) {
-	return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' . esc_attr( $width ) . '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $tristate_icons[ $name ] . '</svg>';
-};
+$tristate_icon = 'tristate_line_icon'; // inc/menu.php
 
 // id, title, short name (closing marquee), tag, icon, swatch colours, copy, page slug, image, image alt, badge
 $tristate_services = array(

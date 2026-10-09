@@ -20,13 +20,13 @@ $tristate_slides = array(
 		'tab'      => 'Caring for the heart from the heart',
 		'headline' => array( array( 'Caring for the heart', false ), array( 'from the heart', true ), array( '.', false ) ),
 		'text'     => 'We are known for exceptional and compassionate patient care innovation and research.',
-		'image'    => TRISTATE_URI . '/assets/images/hero-home.jpg',
+		'image'    => TRISTATE_URI . '/assets/images/hero-care.jpg',
 	),
 	array(
 		'tab'      => 'Foremost Cardiac Centre in Nigeria',
 		'headline' => array( array( 'Foremost', false ), array( 'Cardiac Centre', true ), array( 'in Nigeria.', false ) ),
 		'text'     => 'We are known for exceptional and compassionate patient care innovation and research.',
-		'image'    => TRISTATE_URI . '/assets/images/hero-home.jpg',
+		'image'    => TRISTATE_URI . '/assets/images/hero-cardiac.jpg',
 	),
 );
 
@@ -86,11 +86,6 @@ endif;
 			</div>
 		</div>
 
-		<a class="hero__emergency" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>" data-hero-card>
-			<span class="hero__emergency-label"><?php esc_html_e( '24/7 Emergency Line', 'tristate' ); ?></span>
-			<span class="hero__emergency-number"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></span>
-			<span class="hero__emergency-alt"><?php printf( esc_html__( 'or %s', 'tristate' ), esc_html( tristate_contact( 'phone_alt' ) ) ); ?></span>
-		</a>
 
 		<div class="hero__tabs" role="tablist" aria-label="<?php esc_attr_e( 'Choose slide', 'tristate' ); ?>" data-hero-intro>
 			<?php foreach ( $tristate_slides as $tristate_i => $tristate_slide ) : ?>

@@ -162,3 +162,40 @@ foreach ( array(
 	) );
 	update_post_meta( $page_id, '_wp_page_template', $template );
 }
+
+/* Primary menu, mirroring the live site (Our Services has 11 children) --------- */
+
+$menu_id = wp_create_nav_menu( 'Tristatehs' );
+$add     = static function ( $title, $path, $parent = 0 ) use ( $menu_id ) {
+	return wp_update_nav_menu_item( $menu_id, 0, array(
+		'menu-item-title'     => $title,
+		'menu-item-url'       => home_url( $path ),
+		'menu-item-status'    => 'publish',
+		'menu-item-parent-id' => $parent,
+	) );
+};
+
+$add( 'Home', '/' );
+$add( 'About us', '/about-us/' );
+$add( 'Our Team', '/our-team/' );
+$services_item = $add( 'Our Services', '/services/' );
+foreach ( array(
+	'Emergency & Critical Services' => 'emergency-critical-services',
+	'Anaesthesiology'               => 'anaesthesiology',
+	'Cardiovascular Services'       => 'cardiovascular-services',
+	'Education & Research'          => 'education-research',
+	'Laboratory Services'           => 'laboratory-services',
+	'Dialysis'                      => 'dialysis',
+	'Obstetrics and Gynaecology'    => 'obstetrics-and-gynaecology',
+	'Outpatient Department'         => 'outpatient-department',
+	'Pharmaceutical Services'       => 'pharmaceutical-services',
+	'Respiratory & Critical Care'   => 'respiratory-critical-care',
+	'Radiology'                     => 'radiology',
+) as $title => $slug ) {
+	$add( $title, "/$slug/", $services_item );
+}
+$add( 'Cases', '/real-life-cases/' );
+$add( 'News', '/our-blog/' );
+$add( 'Contact', '/contact-us/' );
+
+set_theme_mod( 'nav_menu_locations', array( 'primary' => $menu_id ) );

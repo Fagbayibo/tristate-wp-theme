@@ -87,28 +87,26 @@
 	position: relative;
 }
 
-.nav-menu a {
+.nav-menu > li > a {
 	position: relative;
 	display: inline-block;
 	padding-block: 6px;
 	color: var(--color-white);
-	transition: color var(--dur-fast);
-}
-
-/* Underline grows in on hover (background, so ::after stays free for the caret) */
-.nav-menu > li > a {
+	/* Underline grows in on hover (background, so ::after stays free for the caret) */
 	background: linear-gradient(var(--accent), var(--accent)) 0 100% / 0 2px no-repeat;
 	transition: color var(--dur-fast), background-size var(--dur-base) var(--ease-out);
 }
 
-/* Current page keeps its underline; others show it on hover. */
+/* Current page keeps its underline; others show it on hover or while open. */
 .nav-menu > li > a:hover,
+.nav-menu > li.is-open > a,
 .nav-menu > .current-menu-item > a,
 .nav-menu > .current-menu-ancestor > a {
 	background-size: 100% 2px;
 }
 
 .nav-menu > li > a:hover,
+.nav-menu > li.is-open > a,
 .nav-menu .current-menu-item > a,
 .nav-menu .current-menu-ancestor > a {
 	color: var(--accent);
@@ -118,60 +116,280 @@
 	font-weight: 600;
 }
 
-/* Parent items get the ▾ from the design */
+/* Parent items get the ▾ from the design; it flips while the dropdown is open. */
 .nav-menu .menu-item-has-children > a::after {
 	content: "▾";
+	display: inline-block;
 	margin-left: 0.45em;
 	font-family: system-ui, sans-serif; /* Poppins has no ▾ glyph */
 	font-size: 0.8em;
+	transition: transform var(--dur-base) var(--ease-out);
 }
 
-/* Dropdown */
-.nav-menu .sub-menu {
-	position: absolute;
-	top: calc(100% + 12px);
-	left: -20px;
-	min-width: 240px;
-	padding: 10px;
-	background: var(--color-white);
-	border-radius: 16px;
-	box-shadow: 0 20px 50px rgba(42, 10, 16, 0.25);
-	opacity: 0;
-	visibility: hidden;
-	transform: translateY(8px);
-	transition: opacity var(--dur-fast), transform var(--dur-fast) var(--ease-out), visibility var(--dur-fast);
+.nav-menu .menu-item-has-children.is-open > a::after {
+	transform: rotate(180deg);
 }
 
-.nav-menu .sub-menu::before { /* hover bridge */
-	content: "";
-	position: absolute;
-	inset: -12px 0 auto;
-	height: 12px;
-}
-
-.nav-menu li:hover > .sub-menu,
-.nav-menu li:focus-within > .sub-menu {
-	opacity: 1;
-	visibility: visible;
-	transform: none;
-}
-
-.nav-menu .sub-menu a {
-	display: block;
-	padding: 10px 14px;
-	border-radius: 10px;
-	color: var(--color-ink);
-	font-weight: 500;
-}
-
-.nav-menu .sub-menu a:hover {
-	background: var(--color-blush-100);
-	color: var(--color-burgundy-600);
-}
-
-.navbar__cta--mobile,
+.submenu-toggle,
+.drawer-foot,
 .navbar__toggle {
 	display: none;
+}
+
+/* Service icon tile beside each dropdown link (inc/menu.php) */
+.sub-menu__icon {
+	display: grid;
+	flex-shrink: 0;
+	place-items: center;
+	width: 36px;
+	height: 36px;
+	border-radius: 10px;
+	background: var(--color-paper);
+	color: var(--color-burgundy-600);
+	transition: background-color var(--dur-fast), color var(--dur-fast), transform var(--dur-base) var(--ease-out);
+}
+
+.sub-menu__icon svg {
+	width: 19px;
+	height: 19px;
+}
+
+@keyframes live-dot {
+	from { box-shadow: 0 0 0 0 rgba(31, 164, 106, 0.6); }
+	to   { box-shadow: 0 0 0 8px rgba(31, 164, 106, 0); }
+}
+
+/* Mega dropdown (desktop) ------------------------------------------------------
+   Without JS each panel opens under its own item on hover/focus. header.js adds
+   .has-morph to the bar: panels then share one white backdrop (.nav-morph) that
+   glides and resizes between them while their content cross-slides — the
+   Stripe-style dropdown. */
+@media (min-width: 1081px) {
+	.navbar__inner {
+		position: relative;
+	}
+
+	.mega {
+		position: absolute;
+		top: 100%;
+		left: -24px;
+		z-index: 2;
+		padding-top: 14px; /* hover bridge between the link and the panel */
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(8px);
+		transition: opacity var(--dur-fast), transform var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
+	}
+
+	.navbar__inner:not(.has-morph) .nav-menu li:hover > .mega,
+	.navbar__inner:not(.has-morph) .nav-menu li:focus-within > .mega {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition: opacity var(--dur-base), transform var(--dur-base) var(--ease-out), visibility 0s;
+	}
+
+	.mega__inner {
+		display: flex;
+		gap: 12px;
+		padding: 12px;
+		border-radius: 20px;
+		background: var(--color-white);
+		box-shadow: 0 30px 60px -12px rgba(42, 10, 16, 0.32), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
+		color: var(--color-ink);
+	}
+
+	.mega .sub-menu {
+		--cols: 1;
+		display: grid;
+		grid-template-columns: repeat(var(--cols), 244px);
+		align-content: start;
+		gap: 2px 4px;
+		padding: 4px;
+	}
+
+	.mega .sub-menu:has(> li:nth-child(6)) {
+		--cols: 2;
+	}
+
+	.mega .sub-menu a {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 8px 10px;
+		border-radius: 12px;
+		font-size: 14.5px;
+		font-weight: 500;
+		line-height: 1.3;
+		white-space: normal;
+		color: var(--color-ink);
+		transition: background-color var(--dur-fast), color var(--dur-fast);
+	}
+
+	.mega .sub-menu a:hover,
+	.mega .sub-menu a:focus-visible,
+	.mega .sub-menu .current-menu-item > a {
+		background: #fbf3f4;
+		color: var(--color-burgundy-600);
+	}
+
+	.mega .sub-menu a:hover .sub-menu__icon,
+	.mega .sub-menu a:focus-visible .sub-menu__icon {
+		background: var(--color-burgundy-600);
+		color: var(--color-white);
+		transform: scale(1.06) rotate(-4deg);
+	}
+
+	/* Side card: emergency line, booking, "View all" */
+	.mega-feature {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		width: 236px;
+		padding: 22px;
+		border-radius: 14px;
+		background:
+			radial-gradient(120% 80% at 100% 0%, rgba(232, 201, 205, 0.22), transparent 60%),
+			linear-gradient(150deg, var(--color-burgundy-600), var(--color-burgundy-700));
+		color: var(--color-white);
+		white-space: normal;
+	}
+
+	.mega-feature__label {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 11.5px;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-blush-100);
+	}
+
+	.mega-feature__label::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		border-radius: var(--radius-pill);
+		background: #1fa46a;
+		animation: live-dot 2s var(--ease-out) infinite;
+	}
+
+	.mega-feature__number {
+		margin-top: 12px;
+		font-family: var(--font-display);
+		font-size: 25px;
+		font-weight: 700;
+		line-height: 1.1;
+		color: var(--color-white);
+	}
+
+	.mega-feature__alt {
+		margin-top: 4px;
+		font-size: 13px;
+		color: var(--color-blush-100);
+	}
+
+	.mega-feature .mega-feature__btn {
+		width: 100%;
+		margin-top: 22px;
+		padding-block: 9px;
+		font-size: 14px;
+	}
+
+	.mega-feature__all {
+		display: inline-flex;
+		gap: 6px;
+		margin-top: 14px;
+		font-size: 13.5px;
+		font-weight: 600;
+		color: var(--color-white);
+	}
+
+	.mega-feature__all span {
+		transition: transform var(--dur-base) var(--ease-out);
+	}
+
+	.mega-feature__all:hover span {
+		transform: translateX(4px);
+	}
+
+	/* Morph mode -------------------------------------------------------------- */
+	.has-morph .nav-menu > .menu-item-has-children {
+		position: static; /* panels position against .navbar__inner */
+	}
+
+	.has-morph .mega {
+		top: calc(50% + 10px);
+		left: var(--mega-x, 0px);
+		transform: translateX(var(--mega-from, 0px));
+		transition: opacity 0.2s, transform 0.45s var(--ease-out), visibility 0s linear 0.45s;
+	}
+
+	.has-morph .mega.is-active {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition: opacity 0.3s 0.06s, transform 0.45s var(--ease-out), visibility 0s;
+	}
+
+	.has-morph .mega.is-instant {
+		transition: none;
+	}
+
+	.has-morph .mega__inner {
+		background: none;
+		box-shadow: none;
+	}
+
+	.nav-morph {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		width: var(--morph-w, 0px);
+		height: var(--morph-h, 0px);
+		border-radius: 20px;
+		background: var(--color-white);
+		box-shadow: 0 30px 60px -12px rgba(42, 10, 16, 0.32), 0 18px 36px -18px rgba(0, 0, 0, 0.3);
+		opacity: 0;
+		transform: translate(var(--morph-x, 0px), var(--morph-y, 0px));
+		scale: 0.96;
+		transform-origin: var(--arrow-x, 50%) 0;
+		pointer-events: none;
+		transition:
+			opacity 0.25s,
+			scale 0.4s var(--ease-out),
+			width 0.45s var(--ease-out),
+			height 0.45s var(--ease-out),
+			transform 0.45s var(--ease-out);
+	}
+
+	.nav-morph.is-visible {
+		opacity: 1;
+		scale: 1;
+	}
+
+	/* Opening from closed: jump to the panel's size, only fade + grow in. */
+	.nav-morph.is-instant {
+		transition: opacity 0.25s, scale 0.4s var(--ease-out);
+	}
+
+	.nav-morph__arrow {
+		position: absolute;
+		top: -6px;
+		left: calc(var(--arrow-x, 50%) - 7px);
+		width: 14px;
+		height: 14px;
+		border-radius: 3px 0 0;
+		background: var(--color-white);
+		transform: rotate(45deg);
+		transition: left 0.45s var(--ease-out);
+	}
+
+	.nav-morph.is-instant .nav-morph__arrow {
+		transition: none;
+	}
 }
 
 /* Stuck state (added by header.js after scrolling) ------------------------- */
@@ -205,15 +423,23 @@
 	.nav-menu { gap: 24px; }
 }
 
+/* Mobile drawer ------------------------------------------------------------------
+   Full-screen panel revealed by a circle from the toggle. Items are rows with
+   hairlines, dropdowns become accordions, and booking + contact shortcuts sit
+   at the bottom. */
 @media (max-width: 1080px) {
+	.navbar {
+		--toggle-y: 48px; /* centre of the toggle, where the circle grows from */
+	}
+
 	.navbar__toggle {
 		position: relative;
 		z-index: 2;
 		display: grid;
 		place-items: center;
-		width: 48px;
-		height: 48px;
-		border-radius: var(--radius-pill);
+		width: 46px;
+		height: 46px;
+		border-radius: var(--radius-button);
 		background: rgba(255, 255, 255, 0.12);
 	}
 
@@ -255,45 +481,75 @@
 		z-index: 2;
 	}
 
-	/* Full-screen drawer */
 	.navbar__nav {
 		position: fixed;
 		inset: 0;
 		z-index: 1;
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
-		gap: 40px;
-		padding: 120px var(--gutter) 40px;
-		background: var(--color-burgundy-600);
+		gap: 32px;
+		padding: 0 var(--gutter) max(28px, env(safe-area-inset-bottom));
+		background:
+			radial-gradient(90% 50% at 100% 0%, rgba(232, 201, 205, 0.16), transparent 70%),
+			linear-gradient(170deg, var(--color-burgundy-600), var(--color-burgundy-700));
 		overflow-y: auto;
-		clip-path: circle(0 at calc(100% - var(--gutter) - 24px) 48px);
+		overscroll-behavior: contain;
+		clip-path: circle(0 at calc(100% - var(--gutter) - 23px) var(--toggle-y));
 		visibility: hidden;
 		transition: clip-path 0.6s var(--ease-out), visibility 0s linear 0.6s;
 	}
 
+	/* Solid band behind the logo and close button: links scroll underneath it
+	   instead of showing through the logo. */
+	.navbar__nav::before {
+		content: "";
+		position: sticky;
+		top: 0;
+		z-index: 1;
+		flex-shrink: 0;
+		height: var(--drawer-top, 96px);
+		margin: 0 calc(-1 * var(--gutter)) -24px;
+		background: var(--color-burgundy-600);
+		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+	}
+
+	/* The chat bubble would cover the drawer's contact shortcuts. */
+	.nav-open #frictionless-widget {
+		display: none;
+	}
+
 	.nav-open .navbar__nav {
-		clip-path: circle(150% at calc(100% - var(--gutter) - 24px) 48px);
+		clip-path: circle(150% at calc(100% - var(--gutter) - 23px) var(--toggle-y));
 		visibility: visible;
 		transition: clip-path 0.6s var(--ease-out), visibility 0s;
 	}
 
 	.nav-menu {
 		flex-direction: column;
-		align-items: flex-start;
-		gap: 6px;
+		align-items: stretch;
+		gap: 0;
 		font-family: var(--font-display);
-		font-size: clamp(24px, 6vw, 32px);
+		font-size: 22px;
 		font-weight: 700;
+		white-space: normal;
 	}
 
-	.nav-menu > li {
+	.nav-menu > li,
+	.drawer-foot {
 		opacity: 0;
 		transform: translateY(16px);
 		transition: opacity var(--dur-base), transform var(--dur-base) var(--ease-out);
 	}
 
-	.nav-open .nav-menu > li {
+	.nav-menu > li {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+	}
+
+	.nav-open .nav-menu > li,
+	.nav-open .drawer-foot {
 		opacity: 1;
 		transform: none;
 	}
@@ -306,8 +562,14 @@
 	.nav-open .nav-menu > li:nth-child(6) { transition-delay: 0.35s; }
 	.nav-open .nav-menu > li:nth-child(7) { transition-delay: 0.39s; }
 	.nav-open .nav-menu > li:nth-child(8) { transition-delay: 0.43s; }
+	.nav-open .drawer-foot                { transition-delay: 0.47s; }
 
-	.nav-menu > li > a { background: none; color: rgba(255, 255, 255, 0.7); }
+	.nav-menu > li > a {
+		flex: 1;
+		padding-block: 14px;
+		background: none;
+		color: rgba(255, 255, 255, 0.78);
+	}
 
 	.nav-menu > li > a:hover,
 	.nav-menu > .current-menu-item > a,
@@ -315,31 +577,141 @@
 
 	.nav-menu .current-menu-item > a { font-weight: 700; }
 
-	.nav-menu .sub-menu {
-		position: static;
-		min-width: 0;
-		padding: 4px 0 8px 16px;
-		background: none;
-		box-shadow: none;
-		opacity: 1;
-		visibility: visible;
-		transform: none;
-		font-family: var(--font-body);
-		font-size: 16px;
-	}
-
-	.nav-menu .sub-menu a {
-		padding: 6px 0;
-		color: var(--color-blush-200);
-	}
-
-	.nav-menu .sub-menu a:hover { background: none; color: var(--color-white); }
-
 	.nav-menu .menu-item-has-children > a::after { content: none; }
+
+	/* Accordion button with a chevron */
+	.submenu-toggle {
+		display: grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border-radius: var(--radius-button);
+		background: rgba(255, 255, 255, 0.1);
+		color: var(--color-white);
+		transition: background-color var(--dur-fast);
+	}
+
+	.submenu-toggle::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		margin-top: -4px;
+		border: solid currentColor;
+		border-width: 0 2px 2px 0;
+		transform: rotate(45deg);
+		transition: transform var(--dur-base) var(--ease-out), margin var(--dur-base) var(--ease-out);
+	}
+
+	.is-expanded > .submenu-toggle {
+		background: rgba(255, 255, 255, 0.2);
+	}
+
+	.is-expanded > .submenu-toggle::before {
+		margin-top: 4px;
+		transform: rotate(-135deg);
+	}
+
+	.mega {
+		display: grid;
+		flex-basis: 100%;
+		grid-template-rows: 0fr;
+		visibility: hidden;
+		transition: grid-template-rows 0.45s var(--ease-out), visibility 0s linear 0.45s;
+	}
+
+	.is-expanded > .mega {
+		grid-template-rows: 1fr;
+		visibility: visible;
+		transition: grid-template-rows 0.45s var(--ease-out), visibility 0s;
+	}
+
+	.mega__inner {
+		min-height: 0;
+		overflow: hidden;
+	}
+
+	.mega .sub-menu {
+		display: grid;
+		gap: 2px;
+		padding-bottom: 14px;
+		font-family: var(--font-body);
+		font-size: 15px;
+		font-weight: 500;
+	}
+
+	.mega .sub-menu a {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		padding: 7px 4px;
+		border-radius: var(--radius-button);
+		color: var(--color-blush-100);
+		transition: background-color var(--dur-fast), color var(--dur-fast);
+	}
+
+	.mega .sub-menu a:hover,
+	.mega .sub-menu .current-menu-item > a {
+		background: rgba(255, 255, 255, 0.08);
+		color: var(--color-white);
+	}
+
+	.mega .sub-menu__icon {
+		width: 32px;
+		height: 32px;
+		border-radius: 9px;
+		background: rgba(255, 255, 255, 0.1);
+		color: var(--color-white);
+	}
+
+	.mega .sub-menu__icon svg {
+		width: 17px;
+		height: 17px;
+	}
+
+	.mega-feature { display: none; }
+
+	/* Bottom: booking + contact shortcuts */
+	.drawer-foot {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin-top: auto;
+	}
 
 	.navbar__cta--mobile {
 		display: inline-flex;
-		align-self: flex-start;
+		width: 100%;
+	}
+
+	.drawer-foot__contacts {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+	}
+
+	.drawer-foot__contacts a {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 11px 14px;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		border-radius: var(--radius-button);
+		background: rgba(255, 255, 255, 0.06);
+		line-height: 1.3;
+	}
+
+	.drawer-foot__contacts span {
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--color-blush-200);
+	}
+
+	.drawer-foot__contacts strong {
+		font-size: 15px;
+		font-weight: 600;
+		color: var(--color-white);
 	}
 
 	body.nav-open {
@@ -363,6 +735,7 @@
 
 @media (max-width: 640px) {
 	.topbar__contacts a[href^="mailto:"] { display: none; }
+	.navbar { --toggle-y: 40px; --drawer-top: 80px; }
 	.navbar,
 	.navbar__bar { height: 80px; }
 	.navbar__logo img { width: 158px; height: 48px; }
@@ -371,4 +744,13 @@
 @media (max-width: 420px) {
 	.topbar__contacts { display: none; }
 	.topbar__inner { justify-content: center; }
+}
+
+@media (max-width: 380px) {
+	.navbar__nav { gap: 28px; }
+	.nav-menu { font-size: 20px; }
+	.nav-menu > li > a { padding-block: 12px; }
+	.mega .sub-menu { font-size: 14px; }
+	.drawer-foot__contacts a { padding: 10px 12px; }
+	.drawer-foot__contacts strong { font-size: 14px; }
 }

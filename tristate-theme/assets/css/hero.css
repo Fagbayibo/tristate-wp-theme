@@ -156,72 +156,6 @@
 	to   { transform: scale(1.6); opacity: 0; }
 }
 
-/* Emergency glass card — Figma 26:36 (x=1087, y=520) */
-.hero__emergency {
-	position: absolute;
-	top: 520px;
-	right: var(--gutter);
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-	padding: 24px 28px;
-	border: 1px solid rgba(255, 255, 255, 0.22);
-	border-radius: var(--radius-card);
-	/* Dark tinted glass: the card sits over the brightest part of the photo, so a
-	   light glass washed out the white number. */
-	background: rgba(42, 10, 16, 0.62);
-	-webkit-backdrop-filter: blur(14px) saturate(140%);
-	backdrop-filter: blur(14px) saturate(140%);
-	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-	line-height: normal;
-	white-space: nowrap;
-	transition: background-color var(--dur-base), border-color var(--dur-base), transform var(--dur-base) var(--ease-out);
-}
-
-.hero__emergency:hover {
-	background: rgba(42, 10, 16, 0.78);
-	border-color: rgba(255, 255, 255, 0.45);
-	transform: translateY(-3px);
-}
-
-.hero__emergency-label {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	font-size: 12px;
-	font-weight: 600;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	color: var(--color-blush-100);
-}
-
-/* Small "live" dot beside the label */
-.hero__emergency-label::before {
-	content: "";
-	width: 8px;
-	height: 8px;
-	border-radius: var(--radius-pill);
-	background: #1fa46a;
-	box-shadow: 0 0 0 0 rgba(31, 164, 106, 0.6);
-	animation: hero-live 2s var(--ease-out) infinite;
-}
-
-@keyframes hero-live {
-	from { box-shadow: 0 0 0 0 rgba(31, 164, 106, 0.6); }
-	to   { box-shadow: 0 0 0 8px rgba(31, 164, 106, 0); }
-}
-
-.hero__emergency-number {
-	font-family: var(--font-display);
-	font-weight: 700;
-	font-size: 26px;
-}
-
-.hero__emergency-alt {
-	font-size: 14px;
-	color: var(--color-blush-100);
-}
-
 /* Slider tabs — Figma 26:40 (y=778) */
 .hero__tabs {
 	position: absolute;
@@ -285,20 +219,6 @@
 }
 
 /* Responsive ---------------------------------------------------------------- */
-@media (max-width: 1180px) {
-	.hero__emergency {
-		position: static;
-		align-self: flex-start;
-		margin-top: 40px;
-	}
-
-	.hero__inner {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-	}
-}
-
 @media (max-width: 1080px) {
 	.hero {
 		min-height: 0;
@@ -332,16 +252,6 @@
 
 	.hero__text {
 		font-size: 16px;
-	}
-
-	.hero__emergency {
-		margin-top: 32px;
-		padding: 18px 22px;
-		border-radius: 18px;
-	}
-
-	.hero__emergency-number {
-		font-size: 24px;
 	}
 
 	.hero__tabs {

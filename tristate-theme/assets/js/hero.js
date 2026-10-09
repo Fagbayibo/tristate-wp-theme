@@ -76,7 +76,7 @@
 			.fromTo(words(nextSlide), { yPercent: 110 }, { yPercent: 0, duration: 0.9, stagger: 0.05 })
 			.fromTo(text(nextSlide), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.8 }, '<0.2');
 
-		// Cross-fade images (they may be identical today; this keeps it ready for real slides).
+		// Cross-fade to the next slide's photo.
 		if (images[prev] !== images[next]) {
 			gsap.to(images[prev], { opacity: 0, duration: 1.2, ease: 'power2.inOut', onComplete: () => images[prev].classList.remove('is-active') });
 			images[next].classList.add('is-active');
@@ -120,7 +120,7 @@
 	// CSS transitions on transform (e.g. button hover lift) fight GSAP's tweens,
 	// so switch them off for the intro and hand control back to CSS afterwards.
 	document.documentElement.classList.add('is-intro');
-	const introTargets = [...headerBits, ...hero.querySelectorAll('.hero__eyebrow, .hero__buttons > *, [data-hero-card], [data-hero-tab]')];
+	const introTargets = [...headerBits, ...hero.querySelectorAll('.hero__eyebrow, .hero__buttons > *, [data-hero-tab]')];
 
 	gsap.timeline({
 		defaults: { ease: 'power3.out' },
@@ -136,6 +136,5 @@
 		.from(words(first), { yPercent: 110, duration: 1, stagger: 0.07 }, 0.4)
 		.from(text(first), { opacity: 0, y: 20, duration: 0.9 }, 0.9)
 		.from(hero.querySelectorAll('.hero__buttons > *'), { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 1.05)
-		.from(hero.querySelector('[data-hero-card]'), { opacity: 0, x: 40, duration: 1 }, 1.1)
 		.from(tabs, { opacity: 0, y: 20, duration: 0.8, stagger: 0.1 }, 1.2);
 })();

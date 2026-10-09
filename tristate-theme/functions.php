@@ -13,6 +13,7 @@ define( 'TRISTATE_DIR', get_template_directory() );
 
 require TRISTATE_DIR . '/inc/appointments.php';
 require TRISTATE_DIR . '/inc/downloads.php';
+require TRISTATE_DIR . '/inc/menu.php';
 require TRISTATE_DIR . '/inc/updater.php';
 
 // Plugins load before the theme, so Elementor has already announced itself here.
@@ -103,6 +104,7 @@ add_action( 'wp_enqueue_scripts', function () {
 			array_push( $css, 'landing', $landing );
 		}
 	}
+	$css[] = 'small-screens'; // Last, so its phone type scale wins.
 	$deps = array( 'tristate-fonts' );
 	foreach ( $css as $file ) {
 		wp_enqueue_style( "tristate-$file", TRISTATE_URI . "/assets/css/$file.css", $deps, tristate_asset_version( "/assets/css/$file.css" ) );
@@ -112,6 +114,8 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_script( 'gsap', 'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js', array(), null, array( 'strategy' => 'defer' ) );
 	wp_enqueue_script( 'gsap-scrolltrigger', 'https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js', array( 'gsap' ), null, array( 'strategy' => 'defer' ) );
 	wp_enqueue_script( 'tristate-header', TRISTATE_URI . '/assets/js/header.js', array(), tristate_asset_version( '/assets/js/header.js' ), array( 'strategy' => 'defer' ) );
+	wp_enqueue_script( 'lenis', 'https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js', array(), null, array( 'strategy' => 'defer' ) );
+	wp_enqueue_script( 'tristate-smooth-scroll', TRISTATE_URI . '/assets/js/smooth-scroll.js', array( 'lenis', 'gsap-scrolltrigger' ), tristate_asset_version( '/assets/js/smooth-scroll.js' ), array( 'strategy' => 'defer' ) );
 	wp_enqueue_script( 'tristate-animations', TRISTATE_URI . '/assets/js/animations.js', array( 'gsap-scrolltrigger' ), tristate_asset_version( '/assets/js/animations.js' ), array( 'strategy' => 'defer' ) );
 
 	if ( is_front_page() ) {

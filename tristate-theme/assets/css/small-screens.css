@@ -1,0 +1,249 @@
+/* ==========================================================================
+   Small phones (≤480px, then ≤380px for 360/320px handsets).
+   Loaded last on every page so one file owns the phone type scale: body copy
+   steps down from 16–17px to 15px, then 14px; headings shrink to match, and long
+   paragraphs read left-aligned instead of centred.
+   ========================================================================== */
+
+/* Balanced headings and no orphaned last words, at every size. */
+h1, h2, h3, .section-title, .landing-title {
+	text-wrap: balance;
+}
+
+p, li, blockquote {
+	text-wrap: pretty;
+	overflow-wrap: break-word;
+}
+
+@media (max-width: 480px) {
+	:root {
+		--fs-display: 32px;
+		--fs-lead: 15px;
+	}
+
+	body {
+		font-size: 15px;
+	}
+
+	.section-title {
+		font-size: 25px;
+	}
+
+	/* Body copy: 16–17px on desktop → 15px */
+	.hero__text,
+	.why__lead,
+	.services__aside p,
+	.mission__item-text,
+	.about-story__col > p:not(.about-story__num),
+	.treat__item p,
+	.closing__foot > p,
+	.svc-card__text,
+	.svc-cta__text,
+	.entry-content p,
+	.entry-content li,
+	.appointment__success > p:not(.appointment__note),
+	.empty-state {
+		font-size: 15px;
+		line-height: 1.65;
+	}
+
+	/* Secondary copy: 15px → 14px */
+	.service-tile__text,
+	.stat__label,
+	.svc-pillar p,
+	.post-card__excerpt,
+	.pathway-step__card p:last-child,
+	.record-stat__label,
+	.record-stat__label--lg,
+	.record-stat--hero .record-stat__label,
+	.footer-links,
+	.footer-downloads__text,
+	.comment-body,
+	.svc-cta__emergency-text {
+		font-size: 14px;
+	}
+
+	/* Display and statement type */
+	.intro__statement           { font-size: 19px; }
+	.testimonial__quote p       { font-size: 17px; }
+	.mission__quote p           { font-size: 17px; }
+	.mission__item-title        { font-size: 19px; }
+	.why__value-title           { font-size: 17px; }
+	.service-tile__title        { font-size: 20px; }
+	.service-tile--large .service-tile__title { font-size: 24px; }
+	.news-featured__title       { font-size: 19px; }
+	.news-item__title           { font-size: 16px; }
+	.footer-cta__number         { font-size: 30px; }
+	.page-hero__title           { font-size: 27px; }
+	.entry-content h2           { font-size: 23px; }
+	.entry-content h3           { font-size: 20px; }
+	.about-hero__quote blockquote { font-size: 17px; }
+	.about-ticker__word         { font-size: 22px; }
+	.about-story__title         { font-size: 21px; }
+	.manifesto__text            { font-size: 20px; }
+	.manifesto__promise-text    { font-size: 17px; }
+	.record-stat__num           { font-size: 34px; }
+	.record-stat--hero .record-stat__num { font-size: 46px; }
+	.treat__title               { font-size: 19px; }
+	.pathway-step__title        { font-size: 18px; }
+	.closing__word              { font-size: 34px; }
+	.svc-statement              { font-size: 21px; }
+	.svc-pillar__title          { font-size: 19px; }
+	.svc-card__title            { font-size: 24px; }
+	.svc-cta__word              { font-size: 22px; }
+	.svc-cta__emergency-number  { font-size: 26px; }
+	.stat__value                { font-size: 30px; }
+
+	/* Long hero paragraphs read better left-aligned on a phone, so the centred
+	   landing heroes and section intros line up on the left like the homepage. */
+	.about-hero,
+	.svc-hero,
+	.landing-head--center {
+		text-align: left;
+	}
+
+	.about-hero__inner,
+	.svc-hero__center {
+		align-items: flex-start;
+	}
+
+	.about-hero .eyebrow--center::after,
+	.svc-hero .eyebrow--center::after,
+	.landing-head--center .eyebrow--center::after {
+		content: none;
+	}
+
+	/* Hero buttons: full-width and equal, instead of two ragged widths. */
+	.hero__buttons,
+	.about-hero__actions,
+	.svc-hero__actions {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+		gap: 10px;
+	}
+
+	.hero__buttons .btn,
+	.about-hero__actions .btn,
+	.svc-hero__actions .btn {
+		width: 100%;
+	}
+
+	/* Homepage service tiles: let the grid shrink below the longest word, and
+	   keep text above the arrow button rather than beside it. */
+	.services__bento {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.service-tile {
+		padding: 22px 20px 80px;
+	}
+
+	.service-tile__arrow {
+		right: 18px;
+		bottom: 18px;
+		width: 42px;
+		height: 42px;
+	}
+}
+
+@media (max-width: 380px) {
+	:root {
+		--fs-display: 29px;
+		--fs-lead: 14.5px;
+		--gutter: 18px;
+	}
+
+	body {
+		font-size: 14px;
+	}
+
+	.section-title {
+		font-size: 23px;
+	}
+
+	.hero__text,
+	.why__lead,
+	.services__aside p,
+	.mission__item-text,
+	.about-story__col > p:not(.about-story__num),
+	.treat__item p,
+	.closing__foot > p,
+	.svc-card__text,
+	.svc-cta__text,
+	.entry-content p,
+	.entry-content li,
+	.appointment__success > p:not(.appointment__note),
+	.empty-state {
+		font-size: 14.5px;
+		line-height: 1.6;
+	}
+
+	.service-tile__text,
+	.stat__label,
+	.svc-pillar p,
+	.post-card__excerpt,
+	.pathway-step__card p:last-child,
+	.record-stat__label,
+	.record-stat__label--lg,
+	.record-stat--hero .record-stat__label,
+	.footer-links,
+	.footer-downloads__text,
+	.comment-body,
+	.svc-cta__emergency-text {
+		font-size: 13.5px;
+	}
+
+	.intro__statement           { font-size: 18px; }
+	.testimonial__quote p       { font-size: 16px; }
+	.mission__quote p           { font-size: 16px; }
+	.mission__item-title        { font-size: 18px; }
+	.service-tile__title        { font-size: 19px; }
+	.service-tile--large .service-tile__title { font-size: 22px; }
+	.footer-cta__number         { font-size: 27px; }
+	.page-hero__title           { font-size: 25px; }
+	.about-ticker__word         { font-size: 20px; }
+	.manifesto__text            { font-size: 18px; }
+	.record-stat__num           { font-size: 30px; }
+	.record-stat--hero .record-stat__num { font-size: 40px; }
+	.closing__word              { font-size: 30px; }
+	.svc-statement              { font-size: 19px; }
+	.svc-card__title            { font-size: 22px; }
+	.svc-cta__word              { font-size: 20px; }
+	.stat__value                { font-size: 28px; }
+
+	/* Testimonial controls: two arrows + four initials must fit in 284px. */
+	.testimonials__nav,
+	.testimonials__tabs {
+		gap: 6px;
+	}
+
+	.testimonials__arrow {
+		width: 38px;
+		height: 38px;
+	}
+
+	.testimonials__tab {
+		padding: 3px;
+	}
+
+	.testimonials__initials {
+		width: 32px;
+		height: 32px;
+		font-size: 12px;
+	}
+
+	.eyebrow {
+		font-size: 12px;
+	}
+
+	/* Brochure carousel: a card fits with the next one peeking in. */
+	.footer-downloads__list > li {
+		flex-basis: 78%;
+		min-width: 0;
+	}
+
+	.download-card__body {
+		min-width: 0;
+	}
+}
