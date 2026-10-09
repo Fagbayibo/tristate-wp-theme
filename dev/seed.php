@@ -147,20 +147,23 @@ update_post_meta( $legacy_id, '_elementor_template_type', 'wp-page' );
 update_post_meta( $legacy_id, '_elementor_version', '3.0.0' );
 update_post_meta( $legacy_id, '_elementor_data', wp_slash( $elementor_data ) );
 
-/* Designed pages: About Us and Our Services use their page templates ----------- */
+/* Designed pages: About Us and Our Services -------------------------------------
+   Like the live site they are old Elementor pages left on the Default template;
+   the theme picks their designed templates from the slug
+   (tristate_current_landing_template()). */
 
-foreach ( array(
-	array( 'About Us', 'about-us', 'page-templates/about-us.php' ),
-	array( 'Our Services', 'services', 'page-templates/our-services.php' ),
-) as $page ) {
-	list( $title, $slug, $template ) = $page;
+foreach ( array( 'About Us' => 'about-us', 'Our Services' => 'our-services' ) as $title => $slug ) {
 	$page_id = wp_insert_post( array(
-		'post_type'   => 'page',
-		'post_title'  => $title,
-		'post_name'   => $slug,
-		'post_status' => 'publish',
+		'post_type'    => 'page',
+		'post_title'   => $title,
+		'post_name'    => $slug,
+		'post_status'  => 'publish',
+		'post_content' => 'Old Elementor content.',
 	) );
-	update_post_meta( $page_id, '_wp_page_template', $template );
+	update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
+	update_post_meta( $page_id, '_elementor_template_type', 'wp-page' );
+	update_post_meta( $page_id, '_elementor_version', '3.0.0' );
+	update_post_meta( $page_id, '_elementor_data', wp_slash( $elementor_data ) );
 }
 
 /* Primary menu, mirroring the live site (Our Services has 11 children) --------- */
@@ -178,7 +181,7 @@ $add     = static function ( $title, $path, $parent = 0 ) use ( $menu_id ) {
 $add( 'Home', '/' );
 $add( 'About us', '/about-us/' );
 $add( 'Our Team', '/our-team/' );
-$services_item = $add( 'Our Services', '/services/' );
+$services_item = $add( 'Our Services', '/our-services/' );
 foreach ( array(
 	'Emergency & Critical Services' => 'emergency-critical-services',
 	'Anaesthesiology'               => 'anaesthesiology',

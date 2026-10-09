@@ -54,19 +54,74 @@ function tristate_asset_version( $path ) {
 	return file_exists( $file ) ? (string) filemtime( $file ) : TRISTATE_VERSION;
 }
 
-/** Designed inner-page templates → their stylesheet (assets/css/<name>.css). */
-function tristate_landing_template() {
-	$templates = array(
-		'page-templates/about-us.php'     => 'about',
-		'page-templates/our-services.php' => 'our-services',
+/**
+ * Designed inner-page templates: their stylesheet (assets/css/<css>.css) and the
+ * page slugs that get them automatically. The slug match matters because
+ * Elementor's "Page Layout" setting rewrites a page's Template field, so a page
+ * left on Default still shows its design; any other template chosen wins.
+ */
+function tristate_landing_templates() {
+	return array(
+		'page-templates/about-us.php'     => array( 'css' => 'about', 'slugs' => array( 'about-us' ) ),
+		'page-templates/our-services.php' => array( 'css' => 'our-services', 'slugs' => array( 'our-services' ) ),
 	);
-	foreach ( $templates as $template => $name ) {
-		if ( is_page_template( $template ) ) {
-			return $name;
+}
+
+/** The designed template the current page uses, or ''. */
+function tristate_current_landing_template() {
+	if ( ! is_page() ) {
+		return '';
+	}
+	$templates = tristate_landing_templates();
+	$assigned  = get_page_template_slug( get_queried_object_id() ); // '' when Default
+	if ( $assigned ) {
+		return isset( $templates[ $assigned ] ) ? $assigned : '';
+	}
+	$slug = get_post_field( 'post_name', get_queried_object_id() );
+	foreach ( $templates as $template => $info ) {
+		if ( in_array( $slug, $info['slugs'], true ) ) {
+			return $template;
 		}
 	}
 	return '';
 }
+
+/** Stylesheet name for the current designed page, or ''. */
+function tristate_landing_template() {
+	$template = tristate_current_landing_template();
+	return $template ? tristate_landing_templates()[ $template ]['css'] : '';
+}
+
+add_filter(
+	'template_include',
+	function ( $template ) {
+		$designed = tristate_current_landing_template();
+		$file     = $designed ? locate_template( $designed ) : '';
+		return $file ? $file : $template;
+	},
+	99 // after Elementor, which swaps in its own templates around priority 12
+);
+
+/**
+ * A designed page replaces an old Elementor layout, so on the front end tell
+ * Elementor it isn't an Elementor page. Otherwise Elementor loads its whole
+ * frontend for content that never prints (and logs "elementorFrontendConfig is
+ * not defined"). The editor and its preview still see the real value.
+ */
+add_filter(
+	'get_post_metadata',
+	function ( $value, $object_id, $meta_key ) {
+		if ( '_elementor_edit_mode' !== $meta_key || is_admin() || ! did_action( 'wp' ) || isset( $_GET['elementor-preview'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			return $value;
+		}
+		if ( (int) $object_id === get_queried_object_id() && tristate_current_landing_template() ) {
+			return array( '' );
+		}
+		return $value;
+	},
+	10,
+	3
+);
 
 /**
  * URL of the first published page using a page template, so templates can link
@@ -169,10 +224,10 @@ function tristate_primary_menu_fallback() {
 		'Home'         => home_url( '/' ),
 		'About Us'     => home_url( '/about-us/' ),
 		'Our Team'     => home_url( '/our-team/' ),
-		'Our Services' => home_url( '/services/' ),
-		'Cases'        => home_url( '/cases/' ),
-		'News'         => home_url( '/news/' ),
-		'Contact'      => home_url( '/contact/' ),
+		'Our Services' => home_url( '/our-services/' ),
+		'Cases'        => home_url( '/real-life-cases/' ),
+		'News'         => home_url( '/our-blog/' ),
+		'Contact'      => home_url( '/contact-us/' ),
 	);
 	echo '<ul class="nav-menu">';
 	foreach ( $items as $label => $url ) {

@@ -51,9 +51,9 @@ $tristate_socials = array(
 					?>
 					<ul class="footer-links">
 						<li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About Us</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/our-services/' ) ); ?>">Services</a></li>
 						<li><a href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>">Appointments</a></li>
-						<li><a href="<?php echo esc_url( home_url( '/news/' ) ); ?>">News</a></li>
+						<li><a href="<?php echo esc_url( get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/our-blog/' ) ); ?>">News</a></li>
 					</ul>
 					<?php
 				}

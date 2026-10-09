@@ -11,32 +11,40 @@ $tristate_services = array(
 		'tag'   => 'Flagship',
 		'text'  => 'Foremost Cardiac Centre in Nigeria. Providing the best in class cardiovascular services that are affordable and accessible.',
 		'image' => 'service-cardiovascular.jpg',
-		'url'   => home_url( '/services/cardiovascular/' ),
+		'url'   => home_url( '/cardiovascular-services/' ),
 	),
 	array(
 		'title' => 'Laboratory Services',
 		'tag'   => 'Diagnostics',
 		'text'  => 'Laboratory tests plays a crucial role in the detection, diagnosis and treatment of diseases in patients.',
 		'image' => 'service-laboratory.jpg',
-		'url'   => home_url( '/services/laboratory/' ),
+		'url'   => home_url( '/laboratory-services/' ),
 	),
 	array(
 		'title' => 'Radiology',
 		'tag'   => 'Imaging',
 		'text'  => 'Cutting-edge digital imaging technology, highly trained technologists and certified radiologists.',
 		'image' => 'service-radiology.jpg',
-		'url'   => home_url( '/services/radiology/' ),
+		'url'   => home_url( '/radiology/' ),
 	),
 	array(
 		'title' => 'Emergency & Critical Care Services',
 		'tag'   => '24/7',
 		'text'  => 'Emergency medical services to efficiently handle life-threatening situations.',
 		'image' => 'service-emergency-alt.jpg',
-		'url'   => home_url( '/services/emergency-critical-care/' ),
+		'url'   => home_url( '/emergency-critical-services/' ),
 	),
 );
 
-$tristate_specialties = array( 'Anaesthesiology', 'Dialysis', 'Obstetrics and Gynaecology', 'Outpatient', 'Pharmaceutical', 'Respiratory & Critical Care' );
+// Label => page slug on the live site.
+$tristate_specialties = array(
+	'Anaesthesiology'             => 'anaesthesiology',
+	'Dialysis'                    => 'dialysis',
+	'Obstetrics and Gynaecology'  => 'obstetrics-and-gynaecology',
+	'Outpatient'                  => 'outpatient-department',
+	'Pharmaceutical'              => 'pharmaceutical-services',
+	'Respiratory & Critical Care' => 'respiratory-critical-care',
+);
 ?>
 <section class="services" aria-labelledby="services-title">
 	<div class="container">
@@ -48,7 +56,7 @@ $tristate_specialties = array( 'Anaesthesiology', 'Dialysis', 'Obstetrics and Gy
 			<div class="services__aside" data-reveal-stagger>
 				<p><?php esc_html_e( 'Best in class cardiovascular services that are affordable and accessible — backed by a full suite of diagnostic and critical care.', 'tristate' ); ?></p>
 				<div>
-					<a class="btn btn--outline-brand" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">
+					<a class="btn btn--outline-brand" href="<?php echo esc_url( home_url( '/our-services/' ) ); ?>">
 						<?php esc_html_e( 'View All Services', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span>
 					</a>
 				</div>
@@ -74,9 +82,9 @@ $tristate_specialties = array( 'Anaesthesiology', 'Dialysis', 'Obstetrics and Gy
 		<div class="services__also" data-reveal="up">
 			<p class="services__also-title">Also at <br>Tristate</p>
 			<ul class="services__chips" data-reveal-stagger>
-				<?php foreach ( $tristate_specialties as $tristate_specialty ) : ?>
+				<?php foreach ( $tristate_specialties as $tristate_specialty => $tristate_slug ) : ?>
 					<li>
-						<a class="chip" href="<?php echo esc_url( home_url( '/services/' . sanitize_title( $tristate_specialty ) . '/' ) ); ?>">
+						<a class="chip" href="<?php echo esc_url( home_url( "/$tristate_slug/" ) ); ?>">
 							<?php tristate_icon( 'dot', 6 ); ?>
 							<?php echo esc_html( $tristate_specialty ); ?>
 						</a>

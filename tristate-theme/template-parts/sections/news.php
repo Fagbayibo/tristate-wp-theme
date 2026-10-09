@@ -39,7 +39,7 @@ if ( $tristate_query->have_posts() ) {
 	);
 }
 
-$tristate_news_url = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/news/' );
+$tristate_news_url = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/our-blog/' );
 
 if ( ! function_exists( 'tristate_news_meta' ) ) :
 	function tristate_news_meta( $post ) {

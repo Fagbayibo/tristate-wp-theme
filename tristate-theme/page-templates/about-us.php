@@ -9,7 +9,7 @@
  */
 
 $tristate_appointment = tristate_contact( 'appointment_url' );
-$tristate_services    = tristate_template_url( 'page-templates/our-services.php', '/services/' );
+$tristate_services    = tristate_template_url( 'page-templates/our-services.php', '/our-services/' );
 
 $tristate_specialties = array( 'Cardiology', 'Neurology', 'Neurosurgery', 'Orthopedics', 'Nephrology', 'OBGYN', 'Internal Medicine', 'Diagnostics', 'Executive Health' );
 
