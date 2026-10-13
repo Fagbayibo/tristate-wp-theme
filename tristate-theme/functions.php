@@ -15,6 +15,7 @@ require TRISTATE_DIR . '/inc/appointments.php';
 require TRISTATE_DIR . '/inc/blog.php';
 require TRISTATE_DIR . '/inc/contact.php';
 require TRISTATE_DIR . '/inc/downloads.php';
+require TRISTATE_DIR . '/inc/icons.php';
 require TRISTATE_DIR . '/inc/menu.php';
 require TRISTATE_DIR . '/inc/services.php';
 require TRISTATE_DIR . '/inc/updater.php';

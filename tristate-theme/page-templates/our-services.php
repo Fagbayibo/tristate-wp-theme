@@ -11,19 +11,19 @@
 $tristate_appointment = tristate_contact( 'appointment_url' );
 $tristate_about       = tristate_template_url( 'page-templates/about-us.php', '/about-us/' );
 $tristate_img         = TRISTATE_URI . '/assets/images/';
-$tristate_arrow       = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+$tristate_arrow       = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
 
-$tristate_icon = 'tristate_line_icon'; // inc/menu.php
+$tristate_icon = 'tristate_svg'; // inc/icons.php
 
 // id, title, short name (closing marquee), tag, icon, swatch colours, copy, page slug, image, image alt, badge
 $tristate_services = array(
 	array( 'svc-lab', 'Laboratory Services', 'Laboratory', 'Diagnostics', 'flask', '#8c101b', '#5e0d17', 'Delivering high-yield clinical testing, pathology, and biochemical analysis with rapid turnaround times to ensure accurate diagnosis and personalized treatment planning.', 'laboratory-services', 'service-laboratory.jpg', 'Tristate laboratory scientist at work', 'Rapid turnaround' ),
-	array( 'svc-obgyn', 'Obstetrics &amp; Gynaecology', 'Obstetrics &amp; Gynaecology', "Women's Health", 'venus', '#e8c9cd', '#b86a75', 'Providing comprehensive, compassionate healthcare for women across all life stages, covering routine ante-natal care, complex maternal-fetal health, and specialized gynecological procedures.', 'obstetrics-and-gynaecology', 'intro-1.jpg', 'A smiling Tristate patient', 'Every life stage' ),
-	array( 'svc-pharma', 'Pharmaceutical Services', 'Pharmaceutical', 'Medication Safety', 'capsule', '#3a1a20', '#8c101b', 'Ensuring safe, precision medication dispensing and personalized therapy management to optimize recovery and prevent adverse interactions for both inpatient and outpatient care.', 'pharmaceutical-services', 'intro-3.jpg', 'A Tristate clinician with a stethoscope', 'Inpatient &amp; outpatient' ),
-	array( 'svc-anaes', 'Anaesthesiology', 'Anaesthesiology', 'Perioperative Care', 'monitor', '#a3343f', '#5e0d17', 'Offering expert perioperative care, specialized surgical sedation, and advanced physiological monitoring to maximize patient safety and comfort during complex medical operations.', 'anaesthesiology', 'service-cardiovascular.jpg', 'Tristate surgical team in theatre', 'Safety &amp; comfort' ),
-	array( 'svc-opd', 'Outpatient Department (OPD)', 'Outpatient', 'Consultations', 'stetho', '#d79aa3', '#8c101b', 'Serving as a structured entry point for direct consultant access, comprehensive second opinions, and routine follow-up care without unnecessary delays.', 'outpatient-department', 'intro-2.jpg', 'A Tristate consultant at her desk', 'Direct consultant access' ),
-	array( 'svc-edu', 'Education &amp; Research', 'Education &amp; Research', 'Innovation', 'cap', '#5e0d17', '#2a0a10', 'Pioneering medical innovation and training local healthcare professionals to continuously advance specialist medical standards and treatment outcomes across Nigeria.', 'education-research', 'service-radiology.jpg', 'Tristate clinicians reviewing findings together', 'Advancing standards' ),
-	array( 'svc-er', 'Emergency &amp; Critical Care Services', 'Emergency &amp; Critical Care', '24/7', 'cross', '#c2283a', '#8c101b', 'Providing 24/7 rapid stabilization, intensive care monitoring, and immediate interventional routing for acute, life-threatening medical emergencies.', 'emergency-critical-services', 'service-emergency-alt.jpg', 'Tristate emergency response team', 'Open 24/7' ),
+	array( 'svc-obgyn', 'Obstetrics &amp; Gynaecology', 'Obstetrics &amp; Gynaecology', "Women's Health", 'gender-female', '#e8c9cd', '#b86a75', 'Providing comprehensive, compassionate healthcare for women across all life stages, covering routine ante-natal care, complex maternal-fetal health, and specialized gynecological procedures.', 'obstetrics-and-gynaecology', 'intro-1.jpg', 'A smiling Tristate patient', 'Every life stage' ),
+	array( 'svc-pharma', 'Pharmaceutical Services', 'Pharmaceutical', 'Medication Safety', 'pill', '#3a1a20', '#8c101b', 'Ensuring safe, precision medication dispensing and personalized therapy management to optimize recovery and prevent adverse interactions for both inpatient and outpatient care.', 'pharmaceutical-services', 'intro-3.jpg', 'A Tristate clinician with a stethoscope', 'Inpatient &amp; outpatient' ),
+	array( 'svc-anaes', 'Anaesthesiology', 'Anaesthesiology', 'Perioperative Care', 'heart-rate-monitor', '#a3343f', '#5e0d17', 'Offering expert perioperative care, specialized surgical sedation, and advanced physiological monitoring to maximize patient safety and comfort during complex medical operations.', 'anaesthesiology', 'service-cardiovascular.jpg', 'Tristate surgical team in theatre', 'Safety &amp; comfort' ),
+	array( 'svc-opd', 'Outpatient Department (OPD)', 'Outpatient', 'Consultations', 'stethoscope', '#d79aa3', '#8c101b', 'Serving as a structured entry point for direct consultant access, comprehensive second opinions, and routine follow-up care without unnecessary delays.', 'outpatient-department', 'intro-2.jpg', 'A Tristate consultant at her desk', 'Direct consultant access' ),
+	array( 'svc-edu', 'Education &amp; Research', 'Education &amp; Research', 'Innovation', 'school', '#5e0d17', '#2a0a10', 'Pioneering medical innovation and training local healthcare professionals to continuously advance specialist medical standards and treatment outcomes across Nigeria.', 'education-research', 'service-radiology.jpg', 'Tristate clinicians reviewing findings together', 'Advancing standards' ),
+	array( 'svc-er', 'Emergency &amp; Critical Care Services', 'Emergency &amp; Critical Care', '24/7', 'ambulance', '#c2283a', '#8c101b', 'Providing 24/7 rapid stabilization, intensive care monitoring, and immediate interventional routing for acute, life-threatening medical emergencies.', 'emergency-critical-services', 'service-emergency-alt.jpg', 'Tristate emergency response team', 'Open 24/7' ),
 );
 $tristate_total = count( $tristate_services );
 
@@ -31,12 +31,12 @@ $tristate_total = count( $tristate_services );
 $tristate_tiles = array(
 	array( 'left:6%;top:24%', 128, -8, '7s', '0s', 0.9, 'why-1.jpg', '', '72px' ),
 	array( 'left:15%;top:62%', 96, 6, '8s', '-2s', 0.5, '', 'flask', '' ),
-	array( 'left:22%;top:13%', 78, 10, '6s', '-1s', 0.3, '', 'stetho blush', '8px' ),
+	array( 'left:22%;top:13%', 78, 10, '6s', '-1s', 0.3, '', 'stethoscope blush', '8px' ),
 	array( 'left:24%;top:80%', 92, -4, '9s', '-4s', 0.45, 'intro-1.jpg', '', '' ),
 	array( 'right:6%;top:20%', 136, 8, '7.5s', '-3s', 0.85, 'service-laboratory.jpg', '', '58px' ),
-	array( 'right:20%;top:11%', 76, -10, '6.5s', '-2.5s', 0.35, '', 'capsule blush', '6px' ),
+	array( 'right:20%;top:11%', 76, -10, '6.5s', '-2.5s', 0.35, '', 'pill blush', '6px' ),
 	array( 'right:13%;top:62%', 120, -6, '8.5s', '-1.5s', 0.7, 'service-emergency-alt.jpg', '', '' ),
-	array( 'right:29%;top:82%', 70, 12, '7s', '-5s', 0.4, '', 'cross', '' ),
+	array( 'right:29%;top:82%', 70, 12, '7s', '-5s', 0.4, '', 'ambulance', '' ),
 );
 
 get_header();
@@ -60,7 +60,7 @@ get_header();
 						<?php if ( $tristate_photo ) : ?>
 							<img src="<?php echo esc_url( $tristate_img . $tristate_photo ); ?>" alt="">
 						<?php else : ?>
-							<?php echo $tristate_icon( $tristate_glyph[0], '1.6' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
+							<?php echo $tristate_icon( $tristate_glyph[0], array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -86,9 +86,9 @@ get_header();
 			<div class="svc-pillars__grid" data-reveal-stagger>
 				<?php
 				$tristate_pillars = array(
-					array( 'monitor', 'Advanced Medical Technology', 'Precise clinical evaluation and advanced diagnostics.' ),
-					array( 'doctor', 'Experienced Specialists', 'World-class, internationally trained clinicians.' ),
-					array( 'pathway', 'Coordinated Pathways', 'One clear journey from assessment to long-term management.' ),
+					array( 'heart-rate-monitor', 'Advanced Medical Technology', 'Precise clinical evaluation and advanced diagnostics.' ),
+					array( 'stethoscope', 'Experienced Specialists', 'World-class, internationally trained clinicians.' ),
+					array( 'route', 'Coordinated Pathways', 'One clear journey from assessment to long-term management.' ),
 				);
 				foreach ( $tristate_pillars as $tristate_i => $tristate_pillar ) :
 					?>

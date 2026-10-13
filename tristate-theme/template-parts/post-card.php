@@ -16,7 +16,7 @@ $tristate_heading  = $tristate_featured ? 'h2' : 'h3';
 		<?php if ( has_post_thumbnail() ) : ?>
 			<?php the_post_thumbnail( $tristate_featured ? 'full' : 'large', array( 'loading' => $tristate_featured ? 'eager' : 'lazy', 'alt' => '' ) ); ?>
 		<?php else : ?>
-			<span class="post-card__placeholder"><?php echo tristate_line_icon( 'heart', '1.2' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+			<span class="post-card__placeholder"><?php echo tristate_svg( 'heartbeat', array( 'stroke' => 1.25 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 		<?php endif; ?>
 		<?php if ( $tristate_cats ) : ?>
 			<span class="post-card__tag"><?php echo esc_html( $tristate_cats[0]->name ); ?></span>
@@ -35,7 +35,7 @@ $tristate_heading  = $tristate_featured ? 'h2' : 'h3';
 
 		<span class="post-card__more" aria-hidden="true">
 			<?php esc_html_e( 'Read article', 'tristate' ); ?>
-			<span class="post-card__circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+			<span class="post-card__circle"><?php echo tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 		</span>
 	</div>
 </article>

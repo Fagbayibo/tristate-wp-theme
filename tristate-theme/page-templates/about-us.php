@@ -21,17 +21,17 @@ $tristate_treat = array(
 	array( 'T', 'Trust', 'We build confidence through clinical competence, clear communication, and continuity of care.' ),
 );
 
-// Icon paths are 24×24, stroked with currentColor.
+// Pathway steps: title, text, Tabler icon.
 $tristate_steps = array(
-	array( 'Assessment', 'Listening carefully to medical histories, symptoms, lifestyle risks, and family concerns.', '<path d="M9 4H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><rect x="9" y="2.5" width="6" height="3.5" rx="1"/><path d="M9 12h6M9 16h4"/>' ),
-	array( 'Diagnosis', 'Utilizing precise clinical evaluation and advanced diagnostics to establish health status.', '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5M8 11h1.5l1-2 1.5 4 1-2H14"/>' ),
-	array( 'Treatment Planning', 'Specialists explain findings clearly and outline custom care options.', '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Z"/><path d="M9 4v14M15 6v14"/>' ),
-	array( 'Intervention or Surgery', 'Executing procedures through experienced, multidisciplinary teams.', '<path d="M10 3h4v7h7v4h-7v7h-4v-7H3v-4h7Z"/>' ),
-	array( 'Recovery', 'Supporting the return to daily life through structured rehabilitation and guidance.', '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/><path d="M8.5 11.5h2l1-2 1.5 3 1-1.5h1.5"/>' ),
-	array( 'Long-Term Management', 'Monitoring risk, preventing recurrence, and maintaining long-term wellness.', '<path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>' ),
+	array( 'Assessment', 'Listening carefully to medical histories, symptoms, lifestyle risks, and family concerns.', 'clipboard-heart' ),
+	array( 'Diagnosis', 'Utilizing precise clinical evaluation and advanced diagnostics to establish health status.', 'report-medical' ),
+	array( 'Treatment Planning', 'Specialists explain findings clearly and outline custom care options.', 'checklist' ),
+	array( 'Intervention or Surgery', 'Executing procedures through experienced, multidisciplinary teams.', 'medical-cross' ),
+	array( 'Recovery', 'Supporting the return to daily life through structured rehabilitation and guidance.', 'heart-handshake' ),
+	array( 'Long-Term Management', 'Monitoring risk, preventing recurrence, and maintaining long-term wellness.', 'shield-check' ),
 );
 
-$tristate_arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+$tristate_arrow = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
 $tristate_img   = TRISTATE_URI . '/assets/images/';
 
 get_header();
@@ -61,7 +61,7 @@ get_header();
 					</figure>
 					<div class="about-hero__chip" data-reveal="up" data-delay="0.18">
 						<span class="about-hero__chip-icon" aria-hidden="true">
-							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path pathLength="100" d="M2 12h4l2-5 4 10 2-5h8"/></svg>
+							<?php echo tristate_svg( 'activity', array( 'stroke' => 2, 'path_length' => 100 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
 						</span>
 						<div>
 							<strong>Our roots</strong>
@@ -258,7 +258,7 @@ get_header();
 					<li class="pathway-step">
 						<span class="pathway-step__node"><?php echo esc_html( sprintf( '%02d', $tristate_i + 1 ) ); ?></span>
 						<div class="pathway-step__card" data-reveal="<?php echo $tristate_i % 2 ? 'left' : 'right'; ?>">
-							<span class="pathway-step__icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><?php echo $tristate_step[2]; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></svg></span>
+							<span class="pathway-step__icon" aria-hidden="true"><?php echo tristate_svg( $tristate_step[2] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 							<div>
 								<p class="pathway-step__kicker">Step <?php echo (int) $tristate_i + 1; ?></p>
 								<h3 class="pathway-step__title"><?php echo esc_html( $tristate_step[0] ); ?></h3>

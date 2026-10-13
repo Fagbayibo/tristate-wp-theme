@@ -18,7 +18,7 @@ while ( have_posts() ) :
 	$tristate_cats     = get_the_category();
 	$tristate_cat      = $tristate_cats ? $tristate_cats[0] : null;
 	$tristate_blog_url = get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/' );
-	$tristate_arrow    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+	$tristate_arrow    = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
 	?>
 	<div class="read-progress" aria-hidden="true"></div>
 
@@ -78,13 +78,13 @@ while ( have_posts() ) :
 							<?php foreach ( tristate_share_links() as $tristate_net => $tristate_share ) : ?>
 								<li>
 									<a class="post-share__btn" href="<?php echo esc_url( $tristate_share[1] ); ?>" target="_blank" rel="noopener" aria-label="<?php echo esc_attr( sprintf( __( 'Share on %s', 'tristate' ), $tristate_share[0] ) ); ?>">
-										<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><?php echo $tristate_share[2]; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></svg>
+										<?php echo tristate_svg( $tristate_share[2] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
 									</a>
 								</li>
 							<?php endforeach; ?>
 							<li>
 								<button class="post-share__btn post-share__copy" type="button" data-copy-link="<?php echo esc_url( get_permalink() ); ?>" aria-label="<?php esc_attr_e( 'Copy link', 'tristate' ); ?>">
-									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg>
+									<?php echo tristate_svg( 'link' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
 									<span class="post-share__copied" role="status"></span>
 								</button>
 							</li>

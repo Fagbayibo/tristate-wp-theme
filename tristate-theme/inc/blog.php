@@ -61,15 +61,15 @@ function tristate_read_label( $post_id = null ) {
 	return sprintf( _n( '%s min read', '%s min read', $minutes, 'tristate' ), number_format_i18n( $minutes ) );
 }
 
-/** Share targets for the current post: [ label, url, svg path(s) ]. */
+/** Share targets for the current post: [ label, url, Tabler icon name ]. */
 function tristate_share_links() {
 	$url   = rawurlencode( get_permalink() );
 	$title = rawurlencode( wp_strip_all_tags( get_the_title() ) );
 
 	return array(
-		'whatsapp' => array( 'WhatsApp', "https://wa.me/?text=$title%20$url", '<path d="M3.5 20.5 4.8 16A8.5 8.5 0 1 1 8 19.2Z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1.3-1.6-2-1-1 .9a5 5 0 0 1-2.6-2.6l.9-1-1-2Z"/>' ),
-		'facebook' => array( 'Facebook', "https://www.facebook.com/sharer/sharer.php?u=$url", '<path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8Z"/>' ),
-		'x'        => array( 'X', "https://twitter.com/intent/tweet?url=$url&text=$title", '<path d="m4 4 16 16M20 4 4 20"/>' ),
-		'linkedin' => array( 'LinkedIn', "https://www.linkedin.com/sharing/share-offsite/?url=$url", '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 10v7M8 7v.01M12 17v-4a2 2 0 0 1 4 0v4M12 10v7"/>' ),
+		'whatsapp' => array( 'WhatsApp', "https://wa.me/?text=$title%20$url", 'brand-whatsapp' ),
+		'facebook' => array( 'Facebook', "https://www.facebook.com/sharer/sharer.php?u=$url", 'brand-facebook' ),
+		'x'        => array( 'X', "https://twitter.com/intent/tweet?url=$url&text=$title", 'brand-x' ),
+		'linkedin' => array( 'LinkedIn', "https://www.linkedin.com/sharing/share-offsite/?url=$url", 'brand-linkedin' ),
 	);
 }

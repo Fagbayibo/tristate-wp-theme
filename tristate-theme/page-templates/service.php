@@ -20,7 +20,7 @@ if ( ! $tristate_service ) { // only reachable if routing and data disagree
 $tristate_services = tristate_services();
 $tristate_all_url  = tristate_template_url( 'page-templates/our-services.php', '/our-services/' );
 $tristate_img      = TRISTATE_URI . '/assets/images/';
-$tristate_arrow    = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>';
+$tristate_arrow    = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
 $tristate_is_er    = ! empty( $tristate_service['emergency'] );
 
 get_header();
@@ -56,7 +56,7 @@ get_header();
 				<div class="sd-hero__media" data-reveal="clip-up">
 					<img src="<?php echo esc_url( $tristate_img . $tristate_service['image'] ); ?>" alt="<?php echo esc_attr( $tristate_service['alt'] ); ?>" fetchpriority="high" data-parallax="0.05">
 				</div>
-				<span class="sd-hero__icon" data-reveal="pop" data-delay="0.6"><?php echo tristate_line_icon( $tristate_service['icon'], '1.6' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+				<span class="sd-hero__icon" data-reveal="pop" data-delay="0.6"><?php echo tristate_svg( $tristate_service['icon'], array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 				<span class="sd-hero__badge" data-reveal="up" data-delay="0.8"><span class="pulse-dot" aria-hidden="true"></span><?php echo wp_kses_post( $tristate_service['badge'] ); ?></span>
 			</div>
 		</div>
@@ -128,7 +128,7 @@ get_header();
 						<?php foreach ( $tristate_list['items'] as $tristate_i => $tristate_item ) : ?>
 							<li class="sd-test">
 								<span class="sd-test__num"><?php echo esc_html( sprintf( '%02d', $tristate_i + 1 ) ); ?></span>
-								<span class="sd-test__icon"><?php echo tristate_line_icon( $tristate_service['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+								<span class="sd-test__icon"><?php echo tristate_svg( $tristate_service['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 								<strong class="sd-test__name"><?php echo esc_html( $tristate_item[0] ); ?></strong>
 								<?php if ( $tristate_item[1] ) : ?>
 									<span class="sd-test__note"><?php echo esc_html( $tristate_item[1] ); ?></span>
@@ -166,7 +166,7 @@ get_header();
 					}
 					?>
 					<a class="svc-link" href="<?php echo esc_url( home_url( "/$tristate_other_slug/" ) ); ?>">
-						<span class="svc-link__swatch"><?php echo tristate_line_icon( $tristate_other['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+						<span class="svc-link__swatch"><?php echo tristate_svg( $tristate_other['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 						<span class="svc-link__text"><strong><?php echo wp_kses_post( $tristate_other['title'] ); ?></strong><small><?php echo esc_html( $tristate_other['tag'] ); ?></small></span>
 						<span class="svc-link__go"><?php echo $tristate_arrow; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 					</a>

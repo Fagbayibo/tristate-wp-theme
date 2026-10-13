@@ -10,7 +10,6 @@
 
 $tristate_status    = isset( $_GET['message'] ) ? sanitize_key( $_GET['message'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification -- display only.
 $tristate_locations = tristate_locations();
-$tristate_icon      = 'tristate_line_icon'; // inc/menu.php
 $tristate_map       = static function ( $address ) {
 	return 'https://maps.google.com/maps?q=' . rawurlencode( $address ) . '&t=m&z=15&output=embed';
 };
@@ -18,10 +17,10 @@ $tristate_route     = static function ( $address ) {
 	return 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode( $address );
 };
 
-// Quick contact cards: icon (24×24 stroked path), label, lines [ text, href ].
+// Quick contact cards: Tabler icon, label, lines [ text, href ].
 $tristate_quick = array(
 	array(
-		'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+		'phone',
 		'Care line',
 		array(
 			array( tristate_contact( 'emergency' ), 'tel:' . tristate_contact( 'emergency_tel' ) ),
@@ -29,12 +28,12 @@ $tristate_quick = array(
 		),
 	),
 	array(
-		'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+		'mail',
 		'Email',
 		array( array( tristate_contact( 'email' ), 'mailto:' . tristate_contact( 'email' ) ) ),
 	),
 	array(
-		'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+		'clock',
 		'Opening hours',
 		array( array( '8 am – 5 pm, every day', '' ), array( 'Emergency care 24/7', '' ) ),
 	),
@@ -57,7 +56,7 @@ get_header();
 			<ul class="ct-quick" data-reveal-stagger>
 				<?php foreach ( $tristate_quick as $tristate_card ) : ?>
 					<li class="ct-quick__card">
-						<span class="ct-quick__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><?php echo $tristate_card[0]; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></svg></span>
+						<span class="ct-quick__icon"><?php echo tristate_svg( $tristate_card[0] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 						<span class="ct-quick__label"><?php echo esc_html( $tristate_card[1] ); ?></span>
 						<?php foreach ( $tristate_card[2] as $tristate_line ) : ?>
 							<?php if ( $tristate_line[1] ) : ?>
