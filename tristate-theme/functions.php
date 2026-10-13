@@ -195,6 +195,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 	if ( is_front_page() ) {
 		wp_enqueue_script( 'tristate-hero', TRISTATE_URI . '/assets/js/hero.js', array( 'gsap' ), tristate_asset_version( '/assets/js/hero.js' ), array( 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'tristate-video-modal', TRISTATE_URI . '/assets/js/video-modal.js', array(), tristate_asset_version( '/assets/js/video-modal.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-testimonials', TRISTATE_URI . '/assets/js/testimonials.js', array( 'gsap' ), tristate_asset_version( '/assets/js/testimonials.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-appointment', TRISTATE_URI . '/assets/js/appointment.js', array(), tristate_asset_version( '/assets/js/appointment.js' ), array( 'strategy' => 'defer' ) );
 	}

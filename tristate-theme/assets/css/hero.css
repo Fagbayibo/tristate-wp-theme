@@ -268,3 +268,90 @@
 		display: none; /* numbers only on phones */
 	}
 }
+
+/* "Watch Our Story" video pop-up (assets/js/video-modal.js) ----------------- */
+.video-modal {
+	width: min(1100px, calc(100vw - 2 * var(--gutter, 24px)));
+	max-width: none;
+	max-height: none;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	overflow: visible;
+}
+
+.video-modal::backdrop {
+	background: rgba(20, 6, 9, 0.86);
+	backdrop-filter: blur(6px);
+}
+
+.video-modal[open] {
+	animation: video-modal-in 0.45s var(--ease-out) both;
+}
+
+.video-modal[open]::backdrop {
+	animation: video-modal-fade 0.45s ease both;
+}
+
+@keyframes video-modal-in {
+	from { opacity: 0; transform: translateY(24px) scale(0.97); }
+}
+
+@keyframes video-modal-fade {
+	from { opacity: 0; }
+}
+
+.video-modal__inner {
+	position: relative;
+}
+
+.video-modal__frame {
+	overflow: hidden;
+	aspect-ratio: 16 / 9;
+	border-radius: var(--radius-media);
+	background: #000;
+	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+.video-modal__frame iframe {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border: 0;
+}
+
+.video-modal__close {
+	position: absolute;
+	top: -56px;
+	right: 0;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.12);
+	color: var(--color-white);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+	transition: background-color var(--dur-fast), transform 0.4s var(--ease-out);
+}
+
+.video-modal__close:hover,
+.video-modal__close:focus-visible {
+	background: var(--color-burgundy-600);
+	transform: rotate(90deg);
+}
+
+.video-modal__close svg {
+	width: 22px;
+}
+
+html.has-video-modal {
+	overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.video-modal[open],
+	.video-modal[open]::backdrop {
+		animation: none;
+	}
+}

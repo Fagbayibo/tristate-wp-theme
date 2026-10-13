@@ -30,6 +30,9 @@ $tristate_slides = array(
 	),
 );
 
+// "Watch Our Story" video: YouTube ID of https://youtu.be/j0hrCvF_SrA
+$tristate_story_video = 'j0hrCvF_SrA';
+
 /** Wrap each word in masks so it can rise into view. */
 if ( ! function_exists( 'tristate_hero_headline' ) ) :
 function tristate_hero_headline( $segments ) {
@@ -79,7 +82,8 @@ endif;
 				<a class="btn btn--primary" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>">
 					<?php esc_html_e( 'Book Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span>
 				</a>
-				<a class="btn btn--ghost" href="#our-story">
+				<?php // Opens in a pop-up (assets/js/video-modal.js); without JS, on YouTube. ?>
+				<a class="btn btn--ghost" href="<?php echo esc_url( 'https://www.youtube.com/watch?v=' . $tristate_story_video ); ?>" target="_blank" rel="noopener" data-video="<?php echo esc_attr( $tristate_story_video ); ?>" aria-haspopup="dialog">
 					<span class="btn--ghost__play"><?php tristate_icon( 'play', 16 ); ?></span>
 					<?php esc_html_e( 'Watch Our Story', 'tristate' ); ?>
 				</a>
@@ -98,3 +102,12 @@ endif;
 		</div>
 	</div>
 </section>
+
+<dialog class="video-modal" aria-label="<?php esc_attr_e( 'Our story', 'tristate' ); ?>" data-video-modal>
+	<div class="video-modal__inner">
+		<button class="video-modal__close" type="button" data-video-close aria-label="<?php esc_attr_e( 'Close video', 'tristate' ); ?>">
+			<?php echo tristate_svg( 'x', array( 'stroke' => 2 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
+		</button>
+		<div class="video-modal__frame" data-video-frame></div>
+	</div>
+</dialog>
