@@ -1,8 +1,8 @@
 <?php
 /**
  * LOCAL DEVELOPMENT ONLY — run by blueprint.json when the Playground site boots.
- * Replaces the default "Hello world!" post with the three news posts from the
- * Figma design so the homepage News section can be previewed. Never deploy this.
+ * Replaces the default "Hello world!" post with the live site's posts and sets
+ * up pages shaped like the live ones. Never deploy this.
  */
 
 require_once '/wordpress/wp-load.php';
@@ -10,38 +10,53 @@ require_once ABSPATH . 'wp-admin/includes/image.php';
 
 wp_delete_post( 1, true ); // "Hello world!"
 
-$health = wp_insert_term( 'Health', 'category' );
-$cat_id = is_wp_error( $health ) ? (int) get_term_by( 'name', 'Health', 'category' )->term_id : (int) $health['term_id'];
+/* Blog: the 17 posts from the live site (dev/posts.json, a snapshot of its REST
+   API), with theme photos standing in for their featured images. */
 
-$images = get_theme_root() . '/tristate-theme/assets/images/';
-$posts  = array(
-	array( 'PDA DEVICE CLOSURE DONE ON TWO CHILDREN RECENTLY', '2021-09-23 10:00:00', 'news-featured.jpg' ),
-	array( 'Why Should You Take a Stress Test?', '2021-07-12 10:00:00', 'news-1.jpg' ),
-	array( 'Can I contact Covid after getting the Covid-19 vaccine?', '2021-06-25 10:00:00', 'news-2.jpg' ),
-);
+$cat_ids = array();
+foreach ( array( 'Health', 'News' ) as $cat_name ) {
+	$term                 = term_exists( $cat_name, 'category' );
+	$term                 = $term ? $term : wp_insert_term( $cat_name, 'category' );
+	$cat_ids[ $cat_name ] = (int) $term['term_id'];
+}
 
-foreach ( $posts as $p ) {
-	list( $title, $date, $file ) = $p;
+$images  = get_theme_root() . '/tristate-theme/assets/images/';
+$photos  = array( 'news-featured.jpg', 'news-1.jpg', 'news-2.jpg', 'hero-cardiac.jpg', 'service-cardiovascular.jpg', 'why-2.jpg', 'service-imaging.jpg', 'intro-2.jpg', 'mission.jpg', 'service-outpatient.jpg' );
+$live    = json_decode( file_get_contents( __DIR__ . '/posts.json' ), true );
+$i       = 0;
 
+foreach ( $live as $p ) {
 	$post_id = wp_insert_post( array(
-		'post_title'    => $title,
-		'post_content'  => '<!-- wp:paragraph --><p>Sample post content for local development.</p><!-- /wp:paragraph -->',
+		'post_title'    => $p['title'],
+		'post_name'     => $p['slug'],
+		'post_content'  => $p['content'],
 		'post_status'   => 'publish',
-		'post_date'     => $date,
-		'post_category' => array( $cat_id ),
+		'post_date'     => $p['date'],
+		'post_category' => array_map( static function ( $name ) use ( $cat_ids ) { return $cat_ids[ $name ]; }, $p['categories'] ),
 	) );
 
+	if ( ! $p['image'] ) {
+		continue; // like the live site, one post has no featured image
+	}
+	$file   = $photos[ $i++ % count( $photos ) ];
 	$upload = wp_upload_bits( $file, null, file_get_contents( $images . $file ) );
 	if ( empty( $upload['error'] ) ) {
 		$attachment_id = wp_insert_attachment( array(
 			'post_mime_type' => 'image/jpeg',
-			'post_title'     => $title,
+			'post_title'     => $p['title'],
 			'post_status'    => 'inherit',
 		), $upload['file'], $post_id );
 		wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );
 		set_post_thumbnail( $post_id, $attachment_id );
 	}
 }
+
+/* Static front page + "Our Blog" as the posts page, as on the live site. */
+$home_id = wp_insert_post( array( 'post_type' => 'page', 'post_title' => 'Home', 'post_name' => 'home', 'post_status' => 'publish' ) );
+$blog_id = wp_insert_post( array( 'post_type' => 'page', 'post_title' => 'Our Blog', 'post_name' => 'our-blog', 'post_status' => 'publish' ) );
+update_option( 'show_on_front', 'page' );
+update_option( 'page_on_front', $home_id );
+update_option( 'page_for_posts', $blog_id );
 
 
 /* Sample brochures & flyers ----------------------------------------------------- */
@@ -147,12 +162,12 @@ update_post_meta( $legacy_id, '_elementor_template_type', 'wp-page' );
 update_post_meta( $legacy_id, '_elementor_version', '3.0.0' );
 update_post_meta( $legacy_id, '_elementor_data', wp_slash( $elementor_data ) );
 
-/* Designed pages: About Us and Our Services -------------------------------------
+/* Designed pages: About Us, Our Services and Contact Us -------------------------------------
    Like the live site they are old Elementor pages left on the Default template;
    the theme picks their designed templates from the slug
    (tristate_current_landing_template()). */
 
-foreach ( array( 'About Us' => 'about-us', 'Our Services' => 'our-services' ) as $title => $slug ) {
+foreach ( array( 'About Us' => 'about-us', 'Our Services' => 'our-services', 'Contact Us' => 'contact-us' ) as $title => $slug ) {
 	$page_id = wp_insert_post( array(
 		'post_type'    => 'page',
 		'post_title'   => $title,
@@ -164,6 +179,41 @@ foreach ( array( 'About Us' => 'about-us', 'Our Services' => 'our-services' ) as
 	update_post_meta( $page_id, '_elementor_template_type', 'wp-page' );
 	update_post_meta( $page_id, '_elementor_version', '3.0.0' );
 	update_post_meta( $page_id, '_elementor_data', wp_slash( $elementor_data ) );
+}
+
+/* Service pages ------------------------------------------------------------------
+   Live, most are Elementor pages on Elementor's "Header & Footer" layout (Dialysis
+   is on Default); the theme still routes them to page-templates/service.php. */
+
+$service_pages = array(
+	'Emergency & Critical Services' => 'emergency-critical-services',
+	'Anaesthesiology'               => 'anaesthesiology',
+	'Cardiovascular Services'       => 'cardiovascular-services',
+	'Education & Research'          => 'education-research',
+	'Laboratory Services'           => 'laboratory-services',
+	'Dialysis'                      => 'dialysis',
+	'Obstetrics and Gynaecology'    => 'obstetrics-and-gynaecology',
+	'Outpatient Department'         => 'outpatient-department',
+	'Pharmaceutical Services'       => 'pharmaceutical-services',
+	'Respiratory & Critical Care'   => 'respiratory-critical-care',
+	'Radiology'                     => 'radiology',
+);
+
+foreach ( $service_pages as $title => $slug ) {
+	$page_id = wp_insert_post( array(
+		'post_type'    => 'page',
+		'post_title'   => $title,
+		'post_name'    => $slug,
+		'post_status'  => 'publish',
+		'post_content' => 'Old Elementor content.',
+	) );
+	update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
+	update_post_meta( $page_id, '_elementor_template_type', 'wp-page' );
+	update_post_meta( $page_id, '_elementor_version', '3.0.0' );
+	update_post_meta( $page_id, '_elementor_data', wp_slash( $elementor_data ) );
+	if ( 'dialysis' !== $slug ) {
+		update_post_meta( $page_id, '_wp_page_template', 'elementor_header_footer' );
+	}
 }
 
 /* Primary menu, mirroring the live site (Our Services has 11 children) --------- */
@@ -182,19 +232,7 @@ $add( 'Home', '/' );
 $add( 'About us', '/about-us/' );
 $add( 'Our Team', '/our-team/' );
 $services_item = $add( 'Our Services', '/our-services/' );
-foreach ( array(
-	'Emergency & Critical Services' => 'emergency-critical-services',
-	'Anaesthesiology'               => 'anaesthesiology',
-	'Cardiovascular Services'       => 'cardiovascular-services',
-	'Education & Research'          => 'education-research',
-	'Laboratory Services'           => 'laboratory-services',
-	'Dialysis'                      => 'dialysis',
-	'Obstetrics and Gynaecology'    => 'obstetrics-and-gynaecology',
-	'Outpatient Department'         => 'outpatient-department',
-	'Pharmaceutical Services'       => 'pharmaceutical-services',
-	'Respiratory & Critical Care'   => 'respiratory-critical-care',
-	'Radiology'                     => 'radiology',
-) as $title => $slug ) {
+foreach ( $service_pages as $title => $slug ) {
 	$add( $title, "/$slug/", $services_item );
 }
 $add( 'Cases', '/real-life-cases/' );

@@ -1,0 +1,582 @@
+/* ==========================================================================
+   Service pages (page-templates/service.php, copy in inc/services.php)
+   ========================================================================== */
+
+/* Hero ------------------------------------------------------------------------ */
+.sd-hero {
+	position: relative;
+	isolation: isolate;
+	padding-block: clamp(40px, 6vw, 88px) clamp(64px, 9vw, 120px);
+}
+
+.sd-hero__glow { /* soft blush glow behind the photo */
+	position: absolute;
+	top: 50%;
+	right: -10%;
+	z-index: -1;
+	width: min(900px, 120vw);
+	aspect-ratio: 1;
+	transform: translateY(-50%);
+	border-radius: 50%;
+	background: radial-gradient(closest-side, rgba(243, 218, 221, 0.95), rgba(251, 246, 244, 0));
+}
+
+.sd-hero__grid {
+	display: grid;
+	grid-template-columns: 1.05fr 1fr;
+	gap: clamp(36px, 5vw, 80px);
+	align-items: center;
+}
+
+.sd-hero .eyebrow {
+	margin-bottom: 22px;
+}
+
+.sd-hero .landing-lead {
+	max-width: 540px;
+	margin-top: 24px;
+}
+
+.sd-hero__actions {
+	margin-top: 34px;
+}
+
+.sd-hero__visual {
+	position: relative;
+	padding: 0 0 26px 26px; /* room for the overlapping icon and badge */
+}
+
+.sd-hero__media {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 5 / 5.4;
+	border-radius: var(--radius-media);
+	background: linear-gradient(135deg, var(--color-burgundy-800), var(--color-burgundy-600) 60%, var(--color-blush-200));
+	box-shadow: var(--shadow-soft);
+}
+
+.sd-hero__media img { /* taller than the frame: data-parallax drifts it */
+	position: absolute;
+	top: -6%;
+	left: 0;
+	width: 100%;
+	height: 112%;
+	object-fit: cover;
+}
+
+.sd-hero__media::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, transparent 60%, rgba(42, 10, 16, 0.35));
+}
+
+.sd-hero__icon {
+	position: absolute;
+	top: 28px;
+	left: 0;
+	z-index: 2;
+	display: grid;
+	place-items: center;
+	width: 76px;
+	height: 76px;
+	border-radius: 22px;
+	background: var(--color-burgundy-600);
+	box-shadow: 0 18px 40px -14px rgba(94, 13, 23, 0.6);
+	color: var(--color-white);
+}
+
+.sd-hero__icon svg {
+	width: 34px;
+}
+
+.sd-hero__badge {
+	position: absolute;
+	right: 24px;
+	bottom: 0;
+	z-index: 2;
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 20px;
+	border-radius: var(--radius-pill);
+	background: var(--color-white);
+	box-shadow: 0 18px 40px -18px rgba(58, 26, 32, 0.45), inset 0 0 0 1px var(--line-on-light);
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--color-burgundy-600);
+}
+
+/* Points ---------------------------------------------------------------------- */
+.sd-points {
+	padding-block: clamp(64px, 9vw, 120px);
+	border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+	background: var(--color-white);
+}
+
+.sd-points__grid {
+	display: grid;
+	grid-template-columns: 0.85fr 1.15fr;
+	gap: clamp(36px, 6vw, 96px);
+	align-items: start;
+}
+
+.sd-points__intro {
+	position: sticky;
+	top: var(--sticky-top);
+}
+
+.sd-points__intro .eyebrow {
+	margin-bottom: 16px;
+}
+
+.sd-points__note {
+	max-width: 360px;
+	margin-top: 20px;
+	font-size: 16px;
+	line-height: 1.7;
+	color: var(--color-slate);
+}
+
+/* Each point: a hairline draws across, then the number and text rise in. */
+.sd-point {
+	position: relative;
+	display: grid;
+	grid-template-columns: 64px 1fr;
+	gap: 8px 24px;
+	padding: 34px 0;
+}
+
+.sd-point::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 1px;
+	background: var(--line-on-light);
+	transform-origin: 0 50%;
+	transition: transform 1.1s var(--ease-out);
+}
+
+.sd-point:last-child {
+	padding-bottom: 0;
+}
+
+.sd-point__num {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 34px;
+	line-height: 1;
+	-webkit-text-stroke: 1px var(--color-burgundy-600);
+	color: transparent;
+	transition: color 0.6s var(--ease-out), opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+
+.sd-point:hover .sd-point__num {
+	color: var(--color-burgundy-600);
+}
+
+.sd-point > div {
+	transition: opacity 0.8s var(--ease-out) 0.1s, transform 0.8s var(--ease-out) 0.1s;
+}
+
+.sd-point__title {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: clamp(21px, 1.9vw, 26px);
+	line-height: 1.25;
+}
+
+.sd-point__text {
+	margin-top: 12px;
+	max-width: 560px;
+	font-size: 16px;
+	line-height: 1.75;
+	color: var(--color-slate);
+}
+
+.anim .sd-point::before {
+	transform: scaleX(0);
+}
+
+.anim .sd-point__num,
+.anim .sd-point > div {
+	opacity: 0;
+	transform: translateY(24px);
+}
+
+.anim .sd-point.is-in::before {
+	transform: none;
+}
+
+.anim .sd-point.is-in .sd-point__num,
+.anim .sd-point.is-in > div {
+	opacity: 1;
+	transform: none;
+}
+
+/* Chip list on a dark panel ------------------------------------------------------ */
+.sd-chips {
+	padding-bottom: clamp(64px, 9vw, 120px);
+	background: var(--color-white);
+}
+
+.sd-chips__panel {
+	--accent: var(--color-white);
+	--title-color: var(--color-white);
+	--title-accent: var(--color-blush-100);
+	padding-block: clamp(56px, 8vw, 104px);
+	background: linear-gradient(150deg, var(--color-burgundy-600), var(--color-burgundy-800));
+	color: var(--color-white);
+}
+
+.sd-chips__panel .landing-lead {
+	color: var(--color-blush-100);
+}
+
+.sd-chips__ecg {
+	position: absolute;
+	right: 0;
+	bottom: 24px;
+	left: 0;
+	height: 90px;
+	color: rgba(243, 218, 221, 0.18);
+	pointer-events: none;
+}
+
+.sd-chips__ecg .ecg {
+	width: 100%;
+	height: 100%;
+}
+
+.sd-chips__list {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.sd-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 22px 14px 16px;
+	border-radius: var(--radius-pill);
+	background: rgba(255, 255, 255, 0.08);
+	box-shadow: inset 0 0 0 1px var(--line-on-dark);
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 1.35;
+	transition: background-color var(--dur-base), color var(--dur-base), transform 0.5s var(--ease-out);
+}
+
+.sd-chip i {
+	flex: none;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--color-blush-200);
+	transition: background-color var(--dur-base);
+}
+
+.sd-chip:hover {
+	background: var(--color-white);
+	color: var(--color-burgundy-600);
+	transform: translateY(-3px);
+}
+
+.sd-chip:hover i {
+	background: var(--color-burgundy-600);
+}
+
+/* Numbered test cards ---------------------------------------------------------- */
+.sd-tests {
+	padding-bottom: clamp(64px, 9vw, 120px);
+	background: var(--color-white);
+}
+
+.sd-tests__grid {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.sd-test {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-height: 190px;
+	padding: 26px 24px;
+	overflow: hidden;
+	border-radius: var(--radius-card);
+	background: var(--color-cream);
+	box-shadow: inset 0 0 0 1px var(--line-on-light);
+	transition: transform 0.6s var(--ease-out), color 0.5s;
+}
+
+.sd-test::before { /* burgundy wipes up on hover, like the Our Services pillars */
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(160deg, var(--color-burgundy-600), var(--color-burgundy-700));
+	transform: translateY(101%);
+	transition: transform 0.7s var(--ease-out);
+}
+
+.sd-test > * {
+	position: relative;
+}
+
+.sd-test:hover {
+	transform: translateY(-6px);
+	color: var(--color-white);
+}
+
+.sd-test:hover::before {
+	transform: none;
+}
+
+.sd-test__num {
+	position: absolute;
+	top: 24px;
+	right: 24px;
+	font-family: var(--font-display);
+	font-size: 15px;
+	color: var(--color-blush-200);
+}
+
+.sd-test__icon {
+	display: grid;
+	place-items: center;
+	width: 48px;
+	height: 48px;
+	margin-bottom: auto;
+	border-radius: 14px;
+	background: var(--color-blush-100);
+	color: var(--color-burgundy-600);
+	transition: background-color 0.5s, transform 0.6s var(--ease-out);
+}
+
+.sd-test:hover .sd-test__icon {
+	background: var(--color-white);
+	transform: rotate(-8deg);
+}
+
+.sd-test__icon svg {
+	width: 24px;
+}
+
+.sd-test__name {
+	margin-top: 28px;
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 19px;
+	line-height: 1.3;
+}
+
+.sd-test__note {
+	font-size: 14px;
+	color: var(--color-slate);
+	transition: color 0.5s;
+}
+
+.sd-test:hover .sd-test__note {
+	color: var(--color-blush-100);
+}
+
+/* Last card: book a test, on burgundy. */
+.sd-test--cta {
+	padding: 0;
+	background: linear-gradient(160deg, var(--color-burgundy-600), var(--color-burgundy-800));
+	box-shadow: none;
+	color: var(--color-white);
+}
+
+.sd-test--cta::before {
+	content: none;
+}
+
+.sd-test--cta a {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	gap: 6px;
+	padding: 26px 24px;
+}
+
+.sd-test--cta .sd-test__name {
+	margin-top: 0;
+}
+
+.sd-test--cta .sd-test__note {
+	color: var(--color-blush-100);
+}
+
+.sd-test--cta .sd-link__circle {
+	margin-top: auto;
+	color: var(--color-white);
+}
+
+.sd-test--cta:hover .sd-link__circle {
+	background: var(--color-white);
+	color: var(--color-burgundy-600);
+	transform: rotate(45deg);
+}
+
+/* Other services ------------------------------------------------------------------ */
+.sd-more {
+	padding-block: clamp(64px, 9vw, 110px);
+	border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+	background: var(--color-paper);
+}
+
+.sd-more__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 12px;
+}
+
+.sd-more .svc-link__swatch {
+	--c1: var(--color-burgundy-600);
+	--c2: var(--color-burgundy-800);
+}
+
+.sd-more .svc-link:nth-child(3n + 2) .svc-link__swatch {
+	--c1: #d79aa3;
+	--c2: var(--color-burgundy-600);
+}
+
+.sd-more .svc-link:nth-child(3n + 3) .svc-link__swatch {
+	--c1: var(--color-night-card);
+	--c2: var(--color-burgundy-600);
+}
+
+.sd-more + .svc-cta {
+	padding-top: 0;
+	background: var(--color-paper);
+}
+
+/* Responsive ------------------------------------------------------------------------ */
+@media (max-width: 1080px) {
+	.sd-tests__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 900px) {
+	.sd-hero__grid,
+	.sd-points__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.sd-hero__visual {
+		max-width: 560px;
+	}
+
+	.sd-hero__media {
+		aspect-ratio: 4 / 3.4;
+	}
+
+	.sd-points__intro {
+		position: static;
+	}
+}
+
+@media (max-width: 600px) {
+	.sd-hero__visual {
+		padding: 0 0 22px 14px;
+	}
+
+	.sd-hero__icon {
+		top: 18px;
+		width: 58px;
+		height: 58px;
+		border-radius: 18px;
+	}
+
+	.sd-hero__icon svg {
+		width: 26px;
+	}
+
+	.sd-hero__badge {
+		right: 14px;
+		padding: 11px 16px;
+		font-size: 13px;
+	}
+
+	.sd-point {
+		grid-template-columns: 1fr;
+		padding: 28px 0;
+	}
+
+	.sd-point__num {
+		font-size: 28px;
+	}
+
+	.sd-chip {
+		padding: 11px 16px 11px 13px;
+		font-size: 14px;
+	}
+
+	/* Tests become compact rows: icon beside the name. */
+	.sd-tests__grid {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 10px;
+	}
+
+	.sd-test {
+		display: grid;
+		grid-template-columns: 44px minmax(0, 1fr);
+		column-gap: 16px;
+		align-items: center;
+		min-height: 0;
+		padding: 16px 44px 16px 16px;
+	}
+
+	.sd-test__icon {
+		grid-row: span 2;
+		width: 44px;
+		height: 44px;
+		margin: 0;
+	}
+
+	.sd-test__name {
+		margin-top: 0;
+		font-size: 17px;
+	}
+
+	.sd-test__note {
+		grid-column: 2;
+	}
+
+	.sd-test__num {
+		top: 50%;
+		right: 18px;
+		transform: translateY(-50%);
+	}
+
+	.sd-test--cta {
+		display: flex;
+		padding: 0;
+	}
+
+	.sd-test--cta a {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		column-gap: 16px;
+		padding: 18px 18px 18px 20px;
+	}
+
+	.sd-test--cta .sd-test__note {
+		grid-column: 1;
+	}
+
+	.sd-test--cta .sd-link__circle {
+		grid-row: 1 / span 2;
+		grid-column: 2;
+		margin: 0;
+	}
+}

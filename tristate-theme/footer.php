@@ -5,13 +5,7 @@
  * @package tristate
  */
 
-$tristate_socials = array(
-	'facebook'  => array( 'Facebook', 'https://web.facebook.com/Tristate-Healthcare-110376837308912', 18 ),
-	'x'         => array( 'X', 'https://twitter.com/TristateHs', 18 ),
-	'instagram' => array( 'Instagram', 'https://www.instagram.com/tristate_hs/', 18 ),
-	'youtube'   => array( 'YouTube', 'https://www.youtube.com/channel/UCqVsmjdjxg9cSz5FDYG7yyw', 20 ),
-	'linkedin'  => array( 'LinkedIn', 'https://www.linkedin.com/company/tristate-healthcare-system', 18 ),
-);
+$tristate_socials = tristate_socials();
 ?>
 </main>
 

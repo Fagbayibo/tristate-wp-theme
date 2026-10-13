@@ -12,8 +12,11 @@ define( 'TRISTATE_URI', get_template_directory_uri() );
 define( 'TRISTATE_DIR', get_template_directory() );
 
 require TRISTATE_DIR . '/inc/appointments.php';
+require TRISTATE_DIR . '/inc/blog.php';
+require TRISTATE_DIR . '/inc/contact.php';
 require TRISTATE_DIR . '/inc/downloads.php';
 require TRISTATE_DIR . '/inc/menu.php';
+require TRISTATE_DIR . '/inc/services.php';
 require TRISTATE_DIR . '/inc/updater.php';
 
 // Plugins load before the theme, so Elementor has already announced itself here.
@@ -37,6 +40,17 @@ function tristate_contact( $key ) {
 	return isset( $contact[ $key ] ) ? $contact[ $key ] : '';
 }
 
+/** Social profiles: slug (icon in assets/images/icons) => [ label, url, icon size ]. */
+function tristate_socials() {
+	return array(
+		'facebook'  => array( 'Facebook', 'https://web.facebook.com/Tristate-Healthcare-110376837308912', 18 ),
+		'x'         => array( 'X', 'https://twitter.com/TristateHs', 18 ),
+		'instagram' => array( 'Instagram', 'https://www.instagram.com/tristate_hs/', 18 ),
+		'youtube'   => array( 'YouTube', 'https://www.youtube.com/channel/UCqVsmjdjxg9cSz5FDYG7yyw', 20 ),
+		'linkedin'  => array( 'LinkedIn', 'https://www.linkedin.com/company/tristate-healthcare-system', 18 ),
+	);
+}
+
 add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
@@ -58,12 +72,15 @@ function tristate_asset_version( $path ) {
  * Designed inner-page templates: their stylesheet (assets/css/<css>.css) and the
  * page slugs that get them automatically. The slug match matters because
  * Elementor's "Page Layout" setting rewrites a page's Template field, so a page
- * left on Default still shows its design; any other template chosen wins.
+ * left on Default or an Elementor layout still shows its design; any other
+ * template chosen wins.
  */
 function tristate_landing_templates() {
 	return array(
 		'page-templates/about-us.php'     => array( 'css' => 'about', 'slugs' => array( 'about-us' ) ),
 		'page-templates/our-services.php' => array( 'css' => 'our-services', 'slugs' => array( 'our-services' ) ),
+		'page-templates/service.php'      => array( 'css' => 'service', 'slugs' => tristate_service_slugs() ),
+		'page-templates/contact.php'      => array( 'css' => 'contact', 'slugs' => array( 'contact-us' ) ),
 	);
 }
 
@@ -74,7 +91,7 @@ function tristate_current_landing_template() {
 	}
 	$templates = tristate_landing_templates();
 	$assigned  = get_page_template_slug( get_queried_object_id() ); // '' when Default
-	if ( $assigned ) {
+	if ( $assigned && 0 !== strpos( $assigned, 'elementor_' ) ) { // elementor_header_footer, elementor_canvas…
 		return isset( $templates[ $assigned ] ) ? $assigned : '';
 	}
 	$slug = get_post_field( 'post_name', get_queried_object_id() );
@@ -157,6 +174,8 @@ add_action( 'wp_enqueue_scripts', function () {
 		$css[] = 'pages'; // Inner pages, blog, search, 404.
 		if ( $landing ) {
 			array_push( $css, 'landing', $landing );
+		} elseif ( tristate_is_blog() ) {
+			array_push( $css, 'landing', 'blog' );
 		}
 	}
 	$css[] = 'small-screens'; // Last, so its phone type scale wins.
@@ -179,6 +198,14 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_enqueue_script( 'tristate-appointment', TRISTATE_URI . '/assets/js/appointment.js', array(), tristate_asset_version( '/assets/js/appointment.js' ), array( 'strategy' => 'defer' ) );
 	}
 
+	if ( is_singular( 'post' ) ) {
+		wp_enqueue_script( 'tristate-blog', TRISTATE_URI . '/assets/js/blog.js', array(), tristate_asset_version( '/assets/js/blog.js' ), array( 'strategy' => 'defer' ) );
+	}
+
+	if ( 'contact' === $landing ) {
+		wp_enqueue_script( 'tristate-contact', TRISTATE_URI . '/assets/js/contact.js', array(), tristate_asset_version( '/assets/js/contact.js' ), array( 'strategy' => 'defer' ) );
+	}
+
 	if ( $landing ) {
 		wp_enqueue_script( 'tristate-landing', TRISTATE_URI . '/assets/js/landing.js', array( 'gsap-scrolltrigger', 'tristate-animations' ), tristate_asset_version( '/assets/js/landing.js' ), array( 'strategy' => 'defer' ) );
 	}
@@ -186,7 +213,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	// Frictionless chat widget (usefrictionless.com). The workspace ID is public by design.
 	// Footer rather than defer: WordPress drops the defer strategy when an inline "after" script is attached.
 	wp_enqueue_script( 'frictionless', 'https://usefrictionless.com/widget/v1.js', array(), null, array( 'in_footer' => true ) );
-	wp_add_inline_script( 'frictionless', 'Frictionless.init({ company_id: "62107b4e-e09a-4c94-8960-309af27dea94" });' );
+	wp_add_inline_script( 'frictionless', 'window.Frictionless && Frictionless.init({ company_id: "62107b4e-e09a-4c94-8960-309af27dea94" });' ); // the widget may fail to load
 } );
 
 /**

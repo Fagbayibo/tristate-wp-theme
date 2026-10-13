@@ -1,34 +1,24 @@
 <?php
 /**
- * Fallback template. WordPress uses front-page.php, home.php, single.php,
- * page.php, archive.php, search.php or 404.php first; this covers anything else.
+ * Fallback for any screen without a more specific template: the blog layout.
  *
  * @package tristate
  */
 
 get_header();
-
-get_template_part( 'template-parts/page-hero', null, array(
-	'title' => is_home() ? __( 'News & Updates', 'tristate' ) : get_the_archive_title(),
-) );
 ?>
+<div class="landing landing--blog">
+	<?php
+	get_template_part( 'template-parts/blog-head', null, array(
+		'eyebrow' => get_option( 'page_for_posts' ) ? get_the_title( get_option( 'page_for_posts' ) ) : __( 'News & Insights', 'tristate' ),
+		'title'   => __( 'Health insights &amp; <em>hospital news</em>', 'tristate' ),
+		'lead'    => __( 'Stories from our theatres, guidance from our specialists and updates from across Tristate Healthcare System.', 'tristate' ),
+	) );
 
-<div class="container page-content">
-	<?php if ( have_posts() ) : ?>
-		<div class="post-grid" data-reveal-stagger>
-			<?php
-			while ( have_posts() ) :
-				the_post();
-				get_template_part( 'template-parts/post-card' );
-			endwhile;
-			?>
-		</div>
+	get_template_part( 'template-parts/post-list', null, array( 'empty' => __( 'No posts published yet.', 'tristate' ) ) );
 
-		<?php the_posts_pagination( array( 'mid_size' => 1 ) ); ?>
-	<?php else : ?>
-		<p class="empty-state"><?php esc_html_e( 'Nothing found.', 'tristate' ); ?></p>
-	<?php endif; ?>
+	get_template_part( 'template-parts/blog-cta' );
+	?>
 </div>
-
 <?php
 get_footer();

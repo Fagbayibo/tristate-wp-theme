@@ -39,6 +39,11 @@ p, li, blockquote {
 	.closing__foot > p,
 	.svc-card__text,
 	.svc-cta__text,
+	.sd-point__text,
+	.sd-points__note,
+	.ct-form-card__intro,
+	.ct-success p,
+	.post-card--featured .post-card__excerpt,
 	.entry-content p,
 	.entry-content li,
 	.appointment__success > p:not(.appointment__note),
@@ -59,7 +64,11 @@ p, li, blockquote {
 	.footer-links,
 	.footer-downloads__text,
 	.comment-body,
-	.svc-cta__emergency-text {
+	.sd-test__note,
+	.svc-cta__emergency-text,
+	.ct-urgent__text,
+	.ct-place__address,
+	.post-help__text {
 		font-size: 14px;
 	}
 
@@ -93,22 +102,35 @@ p, li, blockquote {
 	.svc-cta__word              { font-size: 22px; }
 	.svc-cta__emergency-number  { font-size: 26px; }
 	.stat__value                { font-size: 30px; }
+	.sd-point__title            { font-size: 20px; }
+	.sd-test__name              { font-size: 18px; }
+	.post-head__title           { font-size: 29px; }
+	.post-card__title           { font-size: 19px; }
+	.post-card--featured .post-card__title { font-size: 23px; }
+	.post-nav__title            { font-size: 16px; }
+	.post-help__number          { font-size: 28px; }
+	.ct-quick__value            { font-size: 18px; }
+	.ct-urgent__number          { font-size: 28px; }
+	.ct-place__name             { font-size: 17px; }
 
 	/* Long hero paragraphs read better left-aligned on a phone, so the centred
 	   landing heroes and section intros line up on the left like the homepage. */
 	.about-hero,
 	.svc-hero,
+	.ct-hero__head,
 	.landing-head--center {
 		text-align: left;
 	}
 
 	.about-hero__inner,
-	.svc-hero__center {
+	.svc-hero__center,
+	.ct-hero__head {
 		align-items: flex-start;
 	}
 
 	.about-hero .eyebrow--center::after,
 	.svc-hero .eyebrow--center::after,
+	.ct-hero .eyebrow--center::after,
 	.landing-head--center .eyebrow--center::after {
 		content: none;
 	}
@@ -116,7 +138,8 @@ p, li, blockquote {
 	/* Hero buttons: full-width and equal, instead of two ragged widths. */
 	.hero__buttons,
 	.about-hero__actions,
-	.svc-hero__actions {
+	.svc-hero__actions,
+	.sd-hero__actions {
 		flex-direction: column;
 		align-items: stretch;
 		width: 100%;
@@ -125,7 +148,8 @@ p, li, blockquote {
 
 	.hero__buttons .btn,
 	.about-hero__actions .btn,
-	.svc-hero__actions .btn {
+	.svc-hero__actions .btn,
+	.sd-hero__actions .btn {
 		width: 100%;
 	}
 
@@ -144,6 +168,17 @@ p, li, blockquote {
 		bottom: 18px;
 		width: 42px;
 		height: 42px;
+	}
+
+	/* Brochure cards: the whole card is the download link, so drop the round
+	   button and shrink the cover to give the title room. */
+	.download-card__button {
+		display: none;
+	}
+
+	.download-card__cover {
+		width: 56px;
+		height: 76px;
 	}
 }
 
@@ -171,6 +206,11 @@ p, li, blockquote {
 	.closing__foot > p,
 	.svc-card__text,
 	.svc-cta__text,
+	.sd-point__text,
+	.sd-points__note,
+	.ct-form-card__intro,
+	.ct-success p,
+	.post-card--featured .post-card__excerpt,
 	.entry-content p,
 	.entry-content li,
 	.appointment__success > p:not(.appointment__note),
@@ -190,7 +230,11 @@ p, li, blockquote {
 	.footer-links,
 	.footer-downloads__text,
 	.comment-body,
-	.svc-cta__emergency-text {
+	.sd-test__note,
+	.svc-cta__emergency-text,
+	.ct-urgent__text,
+	.ct-place__address,
+	.post-help__text {
 		font-size: 13.5px;
 	}
 
@@ -211,6 +255,11 @@ p, li, blockquote {
 	.svc-card__title            { font-size: 22px; }
 	.svc-cta__word              { font-size: 20px; }
 	.stat__value                { font-size: 28px; }
+	.sd-point__title            { font-size: 19px; }
+	.post-head__title           { font-size: 26px; }
+	.post-card--featured .post-card__title { font-size: 21px; }
+	.ct-quick__value            { font-size: 17px; }
+	.ct-urgent__number          { font-size: 26px; }
 
 	/* Testimonial controls: two arrows + four initials must fit in 284px. */
 	.testimonials__nav,

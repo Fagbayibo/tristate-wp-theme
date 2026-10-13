@@ -160,37 +160,15 @@ get_header();
 	</section>
 
 	<!-- Closing ------------------------------------------------------------------------------- -->
-	<section class="svc-cta" aria-label="Get started">
-		<div class="marquee" style="--speed: 50s">
-			<?php for ( $tristate_copy = 0; $tristate_copy < 2; $tristate_copy++ ) : ?>
-				<div class="marquee__track"<?php echo $tristate_copy ? ' aria-hidden="true"' : ''; ?>>
-					<?php foreach ( $tristate_services as $tristate_svc ) : ?>
-						<span class="svc-cta__word"><?php echo wp_kses_post( $tristate_svc[2] ); ?> <i aria-hidden="true"></i></span>
-					<?php endforeach; ?>
-				</div>
-			<?php endfor; ?>
-		</div>
-
-		<div class="container">
-			<div class="svc-cta__card" data-reveal="up">
-				<div class="svc-cta__main">
-					<p class="eyebrow">Not sure where to start?</p>
-					<h2 class="section-title" style="--title-size: 40" data-split>Begin with our <em>Outpatient Department</em></h2>
-					<p class="svc-cta__text">A structured entry point for direct consultant access, comprehensive second opinions, and routine follow-up care without unnecessary delays.</p>
-					<div class="btn-row">
-						<a class="btn btn--brand" href="<?php echo esc_url( $tristate_appointment ); ?>">Book Appointment <span class="btn__arrow" aria-hidden="true">→</span></a>
-						<a class="btn btn--outline-brand" href="<?php echo esc_url( $tristate_about ); ?>">About Tristate</a>
-					</div>
-				</div>
-				<div class="svc-cta__emergency" data-observe>
-					<p class="svc-cta__emergency-label"><span class="pulse-dot" aria-hidden="true"></span>24/7 Emergency line</p>
-					<a class="svc-cta__emergency-number" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
-					<p class="svc-cta__emergency-text">Rapid stabilization, intensive care monitoring, and immediate interventional routing.</p>
-					<svg class="ecg" viewBox="0 0 600 90" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path pathLength="1000" d="M0 50 H170 L190 50 L205 20 L222 80 L240 8 L258 70 L272 50 H360 L378 50 L392 30 L408 68 L420 50 H600"/></svg>
-				</div>
-			</div>
-		</div>
-	</section>
+	<?php
+	get_template_part( 'template-parts/landing-cta', null, array(
+		'words'     => wp_list_pluck( $tristate_services, 2 ),
+		'eyebrow'   => 'Not sure where to start?',
+		'title'     => 'Begin with our <em>Outpatient Department</em>',
+		'text'      => 'A structured entry point for direct consultant access, comprehensive second opinions, and routine follow-up care without unnecessary delays.',
+		'secondary' => array( 'About Tristate', $tristate_about ),
+	) );
+	?>
 
 </div>
 <?php
