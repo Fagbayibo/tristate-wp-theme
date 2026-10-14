@@ -60,8 +60,8 @@ $tristate_socials = tristate_socials();
 			</div>
 
 			<div class="footer-col">
-			<h2 class="footer-col__title"><?php esc_html_e( 'Follow Us', 'tristate' ); ?></h2>
-			<ul class="footer-socials">
+				<h2 class="footer-col__title"><?php esc_html_e( 'Follow Us', 'tristate' ); ?></h2>
+				<ul class="footer-socials">
 					<?php foreach ( $tristate_socials as $tristate_slug => $tristate_social ) : ?>
 						<li>
 							<a href="<?php echo esc_url( $tristate_social[1] ); ?>" aria-label="<?php echo esc_attr( $tristate_social[0] ); ?>" target="_blank" rel="noopener">
