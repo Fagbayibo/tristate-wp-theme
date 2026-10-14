@@ -17,11 +17,12 @@ if ( ! $tristate_service ) { // only reachable if routing and data disagree
 	return;
 }
 
-$tristate_services = tristate_services();
-$tristate_all_url  = tristate_template_url( 'page-templates/our-services.php', '/our-services/' );
-$tristate_img      = TRISTATE_URI . '/assets/images/';
-$tristate_arrow    = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
-$tristate_is_er    = ! empty( $tristate_service['emergency'] );
+$tristate_services    = tristate_services();
+$tristate_all_url     = tristate_template_url( 'page-templates/our-services.php', '/our-services/' );
+$tristate_contact_url = tristate_template_url( 'page-templates/contact.php', '/contact-us/' );
+$tristate_img         = TRISTATE_URI . '/assets/images/';
+$tristate_arrow       = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
+$tristate_is_er       = ! empty( $tristate_service['emergency'] );
 
 get_header();
 ?>
@@ -43,12 +44,12 @@ get_header();
 				<h1 class="landing-title" data-split data-delay="0.15"><?php echo wp_kses_post( $tristate_service['heading'] ); ?></h1>
 				<p class="landing-lead" data-reveal="up" data-delay="0.35"><?php echo esc_html( $tristate_service['lead'] ); ?></p>
 				<div class="btn-row sd-hero__actions" data-reveal="up" data-delay="0.5">
-					<a class="btn btn--brand" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>">Book Appointment <span class="btn__arrow" aria-hidden="true">→</span></a>
 					<?php if ( $tristate_is_er ) : ?>
-						<a class="btn btn--outline-brand" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">Call <?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
+						<a class="btn btn--brand" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">Call <?php echo esc_html( tristate_contact( 'emergency' ) ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
 					<?php else : ?>
-						<a class="btn btn--outline-brand" href="<?php echo esc_url( $tristate_all_url ); ?>">All Services</a>
+						<a class="btn btn--brand" href="<?php echo esc_url( $tristate_contact_url ); ?>">Contact Us <span class="btn__arrow" aria-hidden="true">→</span></a>
 					<?php endif; ?>
+					<a class="btn btn--outline-brand" href="<?php echo esc_url( $tristate_all_url ); ?>">All Services</a>
 				</div>
 			</div>
 
@@ -69,8 +70,8 @@ get_header();
 				<p class="eyebrow" data-reveal="up">What we offer</p>
 				<h2 class="section-title" style="--title-size: 46" data-split><?php echo wp_kses_post( $tristate_service['short'] ); ?> <em>at Tristate</em></h2>
 				<p class="sd-points__note" data-reveal="up" data-delay="0.2">Have a question about your care? Our team will guide you to the right specialist.</p>
-				<a class="sd-link" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>" data-reveal="up" data-delay="0.3">
-					Book a consultation
+				<a class="sd-link" href="<?php echo esc_url( $tristate_contact_url ); ?>" data-reveal="up" data-delay="0.3">
+					Contact our team
 					<span class="sd-link__circle" aria-hidden="true"><?php echo $tristate_arrow; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 				</a>
 			</div>
@@ -136,9 +137,9 @@ get_header();
 							</li>
 						<?php endforeach; ?>
 						<li class="sd-test sd-test--cta">
-							<a href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>">
-								<strong class="sd-test__name">Book a test</strong>
-								<span class="sd-test__note">Our team will schedule it and explain how to prepare.</span>
+							<a href="<?php echo esc_url( $tristate_contact_url ); ?>">
+								<strong class="sd-test__name">Ask about a test</strong>
+								<span class="sd-test__note">Our team will explain how to prepare.</span>
 								<span class="sd-link__circle" aria-hidden="true"><?php echo $tristate_arrow; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 							</a>
 						</li>
@@ -174,19 +175,6 @@ get_header();
 			</div>
 		</div>
 	</section>
-
-	<!-- Closing ---------------------------------------------------------------- -->
-	<?php
-	get_template_part( 'template-parts/landing-cta', null, array(
-		'words'     => wp_list_pluck( $tristate_services, 'short' ),
-		'eyebrow'   => $tristate_is_er ? 'Every minute counts' : 'Ready when you are',
-		'title'     => $tristate_is_er ? 'In an emergency, <em>call us now</em>' : 'Talk to our <em>' . $tristate_service['short'] . '</em> team',
-		'text'      => $tristate_is_er
-			? 'Our emergency unit and standby ambulances are ready around the clock. For anything that is not urgent, book an appointment instead.'
-			: 'Book an appointment and we will connect you with the right specialist, with clear next steps from your very first visit.',
-		'secondary' => array( 'All Services', $tristate_all_url ),
-	) );
-	?>
 
 </div>
 <?php

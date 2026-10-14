@@ -115,7 +115,7 @@
 			form.reset();
 			showSuccess();
 		} catch (err) {
-			errorBox.textContent = 'Sorry, something went wrong. Please try again or call 0700TRISTATE.';
+			errorBox.textContent = `Sorry, something went wrong. Please try again or call ${form.dataset.phone}.`;
 			errorBox.hidden = false;
 		} finally {
 			submit.disabled = false;

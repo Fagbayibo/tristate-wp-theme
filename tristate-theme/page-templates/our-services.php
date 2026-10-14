@@ -8,10 +8,8 @@
  * @package tristate
  */
 
-$tristate_appointment = tristate_contact( 'appointment_url' );
-$tristate_about       = tristate_template_url( 'page-templates/about-us.php', '/about-us/' );
-$tristate_img         = TRISTATE_URI . '/assets/images/';
-$tristate_arrow       = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
+$tristate_img   = TRISTATE_URI . '/assets/images/';
+$tristate_arrow = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
 
 $tristate_icon = 'tristate_svg'; // inc/icons.php
 
@@ -73,7 +71,6 @@ get_header();
 			<p class="landing-lead" data-reveal="up" data-delay="0.45">At Tristate Healthcare System, we combine advanced medical technology, experienced specialists, and coordinated pathways to deliver care you can trust and compassion you can feel.</p>
 			<div class="btn-row svc-hero__actions" data-reveal="up" data-delay="0.6">
 				<a class="btn btn--brand" href="#services">Explore Services <span class="btn__arrow svc-hero__down" aria-hidden="true">↓</span></a>
-				<a class="btn btn--outline-brand" href="<?php echo esc_url( $tristate_appointment ); ?>">Book Appointment</a>
 			</div>
 		</div>
 
@@ -158,17 +155,6 @@ get_header();
 			<?php endforeach; ?>
 		</div>
 	</section>
-
-	<!-- Closing ------------------------------------------------------------------------------- -->
-	<?php
-	get_template_part( 'template-parts/landing-cta', null, array(
-		'words'     => wp_list_pluck( $tristate_services, 2 ),
-		'eyebrow'   => 'Not sure where to start?',
-		'title'     => 'Begin with our <em>Outpatient Department</em>',
-		'text'      => 'A structured entry point for direct consultant access, comprehensive second opinions, and routine follow-up care without unnecessary delays.',
-		'secondary' => array( 'About Tristate', $tristate_about ),
-	) );
-	?>
 
 </div>
 <?php

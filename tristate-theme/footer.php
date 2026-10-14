@@ -18,9 +18,6 @@ $tristate_socials = tristate_socials();
 				<p class="footer-cta__label"><?php esc_html_e( 'In an emergency, call', 'tristate' ); ?></p>
 				<a class="footer-cta__number" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
 			</div>
-			<a class="btn btn--primary" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>">
-				<?php esc_html_e( 'Book Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span>
-			</a>
 		</div>
 
 		<div class="footer-cols">
@@ -46,7 +43,7 @@ $tristate_socials = tristate_socials();
 					<ul class="footer-links">
 						<li><a href="<?php echo esc_url( home_url( '/about-us/' ) ); ?>">About Us</a></li>
 						<li><a href="<?php echo esc_url( home_url( '/our-services/' ) ); ?>">Services</a></li>
-						<li><a href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>">Appointments</a></li>
+						<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Contact</a></li>
 						<li><a href="<?php echo esc_url( get_option( 'page_for_posts' ) ? get_permalink( get_option( 'page_for_posts' ) ) : home_url( '/our-blog/' ) ); ?>">News</a></li>
 					</ul>
 					<?php
@@ -57,7 +54,7 @@ $tristate_socials = tristate_socials();
 			<div class="footer-col">
 				<h2 class="footer-col__title"><?php esc_html_e( 'Contact', 'tristate' ); ?></h2>
 				<ul class="footer-links">
-					<li><a href="tel:<?php echo esc_attr( tristate_contact( 'phone_alt' ) ); ?>"><?php echo esc_html( tristate_contact( 'phone_alt' ) ); ?></a></li>
+					<li><a href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a></li>
 					<li><a href="mailto:<?php echo esc_attr( tristate_contact( 'email' ) ); ?>"><?php echo esc_html( tristate_contact( 'email' ) ); ?></a></li>
 				</ul>
 			</div>

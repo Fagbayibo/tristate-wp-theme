@@ -1,7 +1,7 @@
 /* ==========================================================================
    Small phones (≤480px, then ≤380px for 360/320px handsets).
    Loaded last on every page so one file owns the phone type scale: body copy
-   steps down from 16–17px to 15px, then 14px; headings shrink to match, and long
+   steps down from 17–18px to 16px, then 15px; headings shrink to match, and long
    paragraphs read left-aligned instead of centred.
    ========================================================================== */
 
@@ -18,27 +18,25 @@ p, li, blockquote {
 @media (max-width: 480px) {
 	:root {
 		--fs-display: 32px;
-		--fs-lead: 15px;
+		--fs-lead: 16px;
 	}
 
 	body {
-		font-size: 15px;
+		font-size: 16px;
 	}
 
 	.section-title {
 		font-size: 25px;
 	}
 
-	/* Body copy: 16–17px on desktop → 15px */
+	/* Body copy: 17–18px on desktop → 16px */
 	.hero__text,
 	.why__lead,
 	.services__aside p,
 	.mission__item-text,
 	.about-story__col > p:not(.about-story__num),
 	.treat__item p,
-	.closing__foot > p,
 	.svc-card__text,
-	.svc-cta__text,
 	.sd-point__text,
 	.sd-points__note,
 	.ct-form-card__intro,
@@ -48,11 +46,11 @@ p, li, blockquote {
 	.entry-content li,
 	.appointment__success > p:not(.appointment__note),
 	.empty-state {
-		font-size: 15px;
+		font-size: 16px;
 		line-height: 1.65;
 	}
 
-	/* Secondary copy: 15px → 14px */
+	/* Secondary copy: 16px → 15px */
 	.service-tile__text,
 	.stat__label,
 	.svc-pillar p,
@@ -65,53 +63,50 @@ p, li, blockquote {
 	.footer-downloads__text,
 	.comment-body,
 	.sd-test__note,
-	.svc-cta__emergency-text,
 	.ct-urgent__text,
 	.ct-place__address,
 	.post-help__text {
-		font-size: 14px;
+		font-size: 15px;
 	}
 
 	/* Display and statement type */
 	.intro__statement           { font-size: 19px; }
-	.testimonial__quote p       { font-size: 17px; }
-	.mission__quote p           { font-size: 17px; }
+	.testimonial__quote p       { font-size: 18px; }
+	.mission__quote p           { font-size: 18px; }
 	.mission__item-title        { font-size: 19px; }
-	.why__value-title           { font-size: 17px; }
+	.why__value-title           { font-size: 20px; }
+	.why__value-text            { font-size: 16px; }
 	.service-tile__title        { font-size: 20px; }
 	.service-tile--large .service-tile__title { font-size: 24px; }
 	.news-featured__title       { font-size: 19px; }
-	.news-item__title           { font-size: 16px; }
+	.news-item__title           { font-size: 17px; }
 	.footer-cta__number         { font-size: 30px; }
 	.page-hero__title           { font-size: 27px; }
 	.entry-content h2           { font-size: 23px; }
 	.entry-content h3           { font-size: 20px; }
-	.about-hero__quote blockquote { font-size: 17px; }
+	.about-hero__quote blockquote { font-size: 18px; }
 	.about-ticker__word         { font-size: 22px; }
 	.about-story__title         { font-size: 21px; }
 	.manifesto__text            { font-size: 20px; }
-	.manifesto__promise-text    { font-size: 17px; }
+	.manifesto__promise-text    { font-size: 18px; }
 	.record-stat__num           { font-size: 34px; }
 	.record-stat--hero .record-stat__num { font-size: 46px; }
 	.treat__title               { font-size: 19px; }
 	.pathway-step__title        { font-size: 18px; }
-	.closing__word              { font-size: 34px; }
 	.svc-statement              { font-size: 21px; }
 	.svc-pillar__title          { font-size: 19px; }
 	.svc-card__title            { font-size: 24px; }
-	.svc-cta__word              { font-size: 22px; }
-	.svc-cta__emergency-number  { font-size: 26px; }
 	.stat__value                { font-size: 30px; }
 	.sd-point__title            { font-size: 20px; }
 	.sd-test__name              { font-size: 18px; }
 	.post-head__title           { font-size: 29px; }
 	.post-card__title           { font-size: 19px; }
 	.post-card--featured .post-card__title { font-size: 23px; }
-	.post-nav__title            { font-size: 16px; }
+	.post-nav__title            { font-size: 17px; }
 	.post-help__number          { font-size: 28px; }
 	.ct-quick__value            { font-size: 18px; }
 	.ct-urgent__number          { font-size: 28px; }
-	.ct-place__name             { font-size: 17px; }
+	.ct-place__name             { font-size: 18px; }
 
 	/* Long hero paragraphs read better left-aligned on a phone, so the centred
 	   landing heroes and section intros line up on the left like the homepage. */
@@ -185,12 +180,12 @@ p, li, blockquote {
 @media (max-width: 380px) {
 	:root {
 		--fs-display: 29px;
-		--fs-lead: 14.5px;
+		--fs-lead: 15.5px;
 		--gutter: 18px;
 	}
 
 	body {
-		font-size: 14px;
+		font-size: 15px;
 	}
 
 	.section-title {
@@ -203,9 +198,7 @@ p, li, blockquote {
 	.mission__item-text,
 	.about-story__col > p:not(.about-story__num),
 	.treat__item p,
-	.closing__foot > p,
 	.svc-card__text,
-	.svc-cta__text,
 	.sd-point__text,
 	.sd-points__note,
 	.ct-form-card__intro,
@@ -215,7 +208,7 @@ p, li, blockquote {
 	.entry-content li,
 	.appointment__success > p:not(.appointment__note),
 	.empty-state {
-		font-size: 14.5px;
+		font-size: 15.5px;
 		line-height: 1.6;
 	}
 
@@ -231,16 +224,15 @@ p, li, blockquote {
 	.footer-downloads__text,
 	.comment-body,
 	.sd-test__note,
-	.svc-cta__emergency-text,
 	.ct-urgent__text,
 	.ct-place__address,
 	.post-help__text {
-		font-size: 13.5px;
+		font-size: 14.5px;
 	}
 
 	.intro__statement           { font-size: 18px; }
-	.testimonial__quote p       { font-size: 16px; }
-	.mission__quote p           { font-size: 16px; }
+	.testimonial__quote p       { font-size: 17px; }
+	.mission__quote p           { font-size: 17px; }
 	.mission__item-title        { font-size: 18px; }
 	.service-tile__title        { font-size: 19px; }
 	.service-tile--large .service-tile__title { font-size: 22px; }
@@ -250,15 +242,13 @@ p, li, blockquote {
 	.manifesto__text            { font-size: 18px; }
 	.record-stat__num           { font-size: 30px; }
 	.record-stat--hero .record-stat__num { font-size: 40px; }
-	.closing__word              { font-size: 30px; }
 	.svc-statement              { font-size: 19px; }
 	.svc-card__title            { font-size: 22px; }
-	.svc-cta__word              { font-size: 20px; }
 	.stat__value                { font-size: 28px; }
 	.sd-point__title            { font-size: 19px; }
 	.post-head__title           { font-size: 26px; }
 	.post-card--featured .post-card__title { font-size: 21px; }
-	.ct-quick__value            { font-size: 17px; }
+	.ct-quick__value            { font-size: 18px; }
 	.ct-urgent__number          { font-size: 26px; }
 
 	/* Testimonial controls: two arrows + four initials must fit in 284px. */

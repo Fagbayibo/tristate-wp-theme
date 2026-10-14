@@ -29,17 +29,21 @@
 	const rules = {
 		name: (v) => v.trim().length > 1,
 		phone: (v) => /^[0-9+()\s-]{7,20}$/.test(v.trim()),
-		department: (v) => v !== '',
+		email: (v) => v.trim() === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
+		patient_type: (v) => v !== '',
+		reason: (v) => v.trim().length > 2,
 	};
 
 	const validate = () => {
 		let firstInvalid = null;
 		Object.entries(rules).forEach(([name, test]) => {
-			const field = form.elements[name];
-			const ok = test(field.value);
-			field.closest('.field').classList.toggle('is-invalid', !ok);
-			field.setAttribute('aria-invalid', String(!ok));
-			if (!ok && !firstInvalid) firstInvalid = field;
+			// Radio groups come back as a RadioNodeList: its .value is the checked option.
+			const control = form.elements[name];
+			const inputs = control instanceof RadioNodeList ? [...control] : [control];
+			const ok = test(control.value);
+			inputs[0].closest('.field').classList.toggle('is-invalid', !ok);
+			inputs.forEach((input) => input.setAttribute('aria-invalid', String(!ok)));
+			if (!ok && !firstInvalid) firstInvalid = inputs[0];
 		});
 		return firstInvalid;
 	};
@@ -49,7 +53,7 @@
 		const field = e.target.closest('.field');
 		if (field && field.classList.contains('is-invalid') && rules[e.target.name] && rules[e.target.name](e.target.value)) {
 			field.classList.remove('is-invalid');
-			e.target.setAttribute('aria-invalid', 'false');
+			field.querySelectorAll('[aria-invalid]').forEach((input) => input.setAttribute('aria-invalid', 'false'));
 		}
 	});
 
@@ -94,7 +98,7 @@
 			form.reset();
 			showSuccess();
 		} catch (err) {
-			errorBox.textContent = 'Sorry, something went wrong. Please try again or call 0700TRISTATE.';
+			errorBox.textContent = `Sorry, something went wrong. Please try again or call ${form.dataset.phone}.`;
 			errorBox.hidden = false;
 		} finally {
 			submit.disabled = false;

@@ -26,9 +26,9 @@ $tristate_status = isset( $_GET['appointment'] ) ? sanitize_key( $_GET['appointm
 		<div class="appointment__card" data-reveal="up" data-delay="0.15">
 			<div class="appointment__form-wrap" data-appointment-form-wrap<?php echo 'sent' === $tristate_status ? ' hidden' : ''; ?>>
 				<p class="section-label"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></p>
-				<h2 class="section-title" id="appointment-title" style="--title-size: 40">Your heart is in <em>good hands</em>.</h2>
+				<h2 class="section-title" id="appointment-title" style="--title-size: 40">Your health is in <em>good hands</em>.</h2>
 
-				<form class="appointment-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-appointment-form novalidate>
+				<form class="appointment-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-appointment-form data-phone="<?php echo esc_attr( tristate_contact( 'emergency' ) ); ?>" novalidate>
 					<input type="hidden" name="action" value="tristate_appointment">
 					<?php wp_nonce_field( 'tristate_appointment', 'tristate_appointment_nonce' ); ?>
 					<div class="appointment-form__hp" aria-hidden="true">
@@ -48,14 +48,9 @@ $tristate_status = isset( $_GET['appointment'] ) ? sanitize_key( $_GET['appointm
 					</div>
 
 					<div class="appointment-form__row">
-						<div class="field field--select">
-							<label class="screen-reader-text" for="appt-department"><?php esc_html_e( 'Department', 'tristate' ); ?></label>
-							<select class="field__control" id="appt-department" name="department" required>
-								<option value="" selected disabled><?php esc_html_e( 'Select department', 'tristate' ); ?></option>
-								<?php foreach ( tristate_departments() as $tristate_department ) : ?>
-									<option><?php echo esc_html( $tristate_department ); ?></option>
-								<?php endforeach; ?>
-							</select>
+						<div class="field">
+							<label class="screen-reader-text" for="appt-email"><?php esc_html_e( 'Email address (optional)', 'tristate' ); ?></label>
+							<input class="field__control" type="email" id="appt-email" name="email" placeholder="<?php esc_attr_e( 'Email (optional)', 'tristate' ); ?>" autocomplete="email" inputmode="email">
 						</div>
 						<div class="field field--select field--date" data-placeholder="<?php esc_attr_e( 'Preferred date', 'tristate' ); ?>" data-date-field>
 							<label class="screen-reader-text" for="appt-date"><?php esc_html_e( 'Preferred date', 'tristate' ); ?></label>
@@ -63,11 +58,28 @@ $tristate_status = isset( $_GET['appointment'] ) ? sanitize_key( $_GET['appointm
 						</div>
 					</div>
 
+					<fieldset class="field appointment-form__choice">
+						<legend class="appointment-form__legend"><?php esc_html_e( 'Patient type', 'tristate' ); ?></legend>
+						<div class="appointment-form__options">
+							<?php foreach ( tristate_patient_types() as $tristate_type ) : ?>
+								<label class="appointment-form__option">
+									<input type="radio" name="patient_type" value="<?php echo esc_attr( $tristate_type ); ?>" required>
+									<span><?php echo esc_html( $tristate_type ); ?></span>
+								</label>
+							<?php endforeach; ?>
+						</div>
+					</fieldset>
+
+					<div class="field">
+						<label class="screen-reader-text" for="appt-reason"><?php esc_html_e( 'Reason for visit', 'tristate' ); ?></label>
+						<textarea class="field__control appointment-form__textarea" id="appt-reason" name="reason" rows="3" maxlength="1000" placeholder="<?php esc_attr_e( 'Reason for visit', 'tristate' ); ?>" required></textarea>
+					</div>
+
 					<button class="appointment-form__submit" type="submit">
 						<span data-submit-label><?php esc_html_e( 'Request Appointment', 'tristate' ); ?></span> <span class="btn__arrow" aria-hidden="true">→</span>
 					</button>
 
-					<p class="appointment-form__error" role="alert" data-appointment-error<?php echo 'error' === $tristate_status ? '' : ' hidden'; ?>><?php esc_html_e( 'Please fill in your name, phone number and department.', 'tristate' ); ?></p>
+					<p class="appointment-form__error" role="alert" data-appointment-error<?php echo 'error' === $tristate_status ? '' : ' hidden'; ?>><?php esc_html_e( 'Please fill in your name, phone number, patient type and reason for visit.', 'tristate' ); ?></p>
 				</form>
 
 				<p class="appointment__note">

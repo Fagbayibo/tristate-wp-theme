@@ -18,7 +18,6 @@ get_header();
 
 	get_template_part( 'template-parts/post-list', null, array( 'empty' => __( 'No posts published yet.', 'tristate' ) ) );
 
-	get_template_part( 'template-parts/blog-cta' );
 	?>
 </div>
 <?php

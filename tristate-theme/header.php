@@ -22,7 +22,6 @@ $tristate_overlay = is_front_page();
 	<div class="topbar">
 		<div class="container topbar__inner">
 			<div class="topbar__contacts">
-				<a href="tel:<?php echo esc_attr( preg_replace( '/\s+/', '', tristate_contact( 'phone' ) ) ); ?>"><?php echo esc_html( tristate_contact( 'phone' ) ); ?></a>
 				<a href="mailto:<?php echo esc_attr( tristate_contact( 'email' ) ); ?>"><?php echo esc_html( tristate_contact( 'email' ) ); ?></a>
 			</div>
 			<a class="topbar__emergency" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">
@@ -54,21 +53,21 @@ $tristate_overlay = is_front_page();
 					) );
 					?>
 					<div class="drawer-foot">
-						<a class="btn btn--light navbar__cta navbar__cta--mobile" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
+						<?php if ( is_front_page() ) : // The booking form lives on the homepage only. ?>
+							<a class="btn btn--light navbar__cta navbar__cta--mobile" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
+						<?php endif; ?>
 						<div class="drawer-foot__contacts">
 							<a href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">
-								<span><?php esc_html_e( '24/7 Emergency', 'tristate' ); ?></span>
+								<span><?php esc_html_e( 'Call us 24/7', 'tristate' ); ?></span>
 								<strong><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></strong>
-							</a>
-							<a href="tel:<?php echo esc_attr( preg_replace( '/\s+/', '', tristate_contact( 'phone' ) ) ); ?>">
-								<span><?php esc_html_e( 'Call us', 'tristate' ); ?></span>
-								<strong><?php echo esc_html( tristate_contact( 'phone_alt' ) ); ?></strong>
 							</a>
 						</div>
 					</div>
 				</nav>
 
-				<a class="btn btn--light navbar__cta" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></a>
+				<?php if ( is_front_page() ) : ?>
+					<a class="btn btn--light navbar__cta" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></a>
+				<?php endif; ?>
 
 				<button class="navbar__toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
 					<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'tristate' ); ?></span>

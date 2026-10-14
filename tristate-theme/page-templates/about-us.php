@@ -8,8 +8,8 @@
  * @package tristate
  */
 
-$tristate_appointment = tristate_contact( 'appointment_url' );
 $tristate_services    = tristate_template_url( 'page-templates/our-services.php', '/our-services/' );
+$tristate_contact_url = tristate_template_url( 'page-templates/contact.php', '/contact-us/' );
 
 $tristate_specialties = array( 'Cardiology', 'Neurology', 'Neurosurgery', 'Orthopedics', 'Nephrology', 'OBGYN', 'Internal Medicine', 'Diagnostics', 'Executive Health' );
 
@@ -45,7 +45,7 @@ get_header();
 			<h1 class="landing-title" data-split>Advanced Specialist Care, Driven by <em>Compassion</em> and <em>Innovation</em></h1>
 			<p class="landing-lead" data-reveal="up" data-delay="0.35">Tristate Healthcare System (THS) was founded to close a critical gap in African healthcare: providing access to complex specialist care locally, without the delay, financial strain, and disruption of overseas medical travel.</p>
 			<div class="btn-row about-hero__actions" data-reveal="up" data-delay="0.5">
-				<a class="btn btn--brand" href="<?php echo esc_url( $tristate_appointment ); ?>">Book Appointment <span class="btn__arrow" aria-hidden="true">→</span></a>
+				<a class="btn btn--brand" href="<?php echo esc_url( $tristate_contact_url ); ?>">Contact Us <span class="btn__arrow" aria-hidden="true">→</span></a>
 				<a class="btn btn--outline-brand" href="#pathway">Your Care Pathway</a>
 			</div>
 		</div>
@@ -148,7 +148,6 @@ get_header();
 				<div class="manifesto__promise" data-reveal="scale">
 					<p class="manifesto__promise-label">One clear promise</p>
 					<p class="manifesto__promise-text">Expert attention, human support, and a pathway patients can understand.</p>
-					<a class="btn btn--light" href="<?php echo esc_url( $tristate_appointment ); ?>">Book Appointment <span class="btn__arrow" aria-hidden="true">→</span></a>
 				</div>
 			</div>
 		</div>
@@ -268,29 +267,6 @@ get_header();
 					</li>
 				<?php endforeach; ?>
 			</ol>
-		</div>
-	</section>
-
-	<!-- Closing ------------------------------------------------------------------------------- -->
-	<section class="panel-wrap closing-wrap" aria-label="Book a consultation">
-		<div class="panel closing">
-			<div class="closing__bg" aria-hidden="true">
-				<img src="<?php echo esc_url( $tristate_img . 'appointment.jpg' ); ?>" alt="" loading="lazy" data-parallax="0.06">
-			</div>
-			<div class="marquee" style="--speed: 40s">
-				<?php for ( $tristate_copy = 0; $tristate_copy < 2; $tristate_copy++ ) : ?>
-					<div class="marquee__track"<?php echo $tristate_copy ? ' aria-hidden="true"' : ''; ?>>
-						<p class="closing__word">Expert attention. <em>Human support.</em> A pathway you can understand.</p>
-					</div>
-				<?php endfor; ?>
-			</div>
-			<div class="container closing__foot">
-				<p data-reveal="up">Access world-class clinical expertise in Nigeria — with clear answers, coordinated treatment, and continuity of care that does not disappear after discharge.</p>
-				<div class="btn-row" data-reveal="up" data-delay="0.18">
-					<a class="btn btn--light" href="<?php echo esc_url( $tristate_appointment ); ?>">Book Appointment <span class="btn__arrow" aria-hidden="true">→</span></a>
-					<a class="btn btn--outline-light" href="<?php echo esc_url( $tristate_services ); ?>">Our Services</a>
-				</div>
-			</div>
 		</div>
 	</section>
 

@@ -24,7 +24,6 @@ $tristate_quick = array(
 		'Care line',
 		array(
 			array( tristate_contact( 'emergency' ), 'tel:' . tristate_contact( 'emergency_tel' ) ),
-			array( tristate_contact( 'phone_alt' ), 'tel:' . tristate_contact( 'phone_alt' ) ),
 		),
 	),
 	array(
@@ -80,7 +79,7 @@ get_header();
 					<h2 class="section-title" style="--title-size: 44" data-split>How can we <em>help you?</em></h2>
 					<p class="ct-form-card__intro">Tell us a little about what you need and the right team will get back to you by email or phone.</p>
 
-					<form class="ct-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-message-form novalidate>
+					<form class="ct-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" data-message-form data-phone="<?php echo esc_attr( tristate_contact( 'emergency' ) ); ?>" novalidate>
 						<input type="hidden" name="action" value="tristate_message">
 						<?php wp_nonce_field( 'tristate_message', 'tristate_message_nonce' ); ?>
 						<div class="ct-form__hp" aria-hidden="true">

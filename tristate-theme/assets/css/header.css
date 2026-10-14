@@ -245,6 +245,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
+		justify-content: center;
 		width: 236px;
 		padding: 22px;
 		border-radius: 14px;
@@ -284,23 +285,10 @@
 		color: var(--color-white);
 	}
 
-	.mega-feature__alt {
-		margin-top: 4px;
-		font-size: 13px;
-		color: var(--color-blush-100);
-	}
-
-	.mega-feature .mega-feature__btn {
-		width: 100%;
-		margin-top: 22px;
-		padding-block: 9px;
-		font-size: 14px;
-	}
-
 	.mega-feature__all {
 		display: inline-flex;
 		gap: 6px;
-		margin-top: 14px;
+		margin-top: 22px;
 		font-size: 13.5px;
 		font-weight: 600;
 		color: var(--color-white);
@@ -685,7 +673,6 @@
 
 	.drawer-foot__contacts {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
 		gap: 10px;
 	}
 
@@ -734,16 +721,13 @@
 }
 
 @media (max-width: 640px) {
-	.topbar__contacts a[href^="mailto:"] { display: none; }
+	/* Only the 24/7 line fits: hide the email and centre the number. */
+	.topbar__contacts { display: none; }
+	.topbar__inner { justify-content: center; }
 	.navbar { --toggle-y: 40px; --drawer-top: 80px; }
 	.navbar,
 	.navbar__bar { height: 80px; }
 	.navbar__logo img { width: 158px; height: 48px; }
-}
-
-@media (max-width: 420px) {
-	.topbar__contacts { display: none; }
-	.topbar__inner { justify-content: center; }
 }
 
 @media (max-width: 380px) {

@@ -93,15 +93,13 @@ class Tristate_Primary_Walker extends Walker_Nav_Menu {
 	}
 }
 
-/** Side card in a mega dropdown: the 24/7 line, the booking button and "View all". */
+/** Side card in a mega dropdown: the 24/7 line and "View all". */
 function tristate_mega_feature( $parent_item ) {
 	ob_start();
 	?>
 	<div class="mega-feature">
 		<p class="mega-feature__label"><?php esc_html_e( '24/7 Emergency Line', 'tristate' ); ?></p>
 		<a class="mega-feature__number" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
-		<p class="mega-feature__alt"><?php printf( esc_html__( 'or %s', 'tristate' ), esc_html( tristate_contact( 'phone_alt' ) ) ); ?></p>
-		<a class="btn btn--light mega-feature__btn" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></a>
 		<a class="mega-feature__all" href="<?php echo esc_url( $parent_item->url ); ?>">
 			<?php
 			/* translators: %s: menu item label, e.g. "Our Services" */

@@ -31,11 +31,10 @@ if ( did_action( 'elementor/loaded' ) ) {
  */
 function tristate_contact( $key ) {
 	$contact = array(
-		'phone'           => '+234 8106815163',
-		'phone_alt'       => '08106815163',
 		'email'           => 'info@tristatehs.com',
-		'emergency'       => '0700TRISTATE',
-		'emergency_tel'   => '070087478283', // 0700-TRISTATE on a phone keypad — TODO: confirm dialable digits.
+		// The one phone line, shown everywhere as the 24/7 number (0700TRISTATE did not connect).
+		'emergency'       => '0810 681 5163',
+		'emergency_tel'   => '+2348106815163',
 		'appointment_url' => home_url( '/#appointment' ), // Booking form on the homepage.
 	);
 	return isset( $contact[ $key ] ) ? $contact[ $key ] : '';

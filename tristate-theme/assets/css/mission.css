@@ -49,7 +49,7 @@
 }
 
 .mission__quote cite {
-	font-size: 13px;
+	font-size: 14px;
 	font-weight: 500;
 	font-style: normal;
 	color: var(--accent);
@@ -107,7 +107,7 @@
 
 .mission__item-text {
 	max-width: 460px;
-	font-size: 16px;
+	font-size: 17px;
 	line-height: 1.7;
 	color: var(--color-slate);
 }

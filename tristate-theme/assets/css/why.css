@@ -31,7 +31,7 @@
 
 .why__lead {
 	max-width: 560px;
-	font-size: 17px;
+	font-size: 19px;
 	line-height: 1.7;
 	color: var(--color-slate);
 }
@@ -66,18 +66,18 @@
 
 .why__value-title {
 	display: block;
-	margin-bottom: 2px;
+	margin-bottom: 4px;
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: 19px;
+	font-size: 22px;
 	line-height: normal;
 	color: var(--color-ink);
 }
 
 .why__value-text {
 	display: block;
-	font-size: 14px;
-	line-height: normal;
+	font-size: 17px;
+	line-height: 1.5;
 	color: var(--color-slate);
 }
 

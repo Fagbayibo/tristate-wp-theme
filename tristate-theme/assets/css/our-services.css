@@ -265,7 +265,7 @@
 
 .svc-pillar p {
 	margin-top: 10px;
-	font-size: 15px;
+	font-size: 16px;
 	line-height: 1.6;
 	color: var(--color-slate);
 	transition: color 0.5s;
@@ -392,7 +392,7 @@
 
 .svc-card__text {
 	max-width: 480px;
-	font-size: 16px;
+	font-size: 17px;
 	line-height: 1.7;
 	color: var(--color-slate);
 }
@@ -403,7 +403,7 @@
 	align-items: center;
 	gap: 10px;
 	margin-top: 30px;
-	font-size: 15px;
+	font-size: 16px;
 	font-weight: 600;
 	color: var(--color-burgundy-600);
 }

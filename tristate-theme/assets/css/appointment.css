@@ -112,6 +112,92 @@
 	gap: 14px;
 }
 
+/* Patient type: two radio "pills" styled like the text fields */
+.appointment-form__choice {
+	min-inline-size: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.appointment-form__legend {
+	margin-bottom: 10px;
+	padding: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--color-ink);
+}
+
+.appointment-form__options {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 14px;
+}
+
+.appointment-form__option {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	height: 53px;
+	padding: 0 20px;
+	border: 1px solid rgba(140, 16, 27, 0.12);
+	border-radius: 14px;
+	background: var(--color-cream);
+	font-size: 16px;
+	color: var(--color-ink);
+	cursor: pointer;
+	transition: border-color var(--dur-fast), background-color var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.appointment-form__option:hover {
+	border-color: rgba(140, 16, 27, 0.3);
+}
+
+.appointment-form__option input {
+	flex: none;
+	width: 18px;
+	height: 18px;
+	margin: 0;
+	border: 1.5px solid rgba(140, 16, 27, 0.35);
+	border-radius: 50%;
+	background: var(--color-white);
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+
+.appointment-form__option input:checked {
+	border-color: var(--color-burgundy-600);
+	background: radial-gradient(var(--color-burgundy-600) 0 40%, var(--color-white) 45%);
+}
+
+.appointment-form__option input:focus {
+	outline: none;
+}
+
+.appointment-form__option:has(:checked) {
+	border-color: var(--color-burgundy-600);
+	background: var(--color-white);
+}
+
+.appointment-form__option:has(:focus-visible) {
+	border-color: var(--color-burgundy-600);
+	box-shadow: 0 0 0 4px rgba(140, 16, 27, 0.1);
+}
+
+.field.is-invalid .appointment-form__option {
+	border-color: #c0392b;
+}
+
+.appointment-form__textarea {
+	height: auto;
+	min-height: 110px;
+	padding-block: 15px;
+	line-height: 1.6;
+	resize: vertical;
+}
+
 .appointment-form__hp {
 	position: absolute;
 	left: -9999px;
@@ -156,7 +242,7 @@
 
 .appointment-form__error {
 	margin-top: -8px;
-	font-size: 14px;
+	font-size: 15px;
 	color: #b42318;
 }
 

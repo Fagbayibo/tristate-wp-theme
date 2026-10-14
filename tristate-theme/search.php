@@ -19,9 +19,8 @@ global $wp_query;
 		'lead'    => esc_html( sprintf( _n( '%d result found.', '%d results found.', (int) $wp_query->found_posts, 'tristate' ), (int) $wp_query->found_posts ) ),
 	) );
 
-	get_template_part( 'template-parts/post-list', null, array( 'empty' => __( 'Nothing matched your search. Try a different word, or call us on 0700TRISTATE.', 'tristate' ) ) );
+	get_template_part( 'template-parts/post-list', null, array( 'empty' => sprintf( /* translators: %s: phone number */ __( 'Nothing matched your search. Try a different word, or call us on %s.', 'tristate' ), tristate_contact( 'emergency' ) ) ) );
 
-	get_template_part( 'template-parts/blog-cta' );
 	?>
 </div>
 <?php

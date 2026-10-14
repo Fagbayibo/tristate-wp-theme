@@ -26,7 +26,6 @@ $tristate_title = ( is_category() || is_tag() ) ? single_term_title( '', false )
 
 	get_template_part( 'template-parts/post-list', null, array( 'empty' => __( 'Nothing found here yet.', 'tristate' ) ) );
 
-	get_template_part( 'template-parts/blog-cta' );
 	?>
 </div>
 <?php
