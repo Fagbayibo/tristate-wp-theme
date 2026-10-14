@@ -170,7 +170,7 @@ get_header();
 					<p class="eyebrow" data-reveal="up">Our locations</p>
 					<h2 class="section-title" style="--title-size: 46" data-split>Find a Tristate <em>centre near you</em></h2>
 				</div>
-				<p class="landing-lead" data-reveal="up" data-delay="0.25"><?php echo esc_html( sprintf( '%d centres across Lagos, Oyo and Ogun State. Choose one to see it on the map.', count( $tristate_locations ) ) ); ?></p>
+				<p class="landing-lead" data-reveal="up" data-delay="0.25">Our centres in Lagos and Ibadan. Choose one to see it on the map.</p>
 			</div>
 
 			<div class="ct-locations__grid">

@@ -9,14 +9,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Office locations: name, area (tag), address. Copied from the live Contact page. */
+/** Office locations: name, area (tag), address. Lagos and Ibadan only (client, Oct 2026). */
 function tristate_locations() {
 	return array(
-		array( 'Tristate Hospital Lekki', 'Lagos', 'Plot 6 Block 1A Rock Drive, Off Durosinmi Etti, Close to IMAX Film house, Lekki Phase 1, Lagos State.' ),
-		array( 'Tristate @ Reddington, Victoria Island', 'Lagos', '12 Idowu Martins Street, Victoria Island, Lagos State.' ),
-		array( 'Tristate @ Reddington Ikeja', 'Lagos', 'The Duchess Hospital, 27 – 35 Joel Ogunnaike St, Ikeja GRA, Lagos State.' ),
+		array( 'Tristate Hospital Lekki', 'Lagos', 'Plot 6, Block 1A The Rock Dr, Lekki Phase 1, Lekki 106104, Lagos.' ),
 		array( 'Tristate Hospital Ibadan', 'Oyo', 'Metro International Medical Building, Plot 16A, American Quarters, Idi Ape, Ibadan, Oyo State.' ),
-		array( 'Babcock Tristate Heart & Vascular Centre', 'Ogun', 'Babcock Tristate Heart and Vascular Centre, Ilishan Remo, Ogun State.' ),
 	);
 }
 
