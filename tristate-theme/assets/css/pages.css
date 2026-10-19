@@ -45,6 +45,7 @@
 }
 
 .page-hero__meta {
+	font-family: var(--font-ui);
 	font-size: 16px;
 	line-height: 1.6;
 	color: var(--color-blush-200);
@@ -66,8 +67,8 @@
 
 .entry-content p,
 .entry-content li {
-	font-size: 18px;
-	line-height: 1.8;
+	font-size: 20px;
+	line-height: 1.7;
 	color: var(--color-slate);
 }
 
@@ -147,7 +148,7 @@
 .entry-content table {
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 15px;
+	font-size: 17px;
 }
 
 .entry-content th,
@@ -164,6 +165,7 @@
 
 .entry-content figcaption {
 	margin-top: 8px;
+	font-family: var(--font-ui);
 	font-size: 14px;
 	color: var(--color-slate);
 }
@@ -171,6 +173,7 @@
 .entry-tags {
 	max-width: 760px;
 	margin-top: 32px;
+	font-family: var(--font-ui);
 	font-size: 15px;
 	color: var(--color-slate);
 }
@@ -201,6 +204,7 @@
 	padding-inline: 14px;
 	border: 1px solid var(--line-on-light);
 	border-radius: var(--radius-button);
+	font-family: var(--font-ui);
 	font-size: 15px;
 	font-weight: 500;
 	color: var(--color-ink);
@@ -293,7 +297,7 @@
 .comment-body {
 	padding: 20px 0;
 	border-bottom: 1px solid var(--line-on-light);
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 1.7;
 	color: var(--color-slate);
 }
@@ -311,6 +315,7 @@
 }
 
 .comment-metadata {
+	font-family: var(--font-ui);
 	font-size: 14px;
 }
 

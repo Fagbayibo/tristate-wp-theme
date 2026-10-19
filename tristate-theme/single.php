@@ -121,7 +121,7 @@ while ( have_posts() ) :
 
 				<aside class="post-body__aside" aria-label="<?php esc_attr_e( 'Speak to a specialist', 'tristate' ); ?>">
 					<div class="post-help" data-observe>
-						<p class="post-help__label"><span class="pulse-dot" aria-hidden="true"></span><?php esc_html_e( '24/7 Emergency line', 'tristate' ); ?></p>
+						<p class="post-help__label"><span class="pulse-dot" aria-hidden="true"></span><?php esc_html_e( 'Emergency line', 'tristate' ); ?></p>
 						<a class="post-help__number" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
 						<p class="post-help__text"><?php esc_html_e( 'Questions about something you read? Our specialists can help you with advice that fits your own health.', 'tristate' ); ?></p>
 						<svg class="ecg" viewBox="0 0 600 90" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path pathLength="1000" d="M0 50 H170 L190 50 L205 20 L222 80 L240 8 L258 70 L272 50 H360 L378 50 L392 30 L408 68 L420 50 H600"/></svg>

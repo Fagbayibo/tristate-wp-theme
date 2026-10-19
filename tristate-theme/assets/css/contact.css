@@ -86,6 +86,7 @@
 
 .ct-quick__label {
 	margin-bottom: 4px;
+	font-family: var(--font-ui);
 	font-size: 12px;
 	font-weight: 600;
 	letter-spacing: 0.14em;
@@ -113,7 +114,6 @@ a.ct-quick__value:hover {
 /* Form + emergency ------------------------------------------------------------ */
 .ct-main {
 	padding-block: clamp(64px, 9vw, 120px);
-	border-radius: var(--radius-panel) var(--radius-panel) 0 0;
 	background: var(--color-white);
 }
 
@@ -143,7 +143,7 @@ a.ct-quick__value:hover {
 .ct-form-card__intro {
 	max-width: 520px;
 	margin-top: 14px;
-	font-size: 17px;
+	font-size: 18px;
 	line-height: 1.7;
 	color: var(--color-slate);
 }
@@ -159,19 +159,6 @@ a.ct-quick__value:hover {
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	gap: 18px;
-}
-
-.ct-form__label {
-	display: block;
-	margin-bottom: 8px;
-	font-size: 14px;
-	font-weight: 500;
-	color: var(--color-ink);
-}
-
-.ct-form__label span {
-	font-weight: 400;
-	color: var(--color-slate);
 }
 
 .ct-form .field__control {
@@ -206,11 +193,12 @@ a.ct-quick__value:hover {
 }
 
 .ct-form__privacy {
-	font-size: 14px;
+	font-size: 16px;
 	color: var(--color-slate);
 }
 
 .ct-form__error {
+	font-family: var(--font-ui);
 	font-size: 15px;
 	color: #b42318;
 }
@@ -285,6 +273,7 @@ a.ct-quick__value:hover {
 	display: inline-flex;
 	align-items: center;
 	gap: 10px;
+	font-family: var(--font-ui);
 	font-size: 12px;
 	font-weight: 600;
 	letter-spacing: 0.14em;
@@ -300,7 +289,7 @@ a.ct-quick__value:hover {
 }
 
 .ct-urgent__text {
-	font-size: 16px;
+	font-size: 18px;
 	line-height: 1.65;
 	color: var(--color-blush-100);
 }
@@ -324,6 +313,7 @@ a.ct-quick__value:hover {
 
 .ct-social__label {
 	margin-bottom: 16px;
+	font-family: var(--font-ui);
 	font-size: 14px;
 	font-weight: 600;
 }
@@ -392,8 +382,9 @@ a.ct-quick__value:hover {
 	gap: 16px;
 	align-items: start;
 	width: 100%;
-	padding: 20px 20px 50px;
+	padding: 22px 22px 14px;
 	text-align: left;
+	cursor: pointer;
 }
 
 .ct-place__num {
@@ -430,35 +421,28 @@ a.ct-quick__value:hover {
 }
 
 .ct-place__address {
-	font-size: 15px;
-	line-height: 1.6;
+	font-family: var(--font-body);
+	font-size: 18px;
+	line-height: 1.5;
 	color: var(--color-slate);
+	user-select: text;
 }
 
 .ct-place__tag {
 	align-self: start;
 }
 
-.ct-place__route {
-	position: absolute;
-	bottom: 18px;
-	left: 76px;
-	display: inline-flex;
-	gap: 6px;
-	font-size: 14px;
-	font-weight: 600;
-	color: var(--color-burgundy-600);
-}
-
-.ct-place__route:hover {
-	text-decoration: underline;
-	text-underline-offset: 3px;
+.ct-place__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	padding: 0 22px 22px 78px;
 }
 
 .ct-map {
-	position: relative; /* fills the row beside the list (two centres, Oct 2026) */
+	position: relative; /* fills the row beside the list (two hospitals) */
 	overflow: hidden;
-	min-height: 380px;
+	min-height: 420px;
 	border-radius: var(--radius-panel);
 	background: var(--color-blush-100);
 	box-shadow: var(--shadow-soft);
@@ -522,14 +506,18 @@ a.ct-quick__value:hover {
 
 	.ct-place__pick {
 		grid-template-columns: auto minmax(0, 1fr);
-		padding: 18px 16px 48px;
+		padding: 18px 16px 12px;
 	}
 
 	.ct-place__tag {
 		display: none;
 	}
 
-	.ct-place__route {
-		left: 72px;
+	.ct-place__actions {
+		padding: 0 16px 18px;
+	}
+
+	.ct-place__actions .btn {
+		flex: 1 1 100%;
 	}
 }

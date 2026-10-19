@@ -1,0 +1,295 @@
+/* ==========================================================================
+   Our Team, HMO Partners and Patient Guide (page-templates/our-team.php,
+   hmo-partners.php, patient-guide.php)
+   ========================================================================== */
+
+/* Hero ------------------------------------------------------------------------ */
+.info-hero {
+	position: relative;
+	isolation: isolate;
+	padding-block: clamp(48px, 7vw, 100px) clamp(56px, 7vw, 96px);
+}
+
+.blog-head__glow { /* shared with the blog header */
+	position: absolute;
+	top: 0;
+	left: 50%;
+	z-index: -1;
+	width: min(1100px, 140vw);
+	aspect-ratio: 1;
+	transform: translate(-50%, -45%);
+	border-radius: 50%;
+	background: radial-gradient(closest-side, rgba(243, 218, 221, 0.9), rgba(251, 246, 244, 0));
+	pointer-events: none;
+}
+
+.info-hero__inner {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 860px;
+	text-align: center;
+}
+
+.info-hero .eyebrow {
+	margin-bottom: 22px;
+}
+
+.info-hero .landing-lead {
+	max-width: 640px;
+	margin-top: 22px;
+}
+
+.info-hero__actions {
+	justify-content: center;
+	margin-top: 32px;
+}
+
+.info-body {
+	padding-block: clamp(56px, 8vw, 110px);
+	border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+	background: var(--color-white);
+}
+
+/* Our Team --------------------------------------------------------------------- */
+.leaders {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px;
+}
+
+.leader {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	padding: clamp(26px, 3.4vw, 44px);
+	border-radius: var(--radius-panel);
+	background: var(--color-cream);
+}
+
+.leader__portrait {
+	display: grid;
+	place-items: center;
+	width: 112px;
+	height: 112px;
+	border-radius: 50%;
+	background:
+		radial-gradient(120% 100% at 0% 0%, rgba(232, 201, 205, 0.35), transparent 60%),
+		linear-gradient(150deg, var(--color-burgundy-600), var(--color-burgundy-800));
+	font-family: var(--font-display);
+	font-size: 34px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	color: var(--color-white);
+}
+
+.leader__name {
+	font-size: clamp(22px, 2vw, 28px);
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.leader__title {
+	margin-top: 8px;
+	font-family: var(--font-ui);
+	font-size: 15px;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--color-ink);
+}
+
+.leader .person-card__specialty {
+	margin-top: 12px;
+}
+
+.leader__bio {
+	margin-top: 18px;
+	font-size: 19px;
+	line-height: 1.65;
+	color: var(--color-slate);
+}
+
+.clinicians {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+	margin-top: 18px;
+}
+
+.clinicians .person-card {
+	align-items: center;
+	background: var(--color-cream);
+	box-shadow: none;
+}
+
+/* HMO Partners ------------------------------------------------------------------ */
+.hmo-names--page .hmo-name {
+	min-height: 180px;
+	background: var(--color-cream);
+	box-shadow: none;
+}
+
+.hmo-names--page .hmo-name img {
+	max-height: 84px;
+}
+
+.info-panel {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 24px 32px;
+	margin-top: 18px;
+	padding: clamp(26px, 3.4vw, 44px);
+	border-radius: var(--radius-panel);
+	background: var(--color-paper);
+}
+
+.info-panel__icon {
+	display: grid;
+	place-items: center;
+	width: 64px;
+	height: 64px;
+	border-radius: 18px;
+	background: var(--color-burgundy-600);
+	color: var(--color-white);
+}
+
+.info-panel__icon svg {
+	width: 30px;
+}
+
+.info-panel__copy {
+	display: grid;
+	gap: 12px;
+	max-width: 640px;
+	font-size: 19px;
+	line-height: 1.6;
+	color: var(--color-ink);
+}
+
+/* Patient Guide ------------------------------------------------------------------- */
+.info-guide {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 300px;
+	gap: clamp(36px, 6vw, 96px);
+	align-items: start;
+}
+
+.guide-steps {
+	max-width: 780px;
+}
+
+.sd-point {
+	position: relative;
+	display: grid;
+	grid-template-columns: 64px 1fr;
+	gap: 8px 24px;
+	padding: 34px 0;
+	border-top: 1px solid var(--line-on-light);
+}
+
+.sd-point:last-child {
+	border-bottom: 1px solid var(--line-on-light);
+}
+
+.sd-point__num {
+	font-family: var(--font-display);
+	font-weight: 700;
+	font-size: 34px;
+	line-height: 1;
+	-webkit-text-stroke: 1px var(--color-burgundy-600);
+	color: transparent;
+	transition: color 0.6s var(--ease-out);
+}
+
+.sd-point:hover .sd-point__num,
+html:not(.anim) .sd-point__num {
+	color: var(--color-burgundy-600);
+}
+
+.sd-point__title {
+	font-size: clamp(21px, 1.9vw, 26px);
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.sd-point__text {
+	margin-top: 12px;
+	font-size: 19px;
+	line-height: 1.65;
+	color: var(--color-slate);
+}
+
+.guide-aside {
+	position: sticky;
+	top: var(--sticky-top);
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 12px;
+	padding: 28px;
+	border-radius: var(--radius-panel);
+	background: var(--color-cream);
+}
+
+.guide-aside .info-panel__icon {
+	margin-bottom: 8px;
+}
+
+/* Responsive ------------------------------------------------------------------------ */
+@media (max-width: 1080px) {
+	.clinicians {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.info-panel {
+		grid-template-columns: auto minmax(0, 1fr);
+	}
+
+	.info-panel .btn {
+		grid-column: 1 / -1;
+		justify-self: start;
+	}
+}
+
+@media (max-width: 900px) {
+	.leaders,
+	.info-guide {
+		grid-template-columns: 1fr;
+	}
+
+	.guide-aside {
+		position: static;
+	}
+}
+
+@media (max-width: 600px) {
+	.clinicians {
+		grid-template-columns: 1fr;
+	}
+
+	.leader__portrait {
+		width: 84px;
+		height: 84px;
+		font-size: 26px;
+	}
+
+	.leader__bio,
+	.sd-point__text,
+	.info-panel__copy {
+		font-size: 18px;
+	}
+
+	.info-panel {
+		grid-template-columns: 1fr;
+	}
+
+	.sd-point {
+		grid-template-columns: 1fr;
+		padding: 28px 0;
+	}
+
+	.sd-point__num {
+		font-size: 28px;
+	}
+}

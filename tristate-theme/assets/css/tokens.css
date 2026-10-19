@@ -27,10 +27,15 @@
 	--line-on-light: rgba(140, 16, 27, 0.15);
 
 	/* Type */
-	--font-display: "Playfair Display", Georgia, "Times New Roman", serif;
-	--font-body: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
-	--fs-display: clamp(34px, 4.45vw, 64px); /* page-level h1: homepage hero, inner page heroes */
-	--fs-lead: clamp(17px, 1.3vw, 19px);     /* intro paragraph under a heading */
+	/* Client brief: Montserrat headings, Garamond body text. Montserrat also sets every
+	   interface element (buttons, nav, labels, fields); EB Garamond all reading text,
+	   set larger than a sans would be because of its small x-height. */
+	--font-display: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+	--font-ui: var(--font-display);
+	--font-body: "EB Garamond", Garamond, "Times New Roman", serif;
+	--fs-display: clamp(34px, 4.2vw, 60px); /* page-level h1: homepage hero, inner page heroes */
+	--fs-lead: clamp(19px, 1.5vw, 22px);    /* intro paragraph under a heading */
+	--fs-body: 19px;                        /* paragraphs (18px on phones) */
 
 	/* Layout — 1440 frame, 80px gutters → 1280 content */
 	--container: 1280px;
@@ -41,6 +46,8 @@
 	--radius-button: 10px; /* text buttons: a soft corner, not a full pill */
 	--radius-card: 24px;
 	--radius-media: 28px;
+	--radius-panel: 32px; /* wide rounded panels */
+	--shadow-soft: 0 30px 60px -30px rgba(58, 26, 32, 0.35);
 	--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 	--dur-fast: 0.2s;
 	--dur-base: 0.4s;
@@ -49,13 +56,9 @@
 /* Dark surfaces: accents turn white so they stay visible and on-brand. */
 .site-header,
 .hero,
-.stats,
-.testimonials,
 .site-footer,
 .page-hero,
-.mission__quote,
-.service-tile,
-.why__badge {
+.home-heart__panel {
 	--accent: var(--color-white);
 	--accent-soft: rgba(255, 255, 255, 0.14);
 	--label-color: var(--color-white);

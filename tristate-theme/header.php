@@ -1,12 +1,14 @@
 <?php
 /**
- * Site header: top contact strip + main navigation.
+ * Site header: top strip (email, Emergency Care and Virtual Consultations
+ * shortcuts, emergency line) + main navigation.
  * On the front page it overlays the hero (transparent); elsewhere it is solid.
  *
  * @package tristate
  */
 
-$tristate_overlay = is_front_page();
+$tristate_overlay  = is_front_page();
+$tristate_book_url = is_front_page() ? '#appointment' : tristate_contact( 'appointment_url' );
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -24,13 +26,16 @@ $tristate_overlay = is_front_page();
 			<div class="topbar__contacts">
 				<a href="mailto:<?php echo esc_attr( tristate_contact( 'email' ) ); ?>"><?php echo esc_html( tristate_contact( 'email' ) ); ?></a>
 			</div>
-			<a class="topbar__emergency" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">
-				<?php
-				/* translators: %s: emergency phone number */
-				printf( esc_html__( 'Emergency: %s', 'tristate' ), esc_html( tristate_contact( 'emergency' ) ) );
-				?>
-				<span aria-hidden="true">&nbsp;·&nbsp;</span> 24/7
-			</a>
+			<div class="topbar__links">
+				<a class="topbar__link" href="<?php echo esc_url( tristate_service_url( 'emergency-critical-services' ) ); ?>"><?php esc_html_e( 'Emergency Care', 'tristate' ); ?></a>
+				<a class="topbar__link" href="<?php echo esc_url( tristate_service_url( 'virtual-consultations' ) ); ?>"><?php esc_html_e( 'Virtual Consultations', 'tristate' ); ?></a>
+				<a class="topbar__emergency" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">
+					<?php
+					/* translators: %s: emergency phone number */
+					printf( esc_html__( 'Emergency: %s', 'tristate' ), esc_html( tristate_contact( 'emergency' ) ) );
+					?>
+				</a>
+			</div>
 		</div>
 	</div>
 
@@ -42,32 +47,23 @@ $tristate_overlay = is_front_page();
 				</a>
 
 				<nav class="navbar__nav" id="site-nav" aria-label="<?php esc_attr_e( 'Primary', 'tristate' ); ?>" data-lenis-prevent>
-					<?php
-					wp_nav_menu( array(
-						'theme_location' => 'primary',
-						'container'      => false,
-						'menu_class'     => 'nav-menu',
-						'depth'          => 2,
-						'fallback_cb'    => 'tristate_primary_menu_fallback',
-						'walker'         => new Tristate_Primary_Walker(),
-					) );
-					?>
+					<?php tristate_primary_nav(); ?>
 					<div class="drawer-foot">
-						<?php if ( is_front_page() ) : // The booking form lives on the homepage only. ?>
-							<a class="btn btn--light navbar__cta navbar__cta--mobile" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
-						<?php endif; ?>
+						<a class="btn btn--light navbar__cta navbar__cta--mobile" href="<?php echo esc_url( $tristate_book_url ); ?>"><?php esc_html_e( 'Request an Appointment', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
 						<div class="drawer-foot__contacts">
 							<a href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>">
-								<span><?php esc_html_e( 'Call us 24/7', 'tristate' ); ?></span>
+								<span><?php esc_html_e( 'Emergency line', 'tristate' ); ?></span>
 								<strong><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></strong>
+							</a>
+							<a href="<?php echo esc_url( tristate_service_url( 'virtual-consultations' ) ); ?>">
+								<span><?php esc_html_e( 'Speak with a clinician remotely', 'tristate' ); ?></span>
+								<strong><?php esc_html_e( 'Virtual Consultations', 'tristate' ); ?></strong>
 							</a>
 						</div>
 					</div>
 				</nav>
 
-				<?php if ( is_front_page() ) : ?>
-					<a class="btn btn--light navbar__cta" href="<?php echo esc_url( tristate_contact( 'appointment_url' ) ); ?>"><?php esc_html_e( 'Book Appointment', 'tristate' ); ?></a>
-				<?php endif; ?>
+				<a class="btn btn--light navbar__cta" href="<?php echo esc_url( $tristate_book_url ); ?>"><?php esc_html_e( 'Request an Appointment', 'tristate' ); ?></a>
 
 				<button class="navbar__toggle" type="button" aria-controls="site-nav" aria-expanded="false" data-nav-toggle>
 					<span class="screen-reader-text"><?php esc_html_e( 'Menu', 'tristate' ); ?></span>

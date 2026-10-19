@@ -115,7 +115,7 @@
 			form.reset();
 			showSuccess();
 		} catch (err) {
-			errorBox.textContent = `Sorry, something went wrong. Please try again or call ${form.dataset.phone}.`;
+			errorBox.textContent = `Sorry, something went wrong. Please try again or email ${form.dataset.email}.`;
 			errorBox.hidden = false;
 		} finally {
 			submit.disabled = false;

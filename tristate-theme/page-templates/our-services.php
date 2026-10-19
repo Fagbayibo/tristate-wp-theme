@@ -2,40 +2,39 @@
 /**
  * Template Name: Our Services
  *
- * Assign it to the Our Services page (Page → Template). The page's own editor
- * content is not used: the copy lives here, like the homepage sections.
+ * The Our Services page gets this design from its slug (see functions.php).
+ * Areas of care and services come from inc/services.php.
  *
  * @package tristate
  */
 
-$tristate_img   = TRISTATE_URI . '/assets/images/';
-$tristate_arrow = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
+$tristate_img      = TRISTATE_URI . '/assets/images/';
+$tristate_arrow    = tristate_svg( 'arrow-up-right', array( 'stroke' => 2 ) );
+$tristate_services = tristate_services();
+$tristate_groups   = tristate_service_groups();
+$tristate_total    = count( $tristate_groups );
+$tristate_help_url = add_query_arg( 'service', 'help', home_url( '/' ) ) . '#appointment';
 
-$tristate_icon = 'tristate_svg'; // inc/icons.php
+// Swatch colours per area, in order.
+$tristate_swatches = array( array( '#8c101b', '#5e0d17' ), array( '#c2283a', '#8c101b' ), array( '#a3343f', '#5e0d17' ), array( '#e8c9cd', '#b86a75' ), array( '#d79aa3', '#8c101b' ), array( '#3a1a20', '#8c101b' ), array( '#5e0d17', '#2a0a10' ), array( '#b86a75', '#5e0d17' ) );
 
-// id, title, short name (closing marquee), tag, icon, swatch colours, copy, page slug, image, image alt, badge
-$tristate_services = array(
-	array( 'svc-lab', 'Laboratory Services', 'Laboratory', 'Diagnostics', 'flask', '#8c101b', '#5e0d17', 'Delivering high-yield clinical testing, pathology, and biochemical analysis with rapid turnaround times to ensure accurate diagnosis and personalized treatment planning.', 'laboratory-services', 'service-laboratory.jpg', 'Tristate laboratory scientist at work', 'Rapid turnaround' ),
-	array( 'svc-obgyn', 'Obstetrics &amp; Gynaecology', 'Obstetrics &amp; Gynaecology', "Women's Health", 'gender-female', '#e8c9cd', '#b86a75', 'Providing comprehensive, compassionate healthcare for women across all life stages, covering routine ante-natal care, complex maternal-fetal health, and specialized gynecological procedures.', 'obstetrics-and-gynaecology', 'intro-1.jpg', 'A smiling Tristate patient', 'Every life stage' ),
-	array( 'svc-pharma', 'Pharmaceutical Services', 'Pharmaceutical', 'Medication Safety', 'pill', '#3a1a20', '#8c101b', 'Ensuring safe, precision medication dispensing and personalized therapy management to optimize recovery and prevent adverse interactions for both inpatient and outpatient care.', 'pharmaceutical-services', 'intro-3.jpg', 'A Tristate clinician with a stethoscope', 'Inpatient &amp; outpatient' ),
-	array( 'svc-anaes', 'Anaesthesiology', 'Anaesthesiology', 'Perioperative Care', 'heart-rate-monitor', '#a3343f', '#5e0d17', 'Offering expert perioperative care, specialized surgical sedation, and advanced physiological monitoring to maximize patient safety and comfort during complex medical operations.', 'anaesthesiology', 'service-cardiovascular.jpg', 'Tristate surgical team in theatre', 'Safety &amp; comfort' ),
-	array( 'svc-opd', 'Outpatient Department (OPD)', 'Outpatient', 'Consultations', 'stethoscope', '#d79aa3', '#8c101b', 'Serving as a structured entry point for direct consultant access, comprehensive second opinions, and routine follow-up care without unnecessary delays.', 'outpatient-department', 'intro-2.jpg', 'A Tristate consultant at her desk', 'Direct consultant access' ),
-	array( 'svc-edu', 'Education &amp; Research', 'Education &amp; Research', 'Innovation', 'school', '#5e0d17', '#2a0a10', 'Pioneering medical innovation and training local healthcare professionals to continuously advance specialist medical standards and treatment outcomes across Nigeria.', 'education-research', 'service-radiology.jpg', 'Tristate clinicians reviewing findings together', 'Advancing standards' ),
-	array( 'svc-er', 'Emergency &amp; Critical Care Services', 'Emergency &amp; Critical Care', '24/7', 'ambulance', '#c2283a', '#8c101b', 'Providing 24/7 rapid stabilization, intensive care monitoring, and immediate interventional routing for acute, life-threatening medical emergencies.', 'emergency-critical-services', 'service-emergency-alt.jpg', 'Tristate emergency response team', 'Open 24/7' ),
-);
-$tristate_total = count( $tristate_services );
-
-// Floating hero tiles: position, size, rotation, float timing, pointer depth, image or icon.
+// Floating hero tiles: position, size, rotation, float timing, pointer depth, image or icon, phone top.
 $tristate_tiles = array(
-	array( 'left:6%;top:24%', 128, -8, '7s', '0s', 0.9, 'why-1.jpg', '', '72px' ),
-	array( 'left:15%;top:62%', 96, 6, '8s', '-2s', 0.5, '', 'flask', '' ),
+	array( 'left:6%;top:24%', 128, -8, '7s', '0s', 0.9, 'why-2.jpg', '', '72px' ),
+	array( 'left:15%;top:62%', 96, 6, '8s', '-2s', 0.5, '', 'heartbeat', '' ),
 	array( 'left:22%;top:13%', 78, 10, '6s', '-1s', 0.3, '', 'stethoscope blush', '8px' ),
-	array( 'left:24%;top:80%', 92, -4, '9s', '-4s', 0.45, 'intro-1.jpg', '', '' ),
-	array( 'right:6%;top:20%', 136, 8, '7.5s', '-3s', 0.85, 'service-laboratory.jpg', '', '58px' ),
-	array( 'right:20%;top:11%', 76, -10, '6.5s', '-2.5s', 0.35, '', 'pill blush', '6px' ),
-	array( 'right:13%;top:62%', 120, -6, '8.5s', '-1.5s', 0.7, 'service-emergency-alt.jpg', '', '' ),
-	array( 'right:29%;top:82%', 70, 12, '7s', '-5s', 0.4, '', 'ambulance', '' ),
+	array( 'left:24%;top:80%', 92, -4, '9s', '-4s', 0.45, 'service-obgyn.jpg', '', '' ),
+	array( 'right:6%;top:20%', 136, 8, '7.5s', '-3s', 0.85, 'service-imaging.jpg', '', '58px' ),
+	array( 'right:20%;top:11%', 76, -10, '6.5s', '-2.5s', 0.35, '', 'brain blush', '6px' ),
+	array( 'right:13%;top:62%', 120, -6, '8.5s', '-1.5s', 0.7, 'service-outpatient.jpg', '', '' ),
+	array( 'right:29%;top:82%', 70, 12, '7s', '-5s', 0.4, '', 'bone', '' ),
 );
+
+// A–Z: entries grouped by first letter.
+$tristate_az = array();
+foreach ( tristate_az_entries() as $tristate_entry ) {
+	$tristate_az[ strtoupper( mb_substr( $tristate_entry[0], 0, 1 ) ) ][] = $tristate_entry;
+}
 
 get_header();
 ?>
@@ -58,7 +57,7 @@ get_header();
 						<?php if ( $tristate_photo ) : ?>
 							<img src="<?php echo esc_url( $tristate_img . $tristate_photo ); ?>" alt="">
 						<?php else : ?>
-							<?php echo $tristate_icon( $tristate_glyph[0], array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
+							<?php echo tristate_svg( $tristate_glyph[0], array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -67,56 +66,35 @@ get_header();
 
 		<div class="svc-hero__center">
 			<p class="eyebrow eyebrow--center" data-reveal="up">Our Services</p>
-			<h1 class="landing-title" data-split data-delay="0.3">Specialist Medical Care Under One <em>Coordinated Platform</em></h1>
-			<p class="landing-lead" data-reveal="up" data-delay="0.45">At Tristate Healthcare System, we combine advanced medical technology, experienced specialists, and coordinated pathways to deliver care you can trust and compassion you can feel.</p>
+			<h1 class="landing-title" data-split data-delay="0.3">Find care for <em>what matters to you</em></h1>
+			<p class="landing-lead" data-reveal="up" data-delay="0.45">Choose an area of care below. If you are unsure where to begin, ask our team for guidance. Services and clinic schedules vary by hospital.</p>
 			<div class="btn-row svc-hero__actions" data-reveal="up" data-delay="0.6">
-				<a class="btn btn--brand" href="#services">Explore Services <span class="btn__arrow svc-hero__down" aria-hidden="true">↓</span></a>
+				<a class="btn btn--brand" href="<?php echo esc_url( $tristate_help_url ); ?>">Help Me Find Care <span class="btn__arrow" aria-hidden="true">→</span></a>
+				<a class="btn btn--outline-brand" href="#a-z">A–Z directory</a>
 			</div>
 		</div>
 
 		<div class="svc-hero__cue" aria-hidden="true"><i></i>Scroll</div>
 	</section>
 
-	<!-- Pillars ------------------------------------------------------------------------ -->
-	<section class="svc-pillars">
+	<!-- Areas of care at a glance --------------------------------------------------------- -->
+	<section class="svc-index" id="services" aria-label="Areas of care">
 		<div class="container">
-			<div class="svc-pillars__grid" data-reveal-stagger>
-				<?php
-				$tristate_pillars = array(
-					array( 'heart-rate-monitor', 'Advanced Medical Technology', 'Precise clinical evaluation and advanced diagnostics.' ),
-					array( 'stethoscope', 'Experienced Specialists', 'World-class, internationally trained clinicians.' ),
-					array( 'route', 'Coordinated Pathways', 'One clear journey from assessment to long-term management.' ),
-				);
-				foreach ( $tristate_pillars as $tristate_i => $tristate_pillar ) :
-					?>
-					<article class="svc-pillar">
-						<span class="svc-pillar__num"><?php echo esc_html( sprintf( '%02d', $tristate_i + 1 ) ); ?></span>
-						<span class="svc-pillar__icon"><?php echo $tristate_icon( $tristate_pillar[0] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-						<h3 class="svc-pillar__title"><?php echo esc_html( $tristate_pillar[1] ); ?></h3>
-						<p><?php echo esc_html( $tristate_pillar[2] ); ?></p>
-					</article>
-				<?php endforeach; ?>
-			</div>
-			<p class="svc-statement" data-split>Care you can <em>trust.</em> Compassion you can <em>feel.</em></p>
-		</div>
-	</section>
-
-	<!-- Service index ----------------------------------------------------------------------- -->
-	<section class="svc-index" id="services">
-		<div class="container">
-			<div class="landing-head">
-				<div>
-					<p class="eyebrow" data-reveal="up">What we offer</p>
-					<h2 class="section-title" style="--title-size: 46" data-split>Seven specialist services, <em>one platform</em></h2>
-				</div>
-				<p class="landing-lead" data-reveal="up" data-delay="0.25">Choose a service to jump straight to it, or scroll to explore each one in turn.</p>
-			</div>
-
 			<div class="svc-index__grid" data-reveal-stagger>
-				<?php foreach ( $tristate_services as $tristate_svc ) : ?>
-					<a class="svc-link" href="#<?php echo esc_attr( $tristate_svc[0] ); ?>">
-						<span class="svc-link__swatch" style="<?php echo esc_attr( "--c1:{$tristate_svc[5]};--c2:{$tristate_svc[6]}" ); ?>"><?php echo $tristate_icon( $tristate_svc[4] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-						<span class="svc-link__text"><strong><?php echo wp_kses_post( $tristate_svc[1] ); ?></strong><small><?php echo esc_html( $tristate_svc[3] ); ?></small></span>
+				<?php foreach ( array_keys( $tristate_groups ) as $tristate_i => $tristate_key ) : ?>
+					<?php
+					$tristate_group = $tristate_groups[ $tristate_key ];
+					$tristate_names = array();
+					foreach ( $tristate_group['services'] as $tristate_slug ) {
+						if ( $tristate_services[ $tristate_slug ]['title'] !== $tristate_group['label'] ) {
+							$tristate_names[] = $tristate_services[ $tristate_slug ]['title'];
+						}
+					}
+					$tristate_note = $tristate_names ? implode( ' · ', $tristate_names ) : ( 'virtual' === $tristate_key ? $tristate_group['summary'] : '' );
+					?>
+					<a class="svc-link" href="#<?php echo esc_attr( $tristate_key ); ?>">
+						<span class="svc-link__swatch" style="<?php echo esc_attr( "--c1:{$tristate_swatches[$tristate_i][0]};--c2:{$tristate_swatches[$tristate_i][1]}" ); ?>"><?php echo tristate_svg( $tristate_group['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+						<span class="svc-link__text"><strong><?php echo esc_html( $tristate_group['label'] ); ?></strong><?php if ( $tristate_note ) : ?><small><?php echo esc_html( $tristate_note ); ?></small><?php endif; ?></span>
 						<span class="svc-link__go"><?php echo $tristate_arrow; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 					</a>
 				<?php endforeach; ?>
@@ -124,35 +102,76 @@ get_header();
 		</div>
 	</section>
 
-	<!-- Stacked service cards ----------------------------------------------------------------- -->
-	<section class="svc-stack" aria-label="Service details">
+	<!-- Stacked area cards ----------------------------------------------------------------- -->
+	<section class="svc-stack" aria-label="Areas of care in detail">
 		<div class="container svc-stack__inner">
-			<?php foreach ( $tristate_services as $tristate_i => $tristate_svc ) : ?>
+			<?php foreach ( array_keys( $tristate_groups ) as $tristate_i => $tristate_key ) : ?>
 				<?php
+				$tristate_group   = $tristate_groups[ $tristate_key ];
 				$tristate_variant = array( '', ' svc-card--blush', ' svc-card--dark' )[ $tristate_i % 3 ];
+				$tristate_list    = array_merge( $tristate_group['services'], isset( $tristate_group['also'] ) ? $tristate_group['also'] : array() );
 				?>
-				<article class="svc-card<?php echo esc_attr( $tristate_variant ); ?>" id="<?php echo esc_attr( $tristate_svc[0] ); ?>" style="--i: <?php echo (int) $tristate_i; ?>" data-observe>
+				<article class="svc-card<?php echo esc_attr( $tristate_variant ); ?>" id="<?php echo esc_attr( $tristate_key ); ?>" style="--i: <?php echo (int) $tristate_i; ?>" data-observe>
 					<div class="svc-card__inner">
 						<div class="svc-card__body">
 							<div class="svc-card__meta">
 								<span class="svc-card__count"><?php echo esc_html( sprintf( '%02d', $tristate_i + 1 ) ); ?> <span>/ <?php echo esc_html( sprintf( '%02d', $tristate_total ) ); ?></span></span>
-								<span class="landing-tag"><?php echo esc_html( $tristate_svc[3] ); ?></span>
 							</div>
-							<span class="svc-card__icon"><?php echo $tristate_icon( $tristate_svc[4] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-							<h3 class="svc-card__title"><?php echo wp_kses_post( $tristate_svc[1] ); ?></h3>
-							<p class="svc-card__text"><?php echo esc_html( $tristate_svc[7] ); ?></p>
-							<a class="svc-card__link" href="<?php echo esc_url( home_url( '/' . $tristate_svc[8] . '/' ) ); ?>">
-								Learn more <span class="screen-reader-text">about <?php echo wp_kses_post( $tristate_svc[1] ); ?></span>
-								<span class="svc-card__link-circle" aria-hidden="true"><?php echo $tristate_arrow; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-							</a>
+							<span class="svc-card__icon"><?php echo tristate_svg( $tristate_group['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+							<h2 class="svc-card__title"><?php echo esc_html( $tristate_group['label'] ); ?></h2>
+							<p class="svc-card__text"><?php echo esc_html( $tristate_group['summary'] ); ?></p>
+							<ul class="svc-card__services">
+								<?php foreach ( $tristate_list as $tristate_slug ) : ?>
+									<li>
+										<a class="svc-card__service" href="<?php echo esc_url( tristate_service_url( $tristate_slug ) ); ?>">
+											<span><?php echo esc_html( $tristate_services[ $tristate_slug ]['title'] ); ?></span>
+											<span class="svc-card__link-circle" aria-hidden="true"><?php echo $tristate_arrow; // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+										</a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
 						</div>
 						<div class="svc-card__media">
-							<img src="<?php echo esc_url( $tristate_img . $tristate_svc[9] ); ?>" alt="<?php echo esc_attr( $tristate_svc[10] ); ?>" loading="lazy">
-							<span class="svc-card__badge"><span class="pulse-dot" aria-hidden="true"></span><?php echo wp_kses_post( $tristate_svc[11] ); ?></span>
+							<img src="<?php echo esc_url( $tristate_img . $tristate_group['image'] ); ?>" alt="<?php echo esc_attr( $tristate_group['alt'] ); ?>" loading="lazy">
 						</div>
 					</div>
 				</article>
 			<?php endforeach; ?>
+		</div>
+	</section>
+
+	<!-- A–Z directory ------------------------------------------------------------------------ -->
+	<section class="svc-az" id="a-z" aria-labelledby="az-title">
+		<div class="container">
+			<div class="landing-head">
+				<div>
+					<p class="eyebrow" data-reveal="up">A–Z</p>
+					<h2 class="section-title" id="az-title" style="--title-size: 46" data-split>Services, tests and <em>procedures</em></h2>
+				</div>
+				<nav class="svc-az__letters" aria-label="Jump to a letter" data-reveal="up" data-delay="0.2">
+					<?php foreach ( array_keys( $tristate_az ) as $tristate_letter ) : ?>
+						<a href="#az-<?php echo esc_attr( strtolower( $tristate_letter ) ); ?>"><?php echo esc_html( $tristate_letter ); ?></a>
+					<?php endforeach; ?>
+				</nav>
+			</div>
+
+			<div class="svc-az__grid">
+				<?php foreach ( $tristate_az as $tristate_letter => $tristate_entries ) : ?>
+					<div class="svc-az__group" id="az-<?php echo esc_attr( strtolower( $tristate_letter ) ); ?>">
+						<p class="svc-az__letter" aria-hidden="true"><?php echo esc_html( $tristate_letter ); ?></p>
+						<ul class="svc-az__list">
+							<?php foreach ( $tristate_entries as $tristate_entry ) : ?>
+								<li><a href="<?php echo esc_url( $tristate_entry[1] ); ?>"><?php echo esc_html( $tristate_entry[0] ); ?></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endforeach; ?>
+			</div>
+
+			<div class="svc-az__help" data-reveal="up">
+				<p>If you are unsure where to begin, ask our team for guidance.</p>
+				<a class="btn btn--brand" href="<?php echo esc_url( $tristate_help_url ); ?>">Help Me Find Care <span class="btn__arrow" aria-hidden="true">→</span></a>
+			</div>
 		</div>
 	</section>
 

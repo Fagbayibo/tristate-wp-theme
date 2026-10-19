@@ -17,6 +17,8 @@ require TRISTATE_DIR . '/inc/contact.php';
 require TRISTATE_DIR . '/inc/downloads.php';
 require TRISTATE_DIR . '/inc/icons.php';
 require TRISTATE_DIR . '/inc/menu.php';
+require TRISTATE_DIR . '/inc/pages.php';
+require TRISTATE_DIR . '/inc/people.php';
 require TRISTATE_DIR . '/inc/services.php';
 require TRISTATE_DIR . '/inc/updater.php';
 
@@ -32,7 +34,7 @@ if ( did_action( 'elementor/loaded' ) ) {
 function tristate_contact( $key ) {
 	$contact = array(
 		'email'           => 'info@tristatehs.com',
-		// The one phone line, shown everywhere as the 24/7 number (0700TRISTATE did not connect).
+		// The one phone line, shown everywhere as the emergency number (0700TRISTATE did not connect).
 		'emergency'       => '0810 681 5163',
 		'emergency_tel'   => '+2348106815163',
 		'appointment_url' => home_url( '/#appointment' ), // Booking form on the homepage.
@@ -55,11 +57,7 @@ add_action( 'after_setup_theme', function () {
 	add_theme_support( 'title-tag' );
 	add_theme_support( 'post-thumbnails' );
 	add_theme_support( 'html5', array( 'search-form', 'gallery', 'caption', 'style', 'script' ) );
-
-	register_nav_menus( array(
-		'primary' => __( 'Primary Menu', 'tristate' ),
-		'footer'  => __( 'Footer Quick Links', 'tristate' ),
-	) );
+	// No menu locations: the navigation follows the services and pages in code (inc/menu.php).
 } );
 
 /** Cache-busting version for a theme asset: its last-modified time. */
@@ -77,10 +75,13 @@ function tristate_asset_version( $path ) {
  */
 function tristate_landing_templates() {
 	return array(
-		'page-templates/about-us.php'     => array( 'css' => 'about', 'slugs' => array( 'about-us' ) ),
-		'page-templates/our-services.php' => array( 'css' => 'our-services', 'slugs' => array( 'our-services' ) ),
-		'page-templates/service.php'      => array( 'css' => 'service', 'slugs' => tristate_service_slugs() ),
-		'page-templates/contact.php'      => array( 'css' => 'contact', 'slugs' => array( 'contact-us' ) ),
+		'page-templates/about-us.php'      => array( 'css' => 'about', 'slugs' => array( 'about-us' ) ),
+		'page-templates/our-services.php'  => array( 'css' => 'our-services', 'slugs' => array( 'our-services' ) ),
+		'page-templates/service.php'       => array( 'css' => 'service', 'slugs' => tristate_service_slugs() ),
+		'page-templates/contact.php'       => array( 'css' => 'contact', 'slugs' => array( 'our-hospitals', 'contact-us' ) ),
+		'page-templates/our-team.php'      => array( 'css' => 'info', 'slugs' => array( 'our-team' ) ),
+		'page-templates/hmo-partners.php'  => array( 'css' => 'info', 'slugs' => array( 'hmo-partners' ) ),
+		'page-templates/patient-guide.php' => array( 'css' => 'info', 'slugs' => array( 'patient-guide' ) ),
 	);
 }
 
@@ -140,36 +141,20 @@ add_filter(
 	3
 );
 
-/**
- * URL of the first published page using a page template, so templates can link
- * to each other whatever slug the page was given.
- */
-function tristate_template_url( $template, $fallback_path ) {
-	$pages = get_posts( array(
-		'post_type'   => 'page',
-		'post_status' => 'publish',
-		'meta_key'    => '_wp_page_template', // phpcs:ignore WordPress.DB.SlowDBQuery
-		'meta_value'  => $template, // phpcs:ignore WordPress.DB.SlowDBQuery
-		'numberposts' => 1,
-		'fields'      => 'ids',
-	) );
-	return $pages ? get_permalink( $pages[0] ) : home_url( $fallback_path );
-}
-
 add_action( 'wp_enqueue_scripts', function () {
 	$landing = tristate_landing_template();
 
-	// Fonts: Playfair Display (headings) + Poppins (UI/body).
+	// Fonts (client brief): Montserrat for headings and interface, EB Garamond for reading text.
 	wp_enqueue_style(
 		'tristate-fonts',
-		'https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:wght@400;500;600&display=swap',
+		'https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@400;500;600;700&display=swap',
 		array(),
 		null
 	);
 
 	$css = array( 'tokens', 'base', 'header', 'footer' );
 	if ( is_front_page() ) {
-		array_push( $css, 'hero', 'intro', 'mission', 'services', 'stats', 'why', 'testimonials', 'news', 'appointment' );
+		array_push( $css, 'hero', 'landing', 'home', 'appointment' );
 	} else {
 		$css[] = 'pages'; // Inner pages, blog, search, 404.
 		if ( $landing ) {
@@ -194,8 +179,7 @@ add_action( 'wp_enqueue_scripts', function () {
 
 	if ( is_front_page() ) {
 		wp_enqueue_script( 'tristate-hero', TRISTATE_URI . '/assets/js/hero.js', array( 'gsap' ), tristate_asset_version( '/assets/js/hero.js' ), array( 'strategy' => 'defer' ) );
-		wp_enqueue_script( 'tristate-video-modal', TRISTATE_URI . '/assets/js/video-modal.js', array(), tristate_asset_version( '/assets/js/video-modal.js' ), array( 'strategy' => 'defer' ) );
-		wp_enqueue_script( 'tristate-testimonials', TRISTATE_URI . '/assets/js/testimonials.js', array( 'gsap' ), tristate_asset_version( '/assets/js/testimonials.js' ), array( 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'tristate-landing', TRISTATE_URI . '/assets/js/landing.js', array( 'gsap-scrolltrigger', 'tristate-animations' ), tristate_asset_version( '/assets/js/landing.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-appointment', TRISTATE_URI . '/assets/js/appointment.js', array(), tristate_asset_version( '/assets/js/appointment.js' ), array( 'strategy' => 'defer' ) );
 	}
 
@@ -234,44 +218,6 @@ add_filter( 'wp_resource_hints', function ( $urls, $relation ) {
 	}
 	return $urls;
 }, 10, 2 );
-
-/** Mark the current menu item so CSS can colour it gold, as in the design. */
-add_filter( 'nav_menu_link_attributes', function ( $atts, $item ) {
-	if ( in_array( 'current-menu-item', (array) $item->classes, true ) ) {
-		$atts['aria-current'] = 'page';
-	}
-	return $atts;
-}, 10, 2 );
-
-/**
- * Fallback menu used until a menu is assigned in Appearance → Menus.
- * Mirrors the items in the Figma design.
- */
-function tristate_primary_menu_fallback() {
-	$items = array(
-		'Home'         => home_url( '/' ),
-		'About Us'     => home_url( '/about-us/' ),
-		'Our Team'     => home_url( '/our-team/' ),
-		'Our Services' => home_url( '/our-services/' ),
-		'Cases'        => home_url( '/real-life-cases/' ),
-		'News'         => home_url( '/our-blog/' ),
-		'Contact'      => home_url( '/contact-us/' ),
-	);
-	echo '<ul class="nav-menu">';
-	foreach ( $items as $label => $url ) {
-		$is_current = ( 'Home' === $label && is_front_page() );
-		$classes    = $is_current ? ' current-menu-item' : '';
-		$classes   .= 'Our Services' === $label ? ' menu-item-has-children' : ''; // Shows the ▾ from the design.
-		printf(
-			'<li class="menu-item%s"><a href="%s"%s>%s</a></li>',
-			$classes,
-			esc_url( $url ),
-			$is_current ? ' aria-current="page"' : '',
-			esc_html( $label )
-		);
-	}
-	echo '</ul>';
-}
 
 /**
  * Was this page built with Elementor?

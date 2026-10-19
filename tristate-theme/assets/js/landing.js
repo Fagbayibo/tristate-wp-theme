@@ -1,5 +1,5 @@
 /**
- * Scroll-linked motion for the About Us and Our Services templates.
+ * Scroll-linked motion for the designed pages and the homepage.
  * Generic reveals, split headings, counters and parallax come from animations.js;
  * this file only drives the effects unique to these pages. Each block is skipped
  * when its markup isn't on the page.
@@ -29,41 +29,6 @@
 		});
 	});
 
-	// Marquees run faster while the page is scrolling, then ease back -----------------
-	const tracks = [...document.querySelectorAll('.marquee__track')];
-	if (tracks.length) {
-		let rate = 1;
-		ScrollTrigger.create({
-			onUpdate: (self) => {
-				rate = Math.max(rate, 1 + Math.min(Math.abs(self.getVelocity()) / 600, 4));
-			},
-		});
-		gsap.ticker.add(() => {
-			rate += (1 - rate) * 0.06;
-			tracks.forEach((track) => track.getAnimations().forEach((a) => { a.playbackRate = rate; }));
-		});
-	}
-
-	// Pathway: the line fills as you scroll; each step lights up as the fill passes it --
-	const timeline = document.querySelector('[data-timeline]');
-	if (timeline) {
-		ScrollTrigger.create({
-			trigger: timeline,
-			start: 'top 60%',
-			end: 'bottom 60%',
-			scrub: true,
-			onUpdate: (self) => timeline.style.setProperty('--fill', self.progress.toFixed(4)),
-		});
-		timeline.querySelectorAll('.pathway-step').forEach((step) => {
-			ScrollTrigger.create({
-				trigger: step.querySelector('.pathway-step__node'),
-				start: 'center 60%',
-				onEnter: () => step.classList.add('is-active'),
-				onLeaveBack: () => step.classList.remove('is-active'),
-			});
-		});
-	}
-
 	// T.R.E.A.T.: the row in the middle of the screen is active; letters fill in up to it --
 	const treatItems = [...document.querySelectorAll('.treat__item')];
 	const treatLetters = [...document.querySelectorAll('.treat__word span')];
@@ -78,6 +43,18 @@
 			end: 'bottom 45%',
 			onEnter: () => setTreat(i),
 			onEnterBack: () => setTreat(i),
+		});
+	});
+
+	// Service pages: "On this page" marks the section being read --------------------
+	document.querySelectorAll('.sd-toc__list a').forEach((link) => {
+		const target = document.querySelector(link.getAttribute('href'));
+		if (!target) return;
+		ScrollTrigger.create({
+			trigger: target,
+			start: 'top 40%',
+			end: 'bottom 40%',
+			onToggle: (self) => link.classList.toggle('is-current', self.isActive),
 		});
 	});
 

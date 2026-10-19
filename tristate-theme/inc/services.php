@@ -1,10 +1,11 @@
 <?php
 /**
- * The service pages (page-templates/service.php), keyed by page slug.
+ * Services: the 15 services from the client's content brief ("Tristate
+ * Hospitals Website Content", Oct 2026), grouped into areas of care.
  *
- * Copy comes from the "TRISTATE SERVICES" document: the first point is the
- * hero lead and the rest become the numbered points. A service without
- * `points` has no copy yet, so its page keeps its current content.
+ * Every service has its own page (page-templates/service.php, routed by slug),
+ * a place in the grouped menu and the A–Z directory, and, when it can be
+ * booked, an option in the appointment form.
  *
  * @package tristate
  */
@@ -12,9 +13,94 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Each service: title, heading (h1, with <em>), short name, tag, icon
- * (Tabler name, inc/icons.php), image + alt, badge, lead, points [ title, text ],
- * optional lists [ title, intro, style 'chips'|'tests', items ] and emergency.
+ * Areas of care, in menu order: label, one-line summary (homepage), icon,
+ * image for the Our Services page, and the service slugs in each.
+ * `also` lists services that belong to another group but are cross-linked here.
+ */
+function tristate_service_groups() {
+	return array(
+		'medical'      => array(
+			'label'    => 'Medical Care and Wellness',
+			'summary'  => 'New concerns, ongoing conditions and preventive health reviews.',
+			'icon'     => 'stethoscope',
+			'image'    => 'service-outpatient.jpg',
+			'alt'      => 'A doctor in consultation with a patient',
+			'services' => array( 'family-medicine', 'internal-medicine', 'wellness' ),
+		),
+		'heart'        => array(
+			'label'    => 'Heart and Chest Care',
+			'summary'  => 'Cardiology and Cardiothoracic Surgery.',
+			'icon'     => 'heartbeat',
+			'image'    => 'hero-cardiac.jpg',
+			'alt'      => 'Tristate cardiac surgeons operating in theatre',
+			'services' => array( 'cardiovascular-services', 'cardiothoracic-surgery' ),
+		),
+		'surgery'      => array(
+			'label'    => 'Surgery',
+			'summary'  => 'General Surgery, Neurosurgery and Orthopaedics.',
+			'icon'     => 'medical-cross',
+			'image'    => 'service-cardiovascular.jpg',
+			'alt'      => 'A Tristate surgical team in theatre',
+			'services' => array( 'general-surgery', 'neurosurgery', 'orthopaedics' ),
+			'also'     => array( 'cardiothoracic-surgery' ),
+		),
+		'womens'       => array(
+			'label'    => 'Women’s Health',
+			'summary'  => 'Gynaecological concerns and pregnancy care.',
+			'icon'     => 'gender-female',
+			'image'    => 'service-obgyn.jpg',
+			'alt'      => 'A Tristate nurse caring for a newborn baby',
+			'services' => array( 'obstetrics-and-gynaecology' ),
+		),
+		'emergency'    => array(
+			'label'    => 'Emergency and Critical Care',
+			'summary'  => 'Urgent assessment and intensive care.',
+			'icon'     => 'ambulance',
+			'image'    => 'service-emergency.jpg',
+			'alt'      => 'Tristate emergency responders loading a patient into an ambulance',
+			'services' => array( 'emergency-critical-services', 'intensive-care-unit' ),
+		),
+		'diagnostics'  => array(
+			'label'    => 'Diagnostics and Procedures',
+			'summary'  => 'Radiology and Endoscopy.',
+			'icon'     => 'scan',
+			'image'    => 'service-imaging.jpg',
+			'alt'      => 'A clinician reviewing a chest X-ray',
+			'services' => array( 'radiology', 'endoscopy' ),
+		),
+		'regenerative' => array(
+			'label'    => 'Regenerative Medicine',
+			'summary'  => 'Advice on available treatments and suitability.',
+			'icon'     => 'dna-2',
+			'image'    => 'service-laboratory.jpg',
+			'alt'      => 'A Tristate laboratory scientist at work',
+			'services' => array( 'regenerative-medicine' ),
+		),
+		'virtual'      => array(
+			'label'    => 'Virtual Consultations',
+			'summary'  => 'Another way to access suitable appointments and follow-up.',
+			'icon'     => 'video',
+			'image'    => 'why-1.jpg',
+			'alt'      => 'A smiling Tristate doctor with a stethoscope',
+			'services' => array( 'virtual-consultations' ),
+		),
+	);
+}
+
+/**
+ * Each service, keyed by page slug:
+ * - title    name in menus, lists and the form ("Cardiology")
+ * - group    key in tristate_service_groups()
+ * - icon     Tabler icon (inc/icons.php)
+ * - image    hero photo + alt
+ * - eyebrow  optional label above the h1 (defaults to the group)
+ * - heading  optional h1 (defaults to the title); <em> marks the accent
+ * - intro    paragraphs under the h1
+ * - cta      [ label, action ]: 'book' (appointment form, this service chosen),
+ *            'virtual' (form, virtual chosen), 'hospitals' (Our Hospitals page)
+ * - book     false when the service cannot be requested through the form
+ * - sections optional body: title, id, paras, tests [ name, text, id ],
+ *            defs [ term, text ] (the term runs into its text), cta, link (a slug)
  */
 function tristate_services() {
 	static $services = null;
@@ -23,229 +109,366 @@ function tristate_services() {
 	}
 
 	$services = array(
-		'emergency-critical-services' => array(
-			'title'     => 'Emergency &amp; Critical Care Services',
-			'heading'   => 'Emergency &amp; <em>Critical Care</em> Services',
-			'short'     => 'Emergency Care',
-			'tag'       => '24/7',
-			'icon'      => 'ambulance',
-			'image'     => 'service-emergency.jpg',
-			'alt'       => 'Tristate emergency responders loading a patient into an ambulance',
-			'badge'     => 'Open 24/7',
-			'emergency' => true,
-			'lead'      => 'Tristate Healthcare System provides comprehensive emergency medical services designed to efficiently handle life-threatening situations.',
-			'points'    => array(
-				array( 'Rapid resuscitation', 'Our clinical team of specialized physicians and nurses are extensively trained in performing rapid resuscitative procedures.' ),
-				array( 'Round the clock, with standby ambulances', 'Operating round the clock, our emergency unit works alongside well-equipped standby ambulances to deliver immediate, life-saving care to the sick and injured.' ),
-			),
+		'family-medicine'             => array(
+			'title' => 'Family Medicine',
+			'group' => 'medical',
+			'icon'  => 'stethoscope',
+			'image' => 'service-outpatient.jpg',
+			'alt'   => 'A doctor in consultation with a patient',
+			'intro' => array( 'You do not need to know what is wrong before asking for help. Start here for new symptoms, routine reviews or ongoing health concerns. Your clinician considers your history and daily life, recommends any necessary tests and helps identify when specialist care is needed.' ),
+			'cta'   => array( 'Request a Family Medicine Appointment', 'book' ),
+		),
+
+		'internal-medicine'           => array(
+			'title' => 'Internal Medicine',
+			'group' => 'medical',
+			'icon'  => 'report-medical',
+			'image' => 'intro-2.jpg',
+			'alt'   => 'A Tristate consultant at her desk',
+			'intro' => array( 'When symptoms persist or you are managing several health conditions, it helps to consider them together. Our Internal Medicine service assesses adult medical concerns, reviewing your symptoms, medicines and previous results to guide treatment and follow-up.' ),
+			'cta'   => array( 'Request an Internal Medicine Appointment', 'book' ),
+		),
+
+		'wellness'                    => array(
+			'title' => 'Wellness',
+			'group' => 'medical',
+			'icon'  => 'leaf',
+			'image' => 'why-2.jpg',
+			'alt'   => 'A doctor checking an elderly patient’s blood pressure',
+			'intro' => array( 'Make time for your health, even when you feel well. A wellness consultation explores your health history, risks and goals, with advice on prevention and screening appropriate to you. Ask which checks would be useful and why.' ),
+			'cta'   => array( 'Plan a Wellness Visit', 'book' ),
 		),
 
 		'cardiovascular-services'     => array(
-			'title'   => 'Cardiovascular Services',
-			'heading' => '<em>Cardiovascular</em> Services',
-			'short'   => 'Cardiovascular',
-			'tag'     => 'Flagship',
-			'icon'    => 'heartbeat',
-			'image'   => 'hero-cardiac.jpg',
-			'alt'     => 'Tristate cardiac surgeons operating in theatre',
-			'badge'   => 'Our flagship strength',
-			'lead'    => 'As our flagship strength, we offer an extensive portfolio of cardiovascular services for both non-invasive and advanced corrective care.',
-			'points'  => array(
-				array( 'World-renowned specialists', 'Our surgical and medical team comprises world-renowned non-invasive, invasive/interventional cardiologists and cardiothoracic surgeons who maintain exceptional success rates in complex adult and paediatric procedures.' ),
-				array( 'A multidisciplinary team', 'Our cardiology unit works hand-in-hand with professional cardiac sonographers and anaesthesiologists to ensure optimal clinical outcomes.' ),
+			'title'    => 'Cardiology',
+			'group'    => 'heart',
+			'icon'     => 'heartbeat',
+			'image'    => 'hero-cardiac.jpg',
+			'alt'      => 'Tristate cardiac surgeons operating in theatre',
+			'eyebrow'  => 'Advanced Cardiovascular Services',
+			'heading'  => 'Care for the Heart <em>From The Heart</em>',
+			'intro'    => array(
+				'A heart concern can bring questions about your health, your family and the life you want to return to. At Tristate, advanced cardiovascular care begins with understanding those concerns alongside your medical needs.',
+				'Our cardiology and cardiothoracic teams assess your condition and discuss the investigations or treatment appropriate to you. You should understand why a recommendation is made, what the alternatives are and what it may mean for daily life.',
 			),
-			'lists'   => array(
+			'cta'      => array( 'Request a Heart Consultation', 'book' ),
+			'sections' => array(
 				array(
-					'title' => 'Core surgical <em>procedures</em>',
-					'intro' => 'From open-heart surgery to transplants, for adults and children.',
-					'style' => 'chips',
-					'items' => array(
-						'Coronary artery bypass graft (CABG)',
-						'Valve replacements',
-						'Aneurysm repair',
-						'Coronary stent procedures',
-						'Pacemaker &amp; defibrillator implantation',
-						'Adult &amp; paediatric structural procedures',
-						'Pulmonary valvotomy',
-						'PDA, ASD &amp; VSD procedures',
-						'AV fistula procedures',
-						'General thoracic surgery',
-						'Congenital cardiac surgery',
-						'Heart &amp; lung transplant surgery',
+					'id'    => 'consultation',
+					'title' => 'Your consultation',
+					'paras' => array( 'Tell us about your symptoms, existing conditions and medicines. Bring previous results where available. Whether you are reviewing your heart health or discussing an established diagnosis, your consultation helps determine what needs attention.' ),
+				),
+				array(
+					'id'    => 'heart-tests',
+					'title' => 'Understand your heart tests',
+					'tests' => array(
+						array( 'ECG or EKG', 'A short recording of the heart’s electrical activity that provides information about its rate and rhythm. ECG and EKG are names for the same test.', 'ecg' ),
+						array( 'Echocardiogram', 'An ultrasound examination that shows the heart’s structure, pumping function and valves. It answers different questions from an ECG.', 'echocardiogram' ),
+						array( 'Holter monitoring', 'A portable monitor records your heart rhythm over time to help investigate changes that may not appear during a brief test.', 'holter-monitoring' ),
+						array( 'Exercise stress test', 'Monitors how your heart responds to supervised exercise. The team will explain how to prepare and what the examination involves.', 'exercise-stress-test' ),
+						array( 'Specialist echocardiography', 'Some assessments need a closer view through transoesophageal echocardiography or an examination of heart function under stress. Your clinician will explain why a particular test is recommended.', 'specialist-echocardiography' ),
+					),
+					'cta'   => array( 'Enquire About a Heart Test', 'book' ),
+				),
+				array(
+					'id'    => 'before-and-after',
+					'title' => 'Before and after your test',
+					'paras' => array( 'Confirm any preparation instructions, when the results will be ready and who will discuss them with you. Do not change your medicines unless your clinical team advises you to do so.' ),
+				),
+				array(
+					'id'    => 'treatment',
+					'kicker' => 'Cardiovascular treatment and recovery',
+					'title' => 'If a procedure is recommended',
+					'paras' => array( 'Understanding your choices is part of preparing for treatment. Ask what the procedure aims to achieve, its risks, the alternatives and the support you may need afterwards.' ),
+				),
+				array(
+					'id'    => 'cath-lab',
+					'title' => 'Cath lab and interventional care',
+					'paras' => array( 'The cardiac catheterisation laboratory, or cath lab, supports investigations and treatments using thin tubes guided through blood vessels.' ),
+					'defs'  => array(
+						array( 'Coronary angiography', 'uses contrast dye and X-ray imaging to examine the arteries supplying the heart.', 'coronary-angiography' ),
+						array( 'Cardiac catheterisation', 'assesses pressures and other aspects of heart function. Right- and left-heart assessments answer different questions.', 'cardiac-catheterisation' ),
+						array( 'Coronary angioplasty and stenting', 'opens a narrowed coronary artery, usually with a balloon and a small supporting tube called a stent.', 'angioplasty' ),
+					),
+					'cta'   => array( 'Discuss a Cath Lab Referral', 'book' ),
+				),
+				array(
+					'id'    => 'rhythm-and-devices',
+					'title' => 'Heart rhythm and device care',
+					'defs'  => array(
+						array( 'Pacemaker assessment and implantation', 'evaluates whether a device could help with certain slow heart rhythms or electrical conduction problems.', 'pacemaker' ),
+						array( 'Pacemaker follow-up', 'checks how the device is working and reviews its settings.', 'pacemaker-follow-up' ),
+						array( 'Cardiac resynchronisation therapy', 'a specialised pacing treatment that helps the heart’s chambers work together more effectively in selected patients.', 'cardiac-resynchronisation-therapy' ),
 					),
 				),
 				array(
-					'title' => 'Advanced diagnostic <em>testing</em>',
-					'intro' => 'Our laboratories and partnership programs provide industry-standard cardiac investigations, including:',
-					'style' => 'tests',
-					'items' => array(
-						array( 'Electrocardiogram', '12-lead ECG' ),
-						array( 'Exercise Stress Test', '' ),
-						array( 'Holter Monitor', '24-hour ambulatory monitoring' ),
-						array( 'Sleep Tests', '' ),
-						array( 'Ambulatory Blood Pressure Monitor', 'ABPM' ),
-						array( 'Echocardiogram', '' ),
-						array( 'Treadmill Stress Echocardiogram', '' ),
+					'id'    => 'structural-heart',
+					'title' => 'Structural heart procedures',
+					'defs'  => array(
+						array( 'Balloon valvuloplasty', 'widens a narrowed heart valve in suitable cases.', 'balloon-valvuloplasty' ),
+						array( 'Atrial septal defect closure', 'closes a suitable opening between the heart’s upper chambers using a catheter-based device.', 'asd-closure' ),
+						array( 'Patent ductus arteriosus closure', 'treats a persistent connection between major blood vessels near the heart when catheter-based closure is appropriate.', 'pda-closure' ),
 					),
 				),
+				array(
+					'id'    => 'cardiothoracic-surgery',
+					'title' => 'Cardiothoracic Surgery',
+					'link'  => 'cardiothoracic-surgery',
+				),
+				array(
+					'id'    => 'after-treatment',
+					'title' => 'Preparing for life after treatment',
+					'paras' => array( 'Discuss your medicines, return to daily activities and follow-up appointments before leaving hospital. Ask about rehabilitation and other recovery support, and let the team know if travel, cost or family responsibilities could affect your care plan.' ),
+				),
 			),
+		),
+
+		'cardiothoracic-surgery'      => array(
+			'title' => 'Cardiothoracic Surgery',
+			'group' => 'heart',
+			'icon'  => 'lungs',
+			'image' => 'mission.jpg',
+			'alt'   => 'A Tristate surgeon in scrubs standing in an operating theatre',
+			'intro' => array(
+				'Consultations for conditions affecting the heart and chest that may need surgery. Cardiac procedures include coronary artery bypass surgery, heart valve repair or replacement, and surgery for selected congenital heart conditions.',
+				'Your surgeon will explain the proposed operation, alternatives and recovery considerations relevant to you.',
+			),
+			'cta'   => array( 'Request a Surgical Consultation', 'book' ),
+		),
+
+		'general-surgery'             => array(
+			'title' => 'General Surgery',
+			'group' => 'surgery',
+			'icon'  => 'medical-cross',
+			'image' => 'service-cardiovascular.jpg',
+			'alt'   => 'A Tristate surgical team in theatre',
+			'intro' => array( 'A surgical referral is a chance to understand your options. Your surgeon reviews your symptoms and investigations, explains whether an operation is recommended and discusses alternatives, preparation and recovery.' ),
+			'cta'   => array( 'Request a General Surgery Consultation', 'book' ),
+		),
+
+		'neurosurgery'                => array(
+			'title' => 'Neurosurgery',
+			'group' => 'surgery',
+			'icon'  => 'brain',
+			'image' => 'service-education.jpg',
+			'alt'   => 'A senior doctor reviewing a scan with a colleague',
+			'intro' => array(
+				'Brain, spine and nerve concerns can affect movement, independence and daily life. A neurosurgical consultation reviews your symptoms and scans to assess whether surgical treatment should be considered.',
+				'Bring relevant reports and tell the specialist what has changed and what you find difficult.',
+			),
+			'cta'   => array( 'Request a Neurosurgical Consultation', 'book' ),
+		),
+
+		'orthopaedics'                => array(
+			'title' => 'Orthopaedics',
+			'group' => 'surgery',
+			'icon'  => 'bone',
+			'image' => 'intro-3.jpg',
+			'alt'   => 'A Tristate clinician with a stethoscope',
+			'intro' => array(
+				'Walking, working or getting a good night’s sleep can become difficult when bones or joints hurt. Our Orthopaedics service assesses bone, joint and related muscle and tendon problems, with your comfort and ability to move in view.',
+				'Discuss the treatment options, including surgery where appropriate, and what each could mean for your daily activities.',
+			),
+			'cta'   => array( 'Request an Orthopaedic Consultation', 'book' ),
 		),
 
 		'obstetrics-and-gynaecology'  => array(
-			'title'   => 'Obstetrics &amp; Gynaecology',
-			'heading' => 'Obstetrics &amp; <em>Gynaecology</em>',
-			'short'   => 'Obstetrics &amp; Gynaecology',
-			'tag'     => "Women's Health",
-			'icon'    => 'gender-female',
-			'image'   => 'service-obgyn.jpg',
-			'alt'     => 'A Tristate nurse caring for a newborn baby',
-			'badge'   => 'Every life stage',
-			'lead'    => 'We provide comprehensive, life-stage healthcare for women, spanning routine wellness, childbirth, and transition through menopause, while covering integrated women and child programs.',
-			'points'  => array(
-				array( 'Preventive &amp; corrective gynaecology', 'Our Gynaecology services encompass preventive care programs such as patient counselling and educational lectures, alongside corrective care sessions for testing, diagnosis, and management of reproductive system disorders.' ),
-				array( 'Specialised treatments', 'Specialised gynaecological treatments address menstrual and fertility issues, sexually transmitted infections, and complex hormonal disorders.' ),
-				array( 'Complete maternity care', 'Our Obstetrics services deliver complete care for expectant mothers, including structured antenatal monitoring, comprehensive care during childbirth, and postnatal care.' ),
-				array( 'High-risk pregnancies', 'Our experienced obstetricians specialise in managing childbirth complications, high-risk pregnancies, and executing clinical interventions and caesarean deliveries.' ),
+			'title' => 'Obstetrics and Gynaecology',
+			'group' => 'womens',
+			'icon'  => 'gender-female',
+			'image' => 'service-obgyn.jpg',
+			'alt'   => 'A Tristate nurse caring for a newborn baby',
+			'intro' => array(
+				'Some health concerns are personal or difficult to discuss. Whether you need advice about a gynaecological concern or care during pregnancy, your consultation is a place to explain what you are experiencing and ask questions.',
+				'Your clinician will discuss any recommended examination or test. Bring relevant reports and, if pregnant, your existing pregnancy records.',
 			),
+			'cta'   => array( 'Request a Women’s Health Appointment', 'book' ),
 		),
 
-		'pharmaceutical-services'     => array(
-			'title'   => 'Pharmaceutical Services',
-			'heading' => '<em>Pharmaceutical</em> Services',
-			'short'   => 'Pharmaceutical',
-			'tag'     => 'Medication Safety',
-			'icon'    => 'pill',
-			'image'   => 'service-pharmacy.jpg',
-			'alt'     => 'A pharmacist advising a customer at a pharmacy counter',
-			'badge'   => 'Accredited suppliers only',
-			'lead'    => 'Our fully equipped dispensary stocks all essential medications and surgical consumables supplied strictly by accredited partners and organisations.',
-			'points'  => array(
-				array( 'Wholesale &amp; retail dispensary', 'We provide both wholesale and retail dispensary services tailored to medical institutions, corporate partners, and individual end-users.' ),
-				array( 'Certified pharmacists', 'Our certified and trained pharmacists dispense prescription and over-the-counter (OTC) medications while offering professional counselling on safe prescription usage.' ),
-				array( 'Health &amp; wellness screenings', 'Our pharmacy team also conducts health and wellness screenings, including height, weight, and blood pressure checks, while providing expert advice on healthy lifestyles.' ),
+		'emergency-critical-services' => array(
+			'title'     => 'Emergency Care',
+			'group'     => 'emergency',
+			'icon'      => 'ambulance',
+			'image'     => 'service-emergency.jpg',
+			'alt'       => 'Tristate emergency responders loading a patient into an ambulance',
+			'emergency' => true,
+			'book'      => false,
+			'intro'     => array(
+				'When illness or injury needs urgent attention, the first step is assessment of how quickly care is needed. Treatment may involve further tests, admission or transfer, depending on the patient’s condition.',
+				'For a medical emergency, seek immediate care at the nearest emergency department. Do not wait for an online appointment or message reply.',
 			),
+			'cta'       => array( 'Emergency Locations and Contact Details', 'hospitals' ),
 		),
 
-		'anaesthesiology'             => array(
-			'title'   => 'Anaesthesiology',
-			'heading' => '<em>Anaesthesiology</em>',
-			'short'   => 'Anaesthesiology',
-			'tag'     => 'Perioperative Care',
-			'icon'    => 'heart-rate-monitor',
-			'image'   => 'service-cardiovascular.jpg',
-			'alt'     => 'A Tristate surgical team in theatre',
-			'badge'   => 'Before, during &amp; after surgery',
-			'lead'    => 'Anaesthesiology at Tristate covers the total perioperative care of patients before, during, and after surgery, integrating anaesthesia, intensive care medicine, critical emergency medicine, and pain management.',
-			'points'  => array(
-				array( 'Safe from start to finish', 'The foundational core of the speciality is the study and administration of anaesthetics to safely support and monitor a patient’s vital functions throughout the entire perioperative phase.' ),
-				array( 'Beyond the operating room', 'Our anaesthesiologists extend their expertise beyond the operating room into pre-hospital emergency care, intensive care unit management, inter-facility transport of critically ill patients, and prehabilitation programs designed to optimise patients for surgery.' ),
-				array( 'An experienced team', 'The anaesthesia department is staffed by experienced physician anaesthesiologists, certified registered nurse anaesthetists (CRNA), and certified anaesthesiologist assistants (CAA).' ),
+		'intensive-care-unit'         => array(
+			'title' => 'Intensive Care Unit',
+			'group' => 'emergency',
+			'icon'  => 'bed',
+			'image' => 'service-critical-care.jpg',
+			'alt'   => 'Clinicians speaking with a patient on a hospital ward',
+			'book'  => false, // Admission is arranged by the treating team.
+			'intro' => array(
+				'When someone you love is critically ill, clear information matters. The ICU cares for patients who need intensive monitoring and specialist treatment. Admission is arranged by the treating team according to clinical need.',
+				'Ask who will update your family, when to expect the next conversation and what the visiting arrangements are.',
 			),
-		),
-
-		'outpatient-department'       => array(
-			'title'   => 'Outpatient Department (OPD)',
-			'heading' => 'Outpatient <em>Department</em>',
-			'short'   => 'Outpatient',
-			'tag'     => 'Consultations',
-			'icon'    => 'stethoscope',
-			'image'   => 'service-outpatient.jpg',
-			'alt'     => 'A doctor in consultation with a patient',
-			'badge'   => 'No overnight stay',
-			'lead'    => 'Designed for convenience, many specialised procedures and diagnostic tests can be performed within hours without requiring an overnight hospital stay.',
-			'points'  => array(
-				array( 'A full spectrum of care', 'Our outpatient facilities offer a comprehensive spectrum of care encompassing corrective treatments, preventive diagnostics, and wellness programs.' ),
-				array( 'From diagnosis to rehabilitation', 'Outpatient services cover diagnosis, medical observation, specialist consultation, active treatment, intervention, and rehabilitation services.' ),
-				array( 'Certified specialists, modern facilities', 'All procedures are executed using state-of-the-art facilities by certified specialists within a conducive, healing environment, incorporating advanced medical technology even outside traditional wards.' ),
-			),
-		),
-
-		'education-research'          => array(
-			'title'   => 'Education &amp; Research',
-			'heading' => 'Education &amp; <em>Research</em>',
-			'short'   => 'Education &amp; Research',
-			'tag'     => 'Innovation',
-			'icon'    => 'school',
-			'image'   => 'service-education.jpg',
-			'alt'     => 'A senior doctor reviewing a scan with a colleague',
-			'badge'   => 'Advancing standards',
-			'lead'    => 'Tristate remains deeply committed to discovering innovative pathways to deliver world-class, accessible healthcare across Nigeria.',
-			'points'  => array(
-				array( 'Research partnerships', 'We actively collaborate with renowned research institutes and medical professionals to research, master, and implement advanced methods of restoring patients to optimal health.' ),
-				array( 'Physician-led training', 'Our physician-led training methodology focuses on sharing and imparting clinical knowledge to resident doctors through our dedicated research and training institutes.' ),
-				array( 'Setting the pace', 'Through these efforts, we aim to cement our legacy as pacesetters in the provision of accessible, high-quality healthcare.' ),
-			),
-		),
-
-		'dialysis'                    => array(
-			'title'   => 'Dialysis',
-			'heading' => '<em>Dialysis</em>',
-			'short'   => 'Dialysis',
-			'tag'     => 'Kidney Care',
-			'icon'    => 'droplet',
-			'image'   => 'service-dialysis.jpg',
-			'alt'     => 'Treatment chairs and equipment in a hospital treatment room',
-			'badge'   => 'Short or long-term care',
-			'lead'    => 'Dialysis is a specialised medical procedure wherein advanced machinery takes over the filtration functions of the kidneys to remove metabolic waste and excess water from the body.',
-			'points'  => array(
-				array( 'For days, weeks or years', 'This critical intervention helps maintain proper fluid and electrolyte balance and can be administered temporarily (over days or weeks) or managed long-term across years.' ),
-				array( 'A dedicated department', 'Our dedicated dialysis department is operated by highly trained clinical professionals utilising state-of-the-art equipment.' ),
-			),
-		),
-
-		'respiratory-critical-care'   => array(
-			'title'   => 'Respiratory &amp; Critical Care',
-			'heading' => 'Respiratory &amp; <em>Critical Care</em>',
-			'short'   => 'Respiratory Care',
-			'tag'     => 'Intensive Care',
-			'icon'    => 'lungs',
-			'image'   => 'service-critical-care.jpg',
-			'alt'     => 'Clinicians speaking with a patient on a hospital ward',
-			'badge'   => 'Families kept informed',
-			'lead'    => 'Critical care patients present with complex, life-threatening conditions, requiring our dedicated staff to deploy a multidisciplinary, well-rounded care system focused on restoring optimal health.',
-			'points'  => array(
-				array( 'Regular rounds, personal care', 'Regular patient rounds and highly personalised care are prioritised within our Critical Care Units (CCUs).' ),
-				array( 'Families kept in the loop', 'We maintain a seamless, 360-degree communication line between our specialist physicians and patient families throughout the entire duration of the care process.' ),
-			),
+			'cta'   => array( 'ICU Information for Families', 'hospitals' ),
 		),
 
 		'radiology'                   => array(
-			'title'   => 'Radiology',
-			'heading' => '<em>Radiology</em>',
-			'short'   => 'Radiology',
-			'tag'     => 'Imaging',
-			'icon'    => 'scan',
-			'image'   => 'service-imaging.jpg',
-			'alt'     => 'A clinician reviewing a chest X-ray',
-			'badge'   => 'Digital imaging',
-			'lead'    => 'Our Radiology Unit features cutting-edge digital imaging technology, operated by highly trained technologists and certified radiologists committed to complete diagnostic excellence.',
-			'points'  => array(
-				array( 'A complete imaging suite', 'We offer a comprehensive suite of diagnostic imaging tests, including X-rays, CT scans, MRIs, and specialized breast imaging, prioritizing patient safety and comfort at every step.' ),
-				array( 'Interventional radiology', 'In addition to diagnostics, we partner with renowned interventional radiologists to perform complex minimally invasive procedures such as angioplasty, stent placements, needle biopsies, and radiofrequency ablation.' ),
-			),
+			'title' => 'Radiology',
+			'group' => 'diagnostics',
+			'icon'  => 'scan',
+			'image' => 'service-imaging.jpg',
+			'alt'   => 'A clinician reviewing a chest X-ray',
+			'intro' => array( 'Medical imaging helps your clinician investigate symptoms or review a condition. Share your referral and previous relevant reports when booking. The team will confirm the examination, preparation and how your clinician receives the results.' ),
+			'cta'   => array( 'Enquire About Radiology', 'book' ),
 		),
 
-		// No copy yet: listed among the other services, but the page keeps its own content.
-		'laboratory-services'         => array(
-			'title' => 'Laboratory Services',
-			'short' => 'Laboratory',
-			'tag'   => 'Diagnostics',
-			'icon'  => 'flask',
+		'endoscopy'                   => array(
+			'title' => 'Endoscopy',
+			'group' => 'diagnostics',
+			'icon'  => 'camera',
+			'image' => 'service-radiology.jpg',
+			'alt'   => 'Tristate clinicians reviewing findings together',
+			'intro' => array( 'Endoscopy uses a camera-equipped instrument to examine inside the body. Before your appointment, confirm what the procedure involves, how to prepare and whether someone should accompany you home.' ),
+			'cta'   => array( 'Enquire About Endoscopy', 'book' ),
+		),
+
+		'regenerative-medicine'       => array(
+			'title'   => 'Regenerative Medicine',
+			'group'   => 'regenerative',
+			'icon'    => 'dna-2',
+			'image'   => 'service-laboratory.jpg',
+			'alt'     => 'A Tristate laboratory scientist at work',
+			'heading' => 'Explore your options with <em>clear information</em>',
+			'intro'   => array(
+				'If you are considering regenerative medicine, start with an assessment of your condition and a discussion of the treatments available at Tristate.',
+				'Ask what the evidence shows, what remains uncertain and how the proposed approach compares with other options. Potential benefits, risks, costs and follow-up should all be part of that discussion.',
+			),
+			'cta'     => array( 'Enquire About Regenerative Medicine', 'book' ),
+		),
+
+		'virtual-consultations'       => array(
+			'title'   => 'Virtual Consultations',
+			'group'   => 'virtual',
+			'icon'    => 'video',
+			'image'   => 'why-1.jpg',
+			'alt'     => 'A smiling Tristate doctor with a stethoscope',
+			'heading' => 'A consultation <em>without the journey</em>',
+			'book'    => false, // A way to be seen, chosen in the form's "where" question.
+			'intro'   => array(
+				'Some health discussions and follow-up appointments can take place remotely. Our team will confirm whether a virtual consultation is suitable and explain the fees and connection details.',
+				'Choose a private space and have your medicines list and relevant reports ready. If an examination, test or procedure is needed, your clinician may recommend an in-person visit.',
+				'Virtual consultations are not for emergencies.',
+			),
+			'cta'     => array( 'Request a Virtual Consultation', 'virtual' ),
 		),
 	);
 
 	return $services;
 }
 
-/** The service shown on this page slug, or null when it has no copy yet. */
+/** One service by page slug, or null. */
 function tristate_service( $slug ) {
 	$services = tristate_services();
-	return empty( $services[ $slug ]['points'] ) ? null : $services[ $slug ];
+	return isset( $services[ $slug ] ) ? $services[ $slug ] : null;
 }
 
-/** Slugs of the services that have their own designed page. */
+/** Slugs of every service page. */
 function tristate_service_slugs() {
-	return array_keys( array_filter( tristate_services(), static function ( $service ) {
-		return ! empty( $service['points'] );
-	} ) );
+	return array_keys( tristate_services() );
+}
+
+/** A service page's URL. */
+function tristate_service_url( $slug, $anchor = '' ) {
+	return home_url( "/$slug/" ) . ( $anchor ? "#$anchor" : '' );
+}
+
+/** The group a service belongs to: [ key, group ]. */
+function tristate_service_group( $slug ) {
+	$service = tristate_service( $slug );
+	$groups  = tristate_service_groups();
+	return $service ? array( $service['group'], $groups[ $service['group'] ] ) : array( '', null );
+}
+
+/** Services that can be requested through the appointment form: slug => name. */
+function tristate_bookable_services() {
+	$bookable = array();
+	foreach ( tristate_services() as $slug => $service ) {
+		if ( ! isset( $service['book'] ) || false !== $service['book'] ) {
+			$bookable[ $slug ] = $service['title'];
+		}
+	}
+	return $bookable;
+}
+
+/**
+ * Where a service's call to action goes. 'book' opens the homepage form with
+ * this service chosen; 'virtual' with a virtual consultation chosen.
+ */
+function tristate_cta_url( $action, $slug = '' ) {
+	switch ( $action ) {
+		case 'book':
+			return add_query_arg( 'service', $slug, home_url( '/' ) ) . '#appointment';
+		case 'virtual':
+			return add_query_arg( 'visit', 'virtual', home_url( '/' ) ) . '#appointment';
+		case 'hospitals':
+			return home_url( '/our-hospitals/' );
+	}
+	return home_url( '/' );
+}
+
+/**
+ * The A–Z directory: every service, every heart test and procedure, and the
+ * other names people search for. Each entry: [ name, url ]. ECG and EKG lead
+ * to the same entry, as the brief asks.
+ */
+function tristate_az_entries() {
+	$entries = array();
+	foreach ( tristate_services() as $slug => $service ) {
+		$entries[] = array( $service['title'], tristate_service_url( $slug ) );
+		foreach ( isset( $service['sections'] ) ? $service['sections'] : array() as $section ) {
+			foreach ( array_merge( isset( $section['tests'] ) ? $section['tests'] : array(), isset( $section['defs'] ) ? $section['defs'] : array() ) as $item ) {
+				if ( 'ECG or EKG' === $item[0] ) {
+					$entries[] = array( 'ECG', tristate_service_url( $slug, $item[2] ) );
+					$entries[] = array( 'EKG', tristate_service_url( $slug, $item[2] ) );
+					continue;
+				}
+				$entries[] = array( $item[0], tristate_service_url( $slug, $item[2] ) );
+			}
+		}
+	}
+	$aliases = array(
+		'Advanced Cardiovascular Services' => tristate_service_url( 'cardiovascular-services' ),
+		'Gynaecology'                      => tristate_service_url( 'obstetrics-and-gynaecology' ),
+		'Obstetrics'                       => tristate_service_url( 'obstetrics-and-gynaecology' ),
+		'ICU'                              => tristate_service_url( 'intensive-care-unit' ),
+		'Imaging'                          => tristate_service_url( 'radiology' ),
+		'Pregnancy care'                   => tristate_service_url( 'obstetrics-and-gynaecology' ),
+	);
+	foreach ( $aliases as $name => $url ) {
+		$entries[] = array( $name, $url );
+	}
+
+	usort( $entries, static function ( $a, $b ) {
+		return strcasecmp( $a[0], $b[0] );
+	} );
+	return $entries;
+}
+
+/**
+ * Service pages that no longer exist, and where their old links now go.
+ * Followed with a 301 (inc/pages.php).
+ */
+function tristate_retired_pages() {
+	return array(
+		'outpatient-department'     => 'family-medicine',
+		'respiratory-critical-care' => 'intensive-care-unit',
+		'education-research'        => 'about-us',
+		'pharmaceutical-services'   => 'our-services',
+		'anaesthesiology'           => 'our-services',
+		'dialysis'                  => 'our-services',
+		'laboratory-services'       => 'our-services',
+		'contact-us'                => 'our-hospitals',
+	);
 }

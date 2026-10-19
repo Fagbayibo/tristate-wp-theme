@@ -32,14 +32,30 @@ html.lenis body {
 body {
 	margin: 0;
 	font-family: var(--font-body);
-	font-size: 16px;
+	font-size: var(--fs-body);
 	line-height: 1.6;
 	color: var(--color-ink);
 	background: var(--color-white);
 	-webkit-font-smoothing: antialiased;
-	/* Playfair defaults to old-style figures ("400+" dips below the line), which made
-	   numbers in badges/cards look like a different typeface from the headings. */
+	/* Garamond's old-style figures dip below the line; keep phone numbers and dates level. */
 	font-variant-numeric: lining-nums;
+}
+
+/* Interface text is Montserrat; reading text stays Garamond. */
+button,
+input,
+select,
+textarea,
+label,
+legend,
+.nav-menu,
+.topbar {
+	font-family: var(--font-ui);
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-display);
+	text-wrap: balance;
 }
 
 img,
@@ -121,7 +137,7 @@ button {
 	gap: 10px;
 	padding: 10px 22px; /* one size site-wide (~45px tall); variants only change colour */
 	border: 1.5px solid transparent; /* outline and filled buttons line up exactly */
-	font-family: var(--font-body);
+	font-family: var(--font-ui);
 	font-weight: 600;
 	font-size: 15px;
 	line-height: normal;
@@ -199,6 +215,7 @@ button {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
+	font-family: var(--font-ui);
 	font-size: 15px;
 	font-weight: 600;
 	line-height: normal;
@@ -225,8 +242,10 @@ button {
 	flex-direction: column;
 	align-items: flex-start;
 	gap: 12px;
-	font-size: 14px;
+	font-family: var(--font-ui);
+	font-size: 13px;
 	font-weight: 600;
+	letter-spacing: 0.08em;
 	line-height: normal;
 	text-transform: uppercase;
 	color: var(--label-color, var(--color-burgundy-600));
@@ -240,18 +259,26 @@ button {
 	background: var(--accent);
 }
 
-/* --title-size is the Figma px size at 1440, rendered at 84% (the Figma sizes read
-   too large on screen); it scales down with the viewport to a 26px floor. */
+/* --title-size is the Figma px size at 1440, rendered at 80% (Montserrat runs wide);
+   it scales down with the viewport to a 26px floor. */
 .section-title {
 	font-family: var(--font-display);
 	font-weight: 700;
-	font-size: clamp(26px, calc(var(--title-size, 48) * 0.84 * 100vw / 1440), calc(var(--title-size, 48) * 0.84px));
+	font-size: clamp(26px, calc(var(--title-size, 48) * 0.8 * 100vw / 1440), calc(var(--title-size, 48) * 0.8px));
 	line-height: 1.15;
+	letter-spacing: -0.015em;
 	color: var(--title-color, var(--color-ink));
 }
 
-.section-title em {
+/* The accent words in a heading: Garamond italic, a touch larger to match Montserrat. */
+.section-title em,
+.landing-title em,
+.hero__word.is-accent {
+	font-family: var(--font-body);
+	font-size: 1.1em;
 	font-style: italic;
+	font-weight: 500;
+	letter-spacing: 0;
 	color: var(--title-accent, var(--color-burgundy-600));
 }
 
@@ -259,10 +286,11 @@ button {
 	display: inline-flex;
 	align-items: center;
 	gap: 12px;
-	font-size: 14px;
+	font-family: var(--font-ui);
+	font-size: 13px;
 	font-weight: 600;
 	line-height: normal;
-	letter-spacing: 0;
+	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	color: var(--accent);
 }
@@ -311,7 +339,7 @@ button {
 
 	.eyebrow {
 		gap: 10px;
-		font-size: 13px;
+		font-size: 12px;
 	}
 
 	.eyebrow::before,
@@ -344,8 +372,9 @@ button {
 	border: 1px solid rgba(140, 16, 27, 0.12);
 	border-radius: 14px;
 	background: var(--color-cream);
-	font-family: var(--font-body);
-	font-size: 16px;
+	font-family: var(--font-ui);
+	font-size: 15px;
+	font-weight: 500;
 	line-height: normal;
 	color: var(--color-ink);
 	transition: border-color var(--dur-fast), background-color var(--dur-fast), box-shadow var(--dur-fast);
@@ -355,7 +384,23 @@ button {
 
 .field__control::placeholder {
 	color: var(--color-slate);
+	font-weight: 400;
 	opacity: 1;
+}
+
+.field__label {
+	display: block;
+	margin-bottom: 8px;
+	font-family: var(--font-ui);
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.3;
+	color: var(--color-ink);
+}
+
+.field__label span {
+	font-weight: 500;
+	color: var(--color-slate);
 }
 
 .field__control:hover {
@@ -378,12 +423,12 @@ button {
 .field--select::after {
 	content: "▾";
 	position: absolute;
-	top: 50%;
+	bottom: 26.5px; /* centred on the 53px control, below any label */
 	right: 20px;
 	font-family: system-ui, sans-serif;
 	font-size: 14px;
 	color: var(--color-slate);
-	transform: translateY(-50%);
+	transform: translateY(50%);
 	pointer-events: none;
 }
 
@@ -407,7 +452,8 @@ button {
 	position: absolute;
 	top: 50%;
 	left: 21px;
-	font-size: 16px;
+	font-family: var(--font-ui);
+	font-size: 15px;
 	line-height: normal;
 	color: var(--color-slate);
 	transform: translateY(-50%);

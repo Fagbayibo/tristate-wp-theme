@@ -8,9 +8,19 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Patient types offered in the booking form. */
-function tristate_patient_types() {
-	return array( 'New patient', 'Returning patient' );
+/** Where the patient would like to be seen: key => label (a hospital, or virtual). */
+function tristate_visit_options() {
+	$options = array();
+	foreach ( tristate_locations() as $key => $place ) {
+		$options[ $key ] = $place['name'];
+	}
+	$options['virtual'] = __( 'Virtual consultation', 'tristate' );
+	return $options;
+}
+
+/** Optional payment methods. */
+function tristate_payment_methods() {
+	return array( 'Self-pay', 'HMO', 'Not sure yet' );
 }
 
 add_action( 'init', function () {
@@ -53,50 +63,69 @@ function tristate_handle_appointment() {
 		$respond( true );
 	}
 
-	$name   = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-	$phone  = isset( $_POST['phone'] ) ? sanitize_text_field( wp_unslash( $_POST['phone'] ) ) : '';
-	$email  = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-	$type   = isset( $_POST['patient_type'] ) ? sanitize_text_field( wp_unslash( $_POST['patient_type'] ) ) : '';
-	$reason = isset( $_POST['reason'] ) ? sanitize_textarea_field( wp_unslash( $_POST['reason'] ) ) : '';
-	$date   = isset( $_POST['date'] ) ? sanitize_text_field( wp_unslash( $_POST['date'] ) ) : '';
+	$field = static function ( $key, $sanitize = 'sanitize_text_field' ) {
+		return isset( $_POST[ $key ] ) ? call_user_func( $sanitize, wp_unslash( $_POST[ $key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- verified above; sanitized by $sanitize.
+	};
 
-	$valid_phone  = (bool) preg_match( '/^[0-9+()\s-]{7,20}$/', $phone );
-	$valid_email  = '' === $email || is_email( $email );
-	$valid_type   = in_array( $type, tristate_patient_types(), true );
-	$valid_reason = '' !== $reason && mb_strlen( $reason ) <= 1000;
-	$valid_date   = '' === $date || (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date );
+	$name    = $field( 'name' );
+	$phone   = $field( 'phone' );
+	$service = $field( 'service', 'sanitize_key' );
+	$visit   = $field( 'visit', 'sanitize_key' );
+	$email   = $field( 'email', 'sanitize_email' );
+	$date    = $field( 'date' );
+	$payment = $field( 'payment' );
+	$message = $field( 'message', 'sanitize_textarea_field' );
 
-	if ( '' === $name || ! $valid_phone || ! $valid_email || ! $valid_type || ! $valid_reason || ! $valid_date ) {
+	$bookable = tristate_bookable_services();
+	$visits   = tristate_visit_options();
+
+	$valid = mb_strlen( $name ) > 1
+		&& preg_match( '/^[0-9+()\s-]{7,20}$/', $phone )
+		&& ( 'help' === $service || isset( $bookable[ $service ] ) )
+		&& isset( $visits[ $visit ] )
+		&& ( '' === $email || is_email( $email ) )
+		&& ( '' === $date || preg_match( '/^\d{4}-\d{2}-\d{2}$/', $date ) )
+		&& ( '' === $payment || in_array( $payment, tristate_payment_methods(), true ) )
+		&& mb_strlen( $message ) <= 1000;
+
+	if ( ! $valid ) {
 		$respond( false, 422 );
 	}
+
+	$service_name = 'help' === $service ? __( 'Help me choose', 'tristate' ) : $bookable[ $service ];
+	$visit_name   = $visits[ $visit ];
 
 	$post_id = wp_insert_post( array(
 		'post_type'   => 'tristate_appointment',
 		'post_status' => 'private',
-		'post_title'  => sprintf( '%s — %s', $name, $type ),
+		'post_title'  => sprintf( '%s — %s', $name, $service_name ),
 		'meta_input'  => array(
-			'_appt_name'   => $name,
-			'_appt_phone'  => $phone,
-			'_appt_email'  => $email,
-			'_appt_type'   => $type,
-			'_appt_reason' => $reason,
-			'_appt_date'   => $date,
+			'_appt_name'    => $name,
+			'_appt_phone'   => $phone,
+			'_appt_email'   => $email,
+			'_appt_service' => $service_name,
+			'_appt_visit'   => $visit_name,
+			'_appt_date'    => $date,
+			'_appt_payment' => $payment,
+			'_appt_message' => $message,
 		),
 	) );
 
 	$body = sprintf(
-		"New appointment request\n\nName: %s\nPhone: %s\nEmail: %s\nPatient type: %s\nPreferred date: %s\n\nReason for visit:\n%s\n\nView all requests: %s",
+		"New appointment request\n\nName: %s\nPhone: %s\nEmail: %s\nService: %s\nWhere: %s\nPreferred date: %s\nPayment method: %s\n\nMessage:\n%s\n\nView all requests: %s",
 		$name,
 		$phone,
 		$email ? $email : '—',
-		$type,
+		$service_name,
+		$visit_name,
 		$date ? $date : '—',
-		$reason,
+		$payment ? $payment : '—',
+		$message ? $message : '—',
 		admin_url( 'edit.php?post_type=tristate_appointment' )
 	);
 	// Lets staff answer straight from their inbox when the patient left an email.
 	$headers = $email ? array( 'Reply-To: ' . $email ) : array();
-	wp_mail( tristate_contact( 'email' ), sprintf( 'Appointment request: %s', $name ), $body, $headers );
+	wp_mail( tristate_contact( 'email' ), sprintf( 'Appointment request: %s (%s)', $name, $service_name ), $body, $headers );
 
 	$respond( (bool) $post_id );
 }
@@ -106,12 +135,13 @@ add_action( 'admin_post_nopriv_tristate_appointment', 'tristate_handle_appointme
 /** Admin list columns. */
 add_filter( 'manage_tristate_appointment_posts_columns', function () {
 	return array(
-		'cb'         => '<input type="checkbox" />',
-		'title'      => __( 'Request', 'tristate' ),
-		'phone'      => __( 'Phone', 'tristate' ),
-		'reason'     => __( 'Reason for visit', 'tristate' ),
-		'pref_date'  => __( 'Preferred date', 'tristate' ),
-		'date'       => __( 'Received', 'tristate' ),
+		'cb'        => '<input type="checkbox" />',
+		'title'     => __( 'Request', 'tristate' ),
+		'phone'     => __( 'Contact', 'tristate' ),
+		'visit'     => __( 'Where', 'tristate' ),
+		'message'   => __( 'Message', 'tristate' ),
+		'pref_date' => __( 'Preferred date', 'tristate' ),
+		'date'      => __( 'Received', 'tristate' ),
 	);
 } );
 
@@ -123,10 +153,19 @@ add_action( 'manage_tristate_appointment_posts_custom_column', function ( $colum
 		if ( $email ) {
 			printf( '<br><a href="mailto:%1$s">%1$s</a>', esc_attr( $email ) );
 		}
-	} elseif ( 'reason' === $column ) {
-		// Requests sent before the reason field existed only have a department.
-		$reason = get_post_meta( $post_id, '_appt_reason', true );
-		echo esc_html( $reason ? wp_trim_words( $reason, 25 ) : get_post_meta( $post_id, '_appt_department', true ) );
+	} elseif ( 'visit' === $column ) {
+		$visit   = get_post_meta( $post_id, '_appt_visit', true );
+		$payment = get_post_meta( $post_id, '_appt_payment', true );
+		echo esc_html( $visit ? $visit : '—' );
+		if ( $payment ) {
+			echo '<br>' . esc_html( $payment );
+		}
+	} elseif ( 'message' === $column ) {
+		// Older requests kept a reason for visit (Oct 2026) or a department (before).
+		$text = get_post_meta( $post_id, '_appt_message', true );
+		$text = $text ? $text : get_post_meta( $post_id, '_appt_reason', true );
+		$text = $text ? $text : get_post_meta( $post_id, '_appt_department', true );
+		echo esc_html( $text ? wp_trim_words( $text, 25 ) : '—' );
 	} elseif ( 'pref_date' === $column ) {
 		$date = get_post_meta( $post_id, '_appt_date', true );
 		echo esc_html( $date ? $date : '—' );

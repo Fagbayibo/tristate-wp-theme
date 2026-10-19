@@ -1,6 +1,7 @@
 /**
  * Appointment form: inline validation + submit without reloading the page.
  * Without JS the form still posts normally (see inc/appointments.php).
+ * Entries are kept when sending fails, so nothing has to be typed again.
  */
 (() => {
 	const form = document.querySelector('[data-appointment-form]');
@@ -14,24 +15,39 @@
 	const dateField = form.querySelector('[data-date-field]');
 	const validationMessage = errorBox.textContent;
 
-	// Date field: hide the fake placeholder once a date is chosen.
+	// The whole date box opens the picker.
 	if (dateField) {
 		const input = dateField.querySelector('input');
-		const sync = () => dateField.classList.toggle('has-value', Boolean(input.value));
-		input.addEventListener('input', sync);
-		input.addEventListener('change', sync);
 		input.addEventListener('click', () => {
 			try { input.showPicker(); } catch (e) { /* not supported: native behaviour */ }
 		});
-		sync();
 	}
+
+	// Links elsewhere on the page (?service=… or ?visit=…#appointment) preselect
+	// the form; the server does this on load, this covers same-page links.
+	const preselect = (url) => {
+		const params = new URL(url, window.location.href).searchParams;
+		const service = params.get('service');
+		const visit = params.get('visit') || params.get('hospital');
+		if (service && form.elements.service.querySelector(`option[value="${CSS.escape(service)}"]`)) {
+			form.elements.service.value = service;
+		}
+		if (visit) {
+			const radio = form.querySelector(`input[name="visit"][value="${CSS.escape(visit)}"]`);
+			if (radio) radio.checked = true;
+		}
+	};
+	document.addEventListener('click', (e) => {
+		const link = e.target.closest('a[href*="#appointment"]');
+		if (link && new URL(link.href).pathname === window.location.pathname) preselect(link.href);
+	});
 
 	const rules = {
 		name: (v) => v.trim().length > 1,
 		phone: (v) => /^[0-9+()\s-]{7,20}$/.test(v.trim()),
+		service: (v) => v !== '',
+		visit: (v) => v !== '',
 		email: (v) => v.trim() === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()),
-		patient_type: (v) => v !== '',
-		reason: (v) => v.trim().length > 2,
 	};
 
 	const validate = () => {
@@ -49,13 +65,16 @@
 	};
 
 	// Clear an error as soon as the visitor fixes that field.
-	form.addEventListener('input', (e) => {
+	const recheck = (e) => {
 		const field = e.target.closest('.field');
-		if (field && field.classList.contains('is-invalid') && rules[e.target.name] && rules[e.target.name](e.target.value)) {
+		const test = rules[e.target.name];
+		if (field && test && field.classList.contains('is-invalid') && test(form.elements[e.target.name].value)) {
 			field.classList.remove('is-invalid');
 			field.querySelectorAll('[aria-invalid]').forEach((input) => input.setAttribute('aria-invalid', 'false'));
 		}
-	});
+	};
+	form.addEventListener('input', recheck);
+	form.addEventListener('change', recheck);
 
 	const showSuccess = () => {
 		wrap.hidden = true;
@@ -83,7 +102,7 @@
 
 		const original = label.textContent;
 		submit.disabled = true;
-		label.textContent = submit.dataset.loading || 'Sending…';
+		label.textContent = 'Sending…';
 
 		try {
 			// getAttribute: `form.action` would return the hidden <input name="action"> WordPress needs.
@@ -98,7 +117,7 @@
 			form.reset();
 			showSuccess();
 		} catch (err) {
-			errorBox.textContent = `Sorry, something went wrong. Please try again or call ${form.dataset.phone}.`;
+			errorBox.textContent = `Your request has not been sent. Please try again or contact ${form.dataset.email}.`;
 			errorBox.hidden = false;
 		} finally {
 			submit.disabled = false;

@@ -9,17 +9,39 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** Office locations: name, area (tag), address. Lagos and Ibadan only (client, Oct 2026). */
+/**
+ * The two hospitals, keyed for the appointment form: name, short name, area,
+ * address (shown as selectable text and used for the map and directions).
+ */
 function tristate_locations() {
 	return array(
-		array( 'Tristate Hospital Lekki', 'Lagos', 'Plot 6, Block 1A The Rock Dr, Lekki Phase 1, Lekki 106104, Lagos.' ),
-		array( 'Tristate Hospital Ibadan', 'Oyo', 'Metro International Medical Building, Plot 16A, American Quarters, Idi Ape, Ibadan, Oyo State.' ),
+		'lekki'  => array(
+			'name'    => 'Tristate Hospital Lekki',
+			'short'   => 'Lekki',
+			'area'    => 'Lekki, Lagos',
+			'address' => 'Plot 6, Block 1A The Rock Dr, Lekki Phase 1, Lekki 106104, Lagos.',
+		),
+		'ibadan' => array(
+			'name'    => 'Tristate Hospital Ibadan',
+			'short'   => 'Ibadan',
+			'area'    => 'Idi-Ape, Ibadan',
+			'address' => 'Tristate Hospital, American Quarters, Idi-Ape, Ibadan.',
+		),
 	);
+}
+
+/** Google Maps embed and directions links for an address. */
+function tristate_map_url( $address ) {
+	return 'https://maps.google.com/maps?q=' . rawurlencode( $address ) . '&t=m&z=15&output=embed';
+}
+
+function tristate_directions_url( $address ) {
+	return 'https://www.google.com/maps/dir/?api=1&destination=' . rawurlencode( $address );
 }
 
 /** What the visitor is writing about. */
 function tristate_message_topics() {
-	return array( 'General enquiry', 'Appointments', 'Billing & payments', 'Medical records', 'Feedback', 'Partnerships' );
+	return array( 'General enquiry', 'HMO cover', 'Appointments', 'Billing & payments', 'Medical records', 'Feedback', 'Partnerships' );
 }
 
 add_action( 'init', function () {

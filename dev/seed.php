@@ -90,7 +90,7 @@ $downloads = array(
 	array( 'Cardiovascular Services Brochure (Sample)', 'brochure', 'service-cardiovascular.jpg' ),
 	array( 'Preparing for Heart Surgery (Sample)', 'guide', 'why-1.jpg' ),
 	array( 'Laboratory & Radiology Services (Sample)', 'brochure', 'service-laboratory.jpg' ),
-	array( '24/7 Emergency Care Flyer (Sample)', 'flyer', 'service-emergency-alt.jpg' ),
+	array( 'Emergency Care Flyer (Sample)', 'flyer', 'service-emergency-alt.jpg' ),
 );
 
 foreach ( $downloads as $order => $d ) {

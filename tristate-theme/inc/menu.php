@@ -1,113 +1,100 @@
 <?php
 /**
- * The filter that gives each primary-menu dropdown link its service icon
- * (Tabler icons, see inc/icons.php).
+ * Primary navigation, from the client's brief: Our Services, Our Team, Patient
+ * Guide, HMO Partners, Our Hospitals and About Us. Built in code so the grouped
+ * services menu always matches the service pages (inc/services.php).
+ *
+ * The markup matches what header.js and header.css expect: `.nav-menu` items,
+ * and for Our Services a `.mega` panel (desktop dropdown, mobile accordion).
  *
  * @package tristate
  */
 
-/** Pick a service icon from a menu label ("Laboratory Services" → flask). */
-function tristate_service_icon_name( $label ) {
-	$map = array(
-		'emergency'   => 'ambulance',
-		'anaesth'     => 'heart-rate-monitor',
-		'cardio'      => 'heartbeat',
-		'heart'       => 'heartbeat',
-		'education'   => 'school',
-		'research'    => 'school',
-		'laborator'   => 'flask',
-		'dialysis'    => 'droplet',
-		'obstetric'   => 'gender-female',
-		'gynae'       => 'gender-female',
-		'outpatient'  => 'stethoscope',
-		'pharma'      => 'pill',
-		'respirat'    => 'lungs',
-		'radiolog'    => 'scan',
-		'imaging'     => 'scan',
+defined( 'ABSPATH' ) || exit;
+
+/** URL of one of the theme's pages, by slug. */
+function tristate_page_url( $slug, $anchor = '' ) {
+	return home_url( "/$slug/" ) . ( $anchor ? "#$anchor" : '' );
+}
+
+/** Top-level items: label => slug. */
+function tristate_nav_items() {
+	return array(
+		'Our Services'  => 'our-services',
+		'Our Team'      => 'our-team',
+		'Patient Guide' => 'patient-guide',
+		'HMO Partners'  => 'hmo-partners',
+		'Our Hospitals' => 'our-hospitals',
+		'About Us'      => 'about-us',
 	);
-	$label = strtolower( $label );
-	foreach ( $map as $needle => $icon ) {
-		if ( false !== strpos( $label, $needle ) ) {
-			return $icon;
-		}
-	}
-	return 'plus';
 }
 
-/**
- * Primary menu dropdown links get an icon tile before the label, which the mega
- * dropdown (desktop) and the drawer accordion (mobile) both use.
- */
-add_filter(
-	'nav_menu_item_title',
-	function ( $title, $item, $args, $depth ) {
-		if ( 1 !== $depth || empty( $args->theme_location ) || 'primary' !== $args->theme_location ) {
-			return $title;
-		}
-		return '<span class="sub-menu__icon">' . tristate_svg( tristate_service_icon_name( wp_strip_all_tags( $title ) ) ) . '</span><span class="sub-menu__label">' . $title . '</span>';
-	},
-	10,
-	4
-);
+/** Slug of the page being viewed, or ''. */
+function tristate_current_slug() {
+	return is_page() ? (string) get_post_field( 'post_name', get_queried_object_id() ) : '';
+}
 
-/**
- * Primary menu walker: wraps each top-level dropdown in a `.mega` panel with a
- * side card (emergency line + "View all" link), and adds the button that opens
- * it as an accordion in the mobile drawer. header.js morphs one shared white
- * backdrop between panels on desktop (the "Stripe" dropdown).
- */
-class Tristate_Primary_Walker extends Walker_Nav_Menu {
+/** Print the primary menu. */
+function tristate_primary_nav() {
+	$current  = tristate_current_slug();
+	$services = tristate_services();
+	$in_svc   = isset( $services[ $current ] );
 
-	/** Top-level item whose dropdown is being written. */
-	private $parent_item = null;
+	echo '<ul class="nav-menu">';
+	foreach ( tristate_nav_items() as $label => $slug ) {
+		$is_services = 'our-services' === $slug;
+		$classes     = 'menu-item';
+		$classes    .= $current === $slug ? ' current-menu-item' : '';
+		$classes    .= $is_services && $in_svc ? ' current-menu-ancestor' : '';
+		$classes    .= $is_services ? ' menu-item-has-children' : '';
 
-	public function start_el( &$output, $data_object, $depth = 0, $args = null, $current_object_id = 0 ) {
-		if ( 0 === $depth ) {
-			$this->parent_item = $data_object;
-		}
-		parent::start_el( $output, $data_object, $depth, $args, $current_object_id );
-	}
-
-	public function start_lvl( &$output, $depth = 0, $args = null ) {
-		if ( 0 !== $depth || ! $this->parent_item ) {
-			parent::start_lvl( $output, $depth, $args );
-			return;
-		}
-		$id     = 'mega-' . (int) $this->parent_item->ID;
-		$title  = wp_strip_all_tags( $this->parent_item->title );
-		$output .= sprintf(
-			'<button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="%1$s"><span class="screen-reader-text">%2$s</span></button>',
-			esc_attr( $id ),
-			/* translators: %s: menu item label, e.g. "Our Services" */
-			esc_html( sprintf( __( 'Show %s links', 'tristate' ), $title ) )
+		printf(
+			'<li class="%s"><a href="%s"%s>%s</a>',
+			esc_attr( $classes ),
+			esc_url( tristate_page_url( $slug ) ),
+			$current === $slug ? ' aria-current="page"' : '',
+			esc_html( $label )
 		);
-		$output .= '<div class="mega" id="' . esc_attr( $id ) . '" data-mega><div class="mega__inner"><ul class="sub-menu">';
-	}
-
-	public function end_lvl( &$output, $depth = 0, $args = null ) {
-		if ( 0 !== $depth || ! $this->parent_item ) {
-			parent::end_lvl( $output, $depth, $args );
-			return;
+		if ( $is_services ) {
+			tristate_services_mega( $current );
 		}
-		$output .= '</ul>' . tristate_mega_feature( $this->parent_item ) . '</div></div>';
+		echo '</li>';
 	}
+	echo '</ul>';
 }
 
-/** Side card in a mega dropdown: the 24/7 line and "View all". */
-function tristate_mega_feature( $parent_item ) {
-	ob_start();
+/** The Our Services dropdown: every area of care with its services. */
+function tristate_services_mega( $current ) {
+	$services = tristate_services();
 	?>
-	<div class="mega-feature">
-		<p class="mega-feature__label"><?php esc_html_e( '24/7 Emergency Line', 'tristate' ); ?></p>
-		<a class="mega-feature__number" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
-		<a class="mega-feature__all" href="<?php echo esc_url( $parent_item->url ); ?>">
-			<?php
-			/* translators: %s: menu item label, e.g. "Our Services" */
-			printf( esc_html__( 'View all %s', 'tristate' ), esc_html( wp_strip_all_tags( $parent_item->title ) ) );
-			?>
-			<span aria-hidden="true">→</span>
-		</a>
+	<button class="submenu-toggle" type="button" aria-expanded="false" aria-controls="mega-services"><span class="screen-reader-text"><?php esc_html_e( 'Show Our Services links', 'tristate' ); ?></span></button>
+	<div class="mega mega--services" id="mega-services" data-mega>
+		<div class="mega__inner">
+			<div class="mega-groups">
+				<?php foreach ( tristate_service_groups() as $tristate_key => $tristate_group ) : ?>
+					<div class="mega-group">
+						<a class="mega-group__title" href="<?php echo esc_url( tristate_page_url( 'our-services', $tristate_key ) ); ?>"><?php echo esc_html( $tristate_group['label'] ); ?></a>
+						<ul class="sub-menu">
+							<?php foreach ( $tristate_group['services'] as $tristate_slug ) : ?>
+								<li class="menu-item<?php echo $current === $tristate_slug ? ' current-menu-item' : ''; ?>">
+									<a href="<?php echo esc_url( tristate_service_url( $tristate_slug ) ); ?>"<?php echo $current === $tristate_slug ? ' aria-current="page"' : ''; ?>>
+										<span class="sub-menu__icon"><?php echo tristate_svg( $services[ $tristate_slug ]['icon'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
+										<span class="sub-menu__label"><?php echo esc_html( $services[ $tristate_slug ]['title'] ); ?></span>
+									</a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endforeach; ?>
+			</div>
+			<div class="mega-feature">
+				<p class="mega-feature__label"><?php esc_html_e( 'Emergency line', 'tristate' ); ?></p>
+				<a class="mega-feature__number" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
+				<p class="mega-feature__text"><?php esc_html_e( 'For a medical emergency, seek immediate care at the nearest emergency department.', 'tristate' ); ?></p>
+				<a class="mega-feature__all" href="<?php echo esc_url( tristate_page_url( 'our-services' ) ); ?>"><?php esc_html_e( 'View All Services', 'tristate' ); ?> <span aria-hidden="true">→</span></a>
+				<a class="mega-feature__all mega-feature__all--sub" href="<?php echo esc_url( tristate_page_url( 'our-services', 'a-z' ) ); ?>"><?php esc_html_e( 'A–Z directory', 'tristate' ); ?> <span aria-hidden="true">→</span></a>
+			</div>
+		</div>
 	</div>
 	<?php
-	return ob_get_clean();
 }

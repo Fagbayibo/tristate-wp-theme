@@ -1,8 +1,8 @@
 /* ==========================================================================
    Small phones (≤480px, then ≤380px for 360/320px handsets).
-   Loaded last on every page so one file owns the phone type scale: body copy
-   steps down from 17–18px to 16px, then 15px; headings shrink to match, and long
-   paragraphs read left-aligned instead of centred.
+   Loaded last on every page so one file owns the phone type scale. Reading
+   text is EB Garamond, which reads small for its size, so it never drops
+   below 17px; headings shrink, and long paragraphs read left-aligned.
    ========================================================================== */
 
 /* Balanced headings and no orphaned last words, at every size. */
@@ -18,27 +18,25 @@ p, li, blockquote {
 @media (max-width: 480px) {
 	:root {
 		--fs-display: 32px;
-		--fs-lead: 16px;
-	}
-
-	body {
-		font-size: 16px;
+		--fs-lead: 19px;
+		--fs-body: 18px;
 	}
 
 	.section-title {
-		font-size: 25px;
+		font-size: 26px;
 	}
 
-	/* Body copy: 17–18px on desktop → 16px */
-	.hero__text,
-	.why__lead,
-	.services__aside p,
-	.mission__item-text,
-	.about-story__col > p:not(.about-story__num),
-	.treat__item p,
+	/* Reading text: 19px on desktop → 18px */
+	.care-card__text,
+	.visit-card__text,
 	.svc-card__text,
+	.sd-hero__text,
+	.sd-section__text,
+	.sd-def,
 	.sd-point__text,
-	.sd-points__note,
+	.leader__bio,
+	.info-panel__copy,
+	.appointment__intro,
 	.ct-form-card__intro,
 	.ct-success p,
 	.post-card--featured .post-card__excerpt,
@@ -46,59 +44,35 @@ p, li, blockquote {
 	.entry-content li,
 	.appointment__success > p:not(.appointment__note),
 	.empty-state {
-		font-size: 16px;
-		line-height: 1.65;
+		font-size: 18px;
+		line-height: 1.6;
 	}
 
-	/* Secondary copy: 16px → 15px */
-	.service-tile__text,
-	.stat__label,
-	.svc-pillar p,
+	/* Secondary text: → 17px */
 	.post-card__excerpt,
-	.pathway-step__card p:last-child,
-	.record-stat__label,
-	.record-stat__label--lg,
-	.record-stat--hero .record-stat__label,
 	.footer-links,
+	.footer-places span,
 	.footer-downloads__text,
 	.comment-body,
-	.sd-test__note,
+	.sd-test__text,
 	.ct-urgent__text,
 	.ct-place__address,
-	.post-help__text {
-		font-size: 15px;
+	.post-help__text,
+	.person-card__role,
+	.appointment-form__privacy,
+	.appointment__note {
+		font-size: 17px;
 	}
 
-	/* Display and statement type */
-	.intro__statement           { font-size: 19px; }
-	.testimonial__quote p       { font-size: 18px; }
-	.mission__quote p           { font-size: 18px; }
-	.mission__item-title        { font-size: 19px; }
-	.why__value-title           { font-size: 20px; }
-	.why__value-text            { font-size: 16px; }
-	.service-tile__title        { font-size: 20px; }
-	.service-tile--large .service-tile__title { font-size: 24px; }
-	.news-featured__title       { font-size: 19px; }
-	.news-item__title           { font-size: 17px; }
-	.footer-cta__number         { font-size: 30px; }
+	/* Display type */
+	.footer-cta__number         { font-size: 32px; }
 	.page-hero__title           { font-size: 27px; }
 	.entry-content h2           { font-size: 23px; }
 	.entry-content h3           { font-size: 20px; }
-	.about-hero__quote blockquote { font-size: 18px; }
-	.about-ticker__word         { font-size: 22px; }
-	.about-story__title         { font-size: 21px; }
-	.manifesto__text            { font-size: 20px; }
-	.manifesto__promise-text    { font-size: 18px; }
-	.record-stat__num           { font-size: 34px; }
-	.record-stat--hero .record-stat__num { font-size: 46px; }
-	.treat__title               { font-size: 19px; }
-	.pathway-step__title        { font-size: 18px; }
-	.svc-statement              { font-size: 21px; }
-	.svc-pillar__title          { font-size: 19px; }
+	.treat__title               { font-size: 22px; }
 	.svc-card__title            { font-size: 24px; }
-	.stat__value                { font-size: 30px; }
 	.sd-point__title            { font-size: 20px; }
-	.sd-test__name              { font-size: 18px; }
+	.sd-section__title          { font-size: 23px; }
 	.post-head__title           { font-size: 29px; }
 	.post-card__title           { font-size: 19px; }
 	.post-card--featured .post-card__title { font-size: 23px; }
@@ -107,25 +81,29 @@ p, li, blockquote {
 	.ct-quick__value            { font-size: 18px; }
 	.ct-urgent__number          { font-size: 28px; }
 	.ct-place__name             { font-size: 18px; }
+	.leader__name               { font-size: 22px; }
 
 	/* Long hero paragraphs read better left-aligned on a phone, so the centred
-	   landing heroes and section intros line up on the left like the homepage. */
+	   heroes line up on the left like the homepage. */
 	.about-hero,
 	.svc-hero,
 	.ct-hero__head,
+	.info-hero__inner,
 	.landing-head--center {
 		text-align: left;
 	}
 
 	.about-hero__inner,
 	.svc-hero__center,
-	.ct-hero__head {
+	.ct-hero__head,
+	.info-hero__inner {
 		align-items: flex-start;
 	}
 
 	.about-hero .eyebrow--center::after,
 	.svc-hero .eyebrow--center::after,
 	.ct-hero .eyebrow--center::after,
+	.info-hero .eyebrow--center::after,
 	.landing-head--center .eyebrow--center::after {
 		content: none;
 	}
@@ -134,7 +112,8 @@ p, li, blockquote {
 	.hero__buttons,
 	.about-hero__actions,
 	.svc-hero__actions,
-	.sd-hero__actions {
+	.sd-hero__actions,
+	.info-hero__actions {
 		flex-direction: column;
 		align-items: stretch;
 		width: 100%;
@@ -144,25 +123,10 @@ p, li, blockquote {
 	.hero__buttons .btn,
 	.about-hero__actions .btn,
 	.svc-hero__actions .btn,
-	.sd-hero__actions .btn {
+	.sd-hero__actions .btn,
+	.info-hero__actions .btn {
 		width: 100%;
-	}
-
-	/* Homepage service tiles: let the grid shrink below the longest word, and
-	   keep text above the arrow button rather than beside it. */
-	.services__bento {
-		grid-template-columns: minmax(0, 1fr);
-	}
-
-	.service-tile {
-		padding: 22px 20px 80px;
-	}
-
-	.service-tile__arrow {
-		right: 18px;
-		bottom: 18px;
-		width: 42px;
-		height: 42px;
+		white-space: normal;
 	}
 
 	/* Brochure cards: the whole card is the download link, so drop the round
@@ -180,27 +144,25 @@ p, li, blockquote {
 @media (max-width: 380px) {
 	:root {
 		--fs-display: 29px;
-		--fs-lead: 15.5px;
+		--fs-lead: 18px;
+		--fs-body: 17.5px;
 		--gutter: 18px;
 	}
 
-	body {
-		font-size: 15px;
-	}
-
 	.section-title {
-		font-size: 23px;
+		font-size: 24px;
 	}
 
-	.hero__text,
-	.why__lead,
-	.services__aside p,
-	.mission__item-text,
-	.about-story__col > p:not(.about-story__num),
-	.treat__item p,
+	.care-card__text,
+	.visit-card__text,
 	.svc-card__text,
+	.sd-hero__text,
+	.sd-section__text,
+	.sd-def,
 	.sd-point__text,
-	.sd-points__note,
+	.leader__bio,
+	.info-panel__copy,
+	.appointment__intro,
 	.ct-form-card__intro,
 	.ct-success p,
 	.post-card--featured .post-card__excerpt,
@@ -208,72 +170,19 @@ p, li, blockquote {
 	.entry-content li,
 	.appointment__success > p:not(.appointment__note),
 	.empty-state {
-		font-size: 15.5px;
-		line-height: 1.6;
+		font-size: 17.5px;
 	}
 
-	.service-tile__text,
-	.stat__label,
-	.svc-pillar p,
-	.post-card__excerpt,
-	.pathway-step__card p:last-child,
-	.record-stat__label,
-	.record-stat__label--lg,
-	.record-stat--hero .record-stat__label,
-	.footer-links,
-	.footer-downloads__text,
-	.comment-body,
-	.sd-test__note,
-	.ct-urgent__text,
-	.ct-place__address,
-	.post-help__text {
-		font-size: 14.5px;
-	}
-
-	.intro__statement           { font-size: 18px; }
-	.testimonial__quote p       { font-size: 17px; }
-	.mission__quote p           { font-size: 17px; }
-	.mission__item-title        { font-size: 18px; }
-	.service-tile__title        { font-size: 19px; }
-	.service-tile--large .service-tile__title { font-size: 22px; }
-	.footer-cta__number         { font-size: 27px; }
+	.footer-cta__number         { font-size: 28px; }
 	.page-hero__title           { font-size: 25px; }
-	.about-ticker__word         { font-size: 20px; }
-	.manifesto__text            { font-size: 18px; }
-	.record-stat__num           { font-size: 30px; }
-	.record-stat--hero .record-stat__num { font-size: 40px; }
-	.svc-statement              { font-size: 19px; }
 	.svc-card__title            { font-size: 22px; }
-	.stat__value                { font-size: 28px; }
 	.sd-point__title            { font-size: 19px; }
 	.post-head__title           { font-size: 26px; }
 	.post-card--featured .post-card__title { font-size: 21px; }
-	.ct-quick__value            { font-size: 18px; }
 	.ct-urgent__number          { font-size: 26px; }
 
-	/* Testimonial controls: two arrows + four initials must fit in 284px. */
-	.testimonials__nav,
-	.testimonials__tabs {
-		gap: 6px;
-	}
-
-	.testimonials__arrow {
-		width: 38px;
-		height: 38px;
-	}
-
-	.testimonials__tab {
-		padding: 3px;
-	}
-
-	.testimonials__initials {
-		width: 32px;
-		height: 32px;
-		font-size: 12px;
-	}
-
 	.eyebrow {
-		font-size: 12px;
+		font-size: 11.5px;
 	}
 
 	/* Brochure carousel: a card fits with the next one peeking in. */

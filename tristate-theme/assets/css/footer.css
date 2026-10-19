@@ -32,7 +32,7 @@
 }
 
 .footer-downloads__text {
-	font-size: 16px;
+	font-size: 17px;
 	line-height: 1.7;
 }
 
@@ -117,6 +117,7 @@
 }
 
 .download-card__meta {
+	font-family: var(--font-ui);
 	font-size: 14px;
 	line-height: normal;
 }
@@ -182,15 +183,16 @@
 }
 
 .footer-cta__label {
-	font-size: 18px;
-	font-weight: 500;
+	font-size: 19px;
 }
 
 .footer-cta__number {
 	font-family: var(--font-display);
 	font-weight: 700;
 	font-size: clamp(34px, 4.6vw, 64px);
-	line-height: 1.333; /* Playfair's "normal" line height, as in Figma */
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	white-space: nowrap;
 	color: var(--color-white);
 	transition: color var(--dur-fast);
 }
@@ -199,19 +201,25 @@
 	color: var(--color-blush-100);
 }
 
+.footer-cta__text {
+	max-width: 520px;
+	font-size: 19px;
+	line-height: 1.55;
+	color: var(--color-blush-100);
+}
+
 /* Columns ------------------------------------------------------------------ */
 .footer-cols {
-	display: flex;
-	align-items: flex-start;
-	gap: 64px;
+	display: grid;
+	grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 0.8fr) minmax(0, 1.25fr);
+	align-items: start;
+	gap: 48px;
 }
 
 .footer-brand {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
-	width: 420px;
-	flex-shrink: 0;
 }
 
 .footer-brand img {
@@ -221,8 +229,8 @@
 }
 
 .footer-brand p {
-	font-size: 15px;
-	line-height: 1.75;
+	font-size: 17px;
+	line-height: 1.6;
 }
 
 .footer-col {
@@ -243,9 +251,35 @@
 .footer-links {
 	display: flex;
 	flex-direction: column;
-	gap: 14px;
-	font-size: 16px;
-	white-space: nowrap;
+	gap: 12px;
+	font-size: 17px;
+	line-height: 1.35;
+}
+
+.footer-places {
+	display: grid;
+	gap: 18px;
+}
+
+.footer-places strong {
+	display: block;
+	margin-bottom: 4px;
+	font-family: var(--font-ui);
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--color-white);
+}
+
+.footer-places span,
+.footer-places a {
+	font-size: 17px;
+	line-height: 1.5;
+	color: var(--color-blush-100);
+	user-select: text;
+}
+
+.footer-places a:hover {
+	color: var(--color-white);
 }
 
 .footer-links a,
@@ -310,13 +344,8 @@
 	}
 
 	.footer-cols {
-		flex-wrap: wrap;
-		gap: 40px 56px;
-	}
-
-	.footer-brand {
-		width: 100%;
-		max-width: 520px;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 40px 48px;
 	}
 }
 
@@ -356,11 +385,19 @@
 	}
 
 	.download-card__title {
+		font-family: var(--font-ui);
 		font-size: 17px;
 		-webkit-line-clamp: 3;
 	}
 
 	.footer-bottom {
 		flex-direction: column;
+	}
+}
+
+@media (max-width: 760px) {
+	.footer-brand,
+	.footer-col--hospitals {
+		grid-column: 1 / -1;
 	}
 }

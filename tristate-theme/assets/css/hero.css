@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Home hero — Figma 25:3 (1440 × 900)
+   Home hero: photo, the multispecialty message, and a strip with the two
+   hospitals and the emergency line.
    ========================================================================== */
 
 .hero {
 	position: relative;
 	isolation: isolate;
-	min-height: 900px;
 	overflow: hidden;
 	background: var(--color-burgundy-950);
 	color: var(--color-white);
@@ -24,17 +24,13 @@
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	opacity: 0;
-}
-
-.hero__image.is-active {
-	opacity: 1;
+	object-position: 70% 30%;
 }
 
 .hero__overlay {
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(90deg, rgba(41, 5, 13, 0.92) 0%, rgba(77, 10, 20, 0.55) 55%, rgba(51, 5, 13, 0.15) 100%);
+	background: linear-gradient(90deg, rgba(41, 5, 13, 0.94) 0%, rgba(77, 10, 20, 0.62) 55%, rgba(51, 5, 13, 0.2) 100%);
 }
 
 .hero__overlay-top {
@@ -47,66 +43,51 @@
 /* Layout ------------------------------------------------------------------- */
 .hero__inner {
 	position: relative;
-	min-height: inherit;
-	padding-top: 230px;   /* copy starts at y=230 in the frame */
-	padding-bottom: 170px; /* room for the tabs */
+	display: flex;
+	flex-direction: column;
+	gap: 88px;
+	padding-top: 220px;
+	padding-bottom: 48px;
 }
 
 .hero__copy {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 28px;
-}
-
-.hero__slides {
-	display: grid;
-}
-
-/* Slides share one grid cell so the tallest sets the height — no jumping. */
-.hero__slide {
-	grid-area: 1 / 1;
-	display: flex;
-	flex-direction: column;
-	gap: 28px;
-	visibility: hidden;
-}
-
-.hero__slide.is-active {
-	visibility: visible;
+	gap: 26px;
+	max-width: 760px;
 }
 
 .hero__title {
-	max-width: 720px;
 	font-family: var(--font-display);
 	font-weight: 700;
 	font-size: var(--fs-display);
-	line-height: 1.05;
-	letter-spacing: 0;
+	line-height: 1.06;
+	letter-spacing: -0.02em;
 }
 
 .hero__word {
 	display: inline-block;
 	overflow: hidden;
 	vertical-align: top;
-	padding-bottom: 0.08em; /* keeps italic descenders inside the mask */
-	margin-bottom: -0.08em;
+	padding-bottom: 0.1em; /* keeps descenders inside the mask */
+	margin-bottom: -0.1em;
 }
 
 .hero__word > span {
 	display: inline-block;
 }
 
-.hero__word.is-italic {
-	font-style: italic;
+.hero__word.is-accent {
 	padding-right: 0.06em; /* italic overhang */
 	margin-right: -0.06em;
+	color: var(--color-blush-100);
 }
 
 .hero__text {
-	max-width: 560px;
-	font-size: 17px;
-	line-height: 1.65;
+	max-width: 620px;
+	font-size: var(--fs-lead);
+	line-height: 1.55;
 	color: var(--color-blush-100);
 }
 
@@ -114,244 +95,120 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 16px;
+	gap: 14px;
 }
 
-/* Ghost button with play badge — Figma 26:31 */
-.btn--ghost {
-	gap: 10px;
-	padding: 4px 20px 4px 4px;
-	background: rgba(255, 255, 255, 0.1);
-	border-color: rgba(255, 255, 255, 0.3);
+.hero__help {
+	font-size: 18px;
+	color: var(--color-blush-200);
+}
+
+.hero__help a {
 	color: var(--color-white);
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+	transition: text-decoration-color var(--dur-fast);
 }
 
-.btn--ghost:hover {
-	background: rgba(255, 255, 255, 0.18);
-	border-color: rgba(255, 255, 255, 0.5);
+.hero__help a:hover {
+	text-decoration-color: var(--color-blush-200);
 }
 
-.btn--ghost__play {
-	position: relative;
-	display: grid;
-	place-items: center;
-	width: 34px;
-	height: 34px;
-	border-radius: var(--radius-pill);
-	background: var(--color-white);
-}
-
-/* Soft pulse ring */
-.btn--ghost__play::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	border: 2px solid rgba(255, 255, 255, 0.6);
-	animation: hero-pulse 2.4s var(--ease-out) infinite;
-}
-
-@keyframes hero-pulse {
-	from { transform: scale(1); opacity: 0.9; }
-	to   { transform: scale(1.6); opacity: 0; }
-}
-
-/* Slider tabs — Figma 26:40 (y=778) */
-.hero__tabs {
-	position: absolute;
-	left: var(--gutter);
-	right: var(--gutter);
-	bottom: 46px;
+/* Hospitals + emergency strip ------------------------------------------------ */
+.hero__facts {
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
+	border-top: 1px solid rgba(255, 255, 255, 0.22);
 }
 
-.hero__tab {
-	position: relative;
+.hero__fact {
 	display: flex;
 	flex-direction: column;
-	align-items: flex-start;
-	gap: 10px;
-	padding: 20px 24px 0 0;
-	border-top: 1px solid rgba(255, 255, 255, 0.25);
-	text-align: left;
-	line-height: normal;
-	color: var(--color-blush-200);
-	transition: color var(--dur-base);
+	gap: 6px;
+	padding: 22px 24px 0 0;
 }
 
-.hero__tab:hover {
-	color: var(--color-white);
+.hero__fact + .hero__fact {
+	padding-left: 24px;
+	border-left: 1px solid rgba(255, 255, 255, 0.14);
 }
 
-.hero__tab-progress {
-	position: absolute;
-	top: -2px; /* centres the 3px bar on the 1px rule */
-	left: 0;
-	right: 0;
-	height: 3px;
-	background: var(--color-white);
-	transform: scaleX(0);
-	transform-origin: left;
-}
-
-.hero__tab-num {
-	font-size: 13px;
+.hero__fact-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	font-family: var(--font-ui);
+	font-size: 12px;
 	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-blush-200);
 }
 
-.hero__tab-title {
-	font-size: 16px;
-	font-weight: 500;
-}
-
-.hero__tab.is-active {
+.hero__fact-value {
+	font-family: var(--font-ui);
+	font-size: 17px;
+	font-weight: 600;
 	color: var(--color-white);
+	transition: color var(--dur-fast);
 }
 
-.hero__tab.is-active .hero__tab-num {
-	color: var(--color-white);
+.hero__fact-value:hover {
+	color: var(--color-blush-100);
 }
 
-/* Without JS (or reduced motion) the active bar is simply full. */
-.hero:not(.is-ready) .hero__tab.is-active .hero__tab-progress {
-	transform: none;
+.hero__fact--urgent .hero__fact-value {
+	font-size: 20px;
+	font-weight: 700;
 }
 
 /* Responsive ---------------------------------------------------------------- */
 @media (max-width: 1080px) {
-	.hero {
-		min-height: 0;
+	.hero__inner {
+		gap: 64px;
+		padding-top: 190px;
+	}
+}
+
+@media (max-width: 720px) {
+	.hero__facts {
+		grid-template-columns: 1fr;
 	}
 
-	.hero__inner {
-		padding-top: 200px;
-		padding-bottom: 150px;
+	.hero__fact,
+	.hero__fact + .hero__fact {
+		flex-direction: row;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: 12px;
+		padding: 14px 0;
+		border-left: 0;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	}
+
+	.hero__fact-value {
+		font-size: 15px;
+		text-align: right;
+	}
+
+	.hero__fact--urgent .hero__fact-value {
+		font-size: 17px;
 	}
 }
 
 @media (max-width: 640px) {
-	.btn--ghost {
-		padding: 3px 18px 3px 3px;
-	}
-
-	.btn--ghost__play {
-		width: 30px;
-		height: 30px;
-	}
-
 	.hero__inner {
-		padding-top: 170px;
-		padding-bottom: 120px;
+		gap: 48px;
+		padding-top: 160px;
+		padding-bottom: 28px;
 	}
 
-	.hero__copy,
-	.hero__slide {
-		gap: 22px;
+	.hero__copy {
+		gap: 20px;
 	}
 
-	.hero__text {
-		font-size: 16px;
-	}
-
-	.hero__tabs {
-		bottom: 32px;
-		gap: 12px;
-	}
-
-	.hero__tab {
-		padding-right: 0;
-		padding-top: 14px;
-	}
-
-	.hero__tab-title {
-		display: none; /* numbers only on phones */
-	}
-}
-
-/* "Watch Our Story" video pop-up (assets/js/video-modal.js) ----------------- */
-.video-modal {
-	width: min(1100px, calc(100vw - 2 * var(--gutter, 24px)));
-	max-width: none;
-	max-height: none;
-	padding: 0;
-	border: 0;
-	background: transparent;
-	overflow: visible;
-}
-
-.video-modal::backdrop {
-	background: rgba(20, 6, 9, 0.86);
-	backdrop-filter: blur(6px);
-}
-
-.video-modal[open] {
-	animation: video-modal-in 0.45s var(--ease-out) both;
-}
-
-.video-modal[open]::backdrop {
-	animation: video-modal-fade 0.45s ease both;
-}
-
-@keyframes video-modal-in {
-	from { opacity: 0; transform: translateY(24px) scale(0.97); }
-}
-
-@keyframes video-modal-fade {
-	from { opacity: 0; }
-}
-
-.video-modal__inner {
-	position: relative;
-}
-
-.video-modal__frame {
-	overflow: hidden;
-	aspect-ratio: 16 / 9;
-	border-radius: var(--radius-media);
-	background: #000;
-	box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
-}
-
-.video-modal__frame iframe {
-	display: block;
-	width: 100%;
-	height: 100%;
-	border: 0;
-}
-
-.video-modal__close {
-	position: absolute;
-	top: -56px;
-	right: 0;
-	display: grid;
-	place-items: center;
-	width: 44px;
-	height: 44px;
-	border-radius: 50%;
-	background: rgba(255, 255, 255, 0.12);
-	color: var(--color-white);
-	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
-	transition: background-color var(--dur-fast), transform 0.4s var(--ease-out);
-}
-
-.video-modal__close:hover,
-.video-modal__close:focus-visible {
-	background: var(--color-burgundy-600);
-	transform: rotate(90deg);
-}
-
-.video-modal__close svg {
-	width: 22px;
-}
-
-html.has-video-modal {
-	overflow: hidden;
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.video-modal[open],
-	.video-modal[open]::backdrop {
-		animation: none;
+	.hero__help {
+		font-size: 17px;
 	}
 }
