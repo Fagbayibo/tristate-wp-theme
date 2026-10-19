@@ -18,11 +18,11 @@ $tristate_virtual = tristate_service( 'virtual-consultations' );
 		</div>
 
 		<ul class="visit-grid" data-reveal-stagger>
-			<?php foreach ( tristate_locations() as $tristate_place ) : ?>
+			<?php foreach ( tristate_locations() as $tristate_key => $tristate_place ) : ?>
 				<li class="visit-card">
 					<span class="visit-card__icon" aria-hidden="true"><?php echo tristate_svg( 'building-hospital', array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 					<span class="landing-tag"><?php echo esc_html( $tristate_place['area'] ); ?></span>
-					<h3 class="visit-card__title"><?php echo esc_html( $tristate_place['name'] ); ?></h3>
+					<h3 class="visit-card__title"><a class="card-link" href="<?php echo esc_url( tristate_page_url( 'our-hospitals', $tristate_key ) ); ?>"><?php echo esc_html( $tristate_place['name'] ); ?></a></h3>
 					<p class="visit-card__text"><?php echo esc_html( $tristate_place['address'] ); ?></p>
 					<a class="text-link" href="<?php echo esc_url( tristate_directions_url( $tristate_place['address'] ) ); ?>" target="_blank" rel="noopener">
 						<?php
@@ -36,7 +36,7 @@ $tristate_virtual = tristate_service( 'virtual-consultations' );
 			<li class="visit-card visit-card--virtual">
 				<span class="visit-card__icon" aria-hidden="true"><?php echo tristate_svg( 'video', array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 				<span class="landing-tag"><?php esc_html_e( 'Remote', 'tristate' ); ?></span>
-				<h3 class="visit-card__title"><?php echo esc_html( $tristate_virtual['title'] ); ?></h3>
+				<h3 class="visit-card__title"><a class="card-link" href="<?php echo esc_url( tristate_service_url( 'virtual-consultations' ) ); ?>"><?php echo esc_html( $tristate_virtual['title'] ); ?></a></h3>
 				<p class="visit-card__text"><?php echo esc_html( $tristate_virtual['intro'][0] ); ?></p>
 				<a class="text-link" href="<?php echo esc_url( tristate_service_url( 'virtual-consultations' ) ); ?>"><?php esc_html_e( 'Virtual Consultations', 'tristate' ); ?> <span class="btn__arrow" aria-hidden="true">→</span></a>
 			</li>

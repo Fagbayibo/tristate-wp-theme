@@ -31,6 +31,7 @@
 		const visit = params.get('visit') || params.get('hospital');
 		if (service && form.elements.service.querySelector(`option[value="${CSS.escape(service)}"]`)) {
 			form.elements.service.value = service;
+			form.elements.service.dispatchEvent(new Event('change', { bubbles: true })); // updates the styled dropdown
 		}
 		if (visit) {
 			const radio = form.querySelector(`input[name="visit"][value="${CSS.escape(visit)}"]`);

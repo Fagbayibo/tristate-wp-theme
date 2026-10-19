@@ -83,6 +83,8 @@
 }
 
 .care-card__links a {
+	position: relative;
+	z-index: 2;
 	display: inline-flex;
 	padding: 6px 12px;
 	border-radius: var(--radius-pill);
@@ -348,7 +350,34 @@
 }
 
 .visit-card .text-link {
+	position: relative;
+	z-index: 2;
 	margin-top: 8px;
+}
+
+.visit-card {
+	position: relative;
+	transition: transform 0.5s var(--ease-out), box-shadow var(--dur-base);
+}
+
+.visit-card:hover {
+	transform: translateY(-4px);
+	box-shadow: var(--shadow-soft);
+}
+
+.visit-card__title a:hover,
+.home-team .person-card__name a:hover {
+	color: var(--color-burgundy-600);
+}
+
+.home-team .person-card {
+	position: relative;
+	transition: transform 0.5s var(--ease-out), box-shadow var(--dur-base);
+}
+
+.home-team .person-card:hover {
+	transform: translateY(-3px);
+	box-shadow: var(--shadow-soft);
 }
 
 .visit-card--virtual {

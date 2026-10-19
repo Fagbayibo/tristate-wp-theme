@@ -180,6 +180,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	if ( is_front_page() ) {
 		wp_enqueue_script( 'tristate-hero', TRISTATE_URI . '/assets/js/hero.js', array( 'gsap' ), tristate_asset_version( '/assets/js/hero.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-landing', TRISTATE_URI . '/assets/js/landing.js', array( 'gsap-scrolltrigger', 'tristate-animations' ), tristate_asset_version( '/assets/js/landing.js' ), array( 'strategy' => 'defer' ) );
+		wp_enqueue_script( 'tristate-select', TRISTATE_URI . '/assets/js/select.js', array(), tristate_asset_version( '/assets/js/select.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-appointment', TRISTATE_URI . '/assets/js/appointment.js', array(), tristate_asset_version( '/assets/js/appointment.js' ), array( 'strategy' => 'defer' ) );
 	}
 
@@ -188,6 +189,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	}
 
 	if ( 'contact' === $landing ) {
+		wp_enqueue_script( 'tristate-select', TRISTATE_URI . '/assets/js/select.js', array(), tristate_asset_version( '/assets/js/select.js' ), array( 'strategy' => 'defer' ) );
 		wp_enqueue_script( 'tristate-contact', TRISTATE_URI . '/assets/js/contact.js', array(), tristate_asset_version( '/assets/js/contact.js' ), array( 'strategy' => 'defer' ) );
 	}
 

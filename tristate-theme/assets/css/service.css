@@ -350,6 +350,7 @@
 }
 
 .sd-enquire__item {
+	position: relative;
 	display: grid;
 	grid-template-columns: 48px minmax(0, 1fr);
 	column-gap: 16px;

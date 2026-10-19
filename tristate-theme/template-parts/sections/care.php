@@ -28,7 +28,7 @@ unset( $tristate_groups['virtual'] ); // shown under "Choose how to visit"
 				?>
 				<li class="care-card">
 					<span class="care-card__icon" aria-hidden="true"><?php echo tristate_svg( $tristate_group['icon'], array( 'stroke' => 1.5 ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
-					<h3 class="care-card__title"><a href="<?php echo esc_url( $tristate_href ); ?>"><?php echo esc_html( $tristate_group['label'] ); ?></a></h3>
+					<h3 class="care-card__title"><a class="card-link" href="<?php echo esc_url( $tristate_href ); ?>"><?php echo esc_html( $tristate_group['label'] ); ?></a></h3>
 					<p class="care-card__text"><?php echo esc_html( $tristate_group['summary'] ); ?></p>
 					<?php if ( ! $tristate_single ) : ?>
 						<ul class="care-card__links">

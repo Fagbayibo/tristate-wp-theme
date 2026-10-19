@@ -304,7 +304,7 @@
 }
 
 /* Person card (homepage team section, Our Team) -------------------------------------
-   No portraits have been supplied yet: initials on a burgundy disc stand in. */
+   A photo when one has been supplied, otherwise initials on a burgundy disc. */
 .person-card {
 	display: flex;
 	align-items: flex-start;
@@ -330,6 +330,20 @@
 	font-weight: 700;
 	letter-spacing: 0.04em;
 	color: var(--color-white);
+}
+
+.person-card__portrait.has-photo {
+	overflow: hidden;
+	background: var(--color-paper);
+}
+
+.person-card__portrait img { /* head and shoulders from a waist-up portrait */
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: 50% 0;
+	transform: scale(1.6);
+	transform-origin: 50% 12%;
 }
 
 .person-card__name {

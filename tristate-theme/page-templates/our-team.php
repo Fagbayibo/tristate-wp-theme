@@ -3,7 +3,7 @@
  * Template Name: Our Team
  *
  * The Our Team page gets this design from its slug (see functions.php).
- * Profiles come from inc/people.php; portraits are added when supplied.
+ * Profiles and portraits come from inc/people.php.
  *
  * @package tristate
  */
@@ -30,7 +30,7 @@ get_header();
 			<ul class="leaders" data-reveal-stagger>
 				<?php foreach ( tristate_leaders() as $tristate_person ) : ?>
 					<li class="leader">
-						<span class="leader__portrait" aria-hidden="true"><?php echo esc_html( tristate_initials( $tristate_person['name'] ) ); ?></span>
+						<?php tristate_portrait( $tristate_person, 'leader__portrait' ); ?>
 						<div class="leader__body">
 							<h2 class="leader__name"><?php echo esc_html( $tristate_person['name'] ); ?></h2>
 							<p class="leader__title"><?php echo esc_html( $tristate_person['title'] ); ?></p>
@@ -46,7 +46,7 @@ get_header();
 			<ul class="clinicians" data-reveal-stagger>
 				<?php foreach ( tristate_clinicians() as $tristate_name ) : ?>
 					<li class="person-card">
-						<span class="person-card__portrait" aria-hidden="true"><?php echo esc_html( tristate_initials( $tristate_name ) ); ?></span>
+						<?php tristate_portrait( $tristate_name, 'person-card__portrait' ); ?>
 						<div>
 							<h2 class="person-card__name"><?php echo esc_html( $tristate_name ); ?></h2>
 						</div>

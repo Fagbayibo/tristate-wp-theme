@@ -16,12 +16,14 @@ function tristate_leaders() {
 	return array(
 		array(
 			'name'      => 'Professor Kamar Tayo Adeleke',
+			'photo'     => 'kamar-adeleke.jpg',
 			'title'     => 'Founder and Chief Executive Officer, Tristate Healthcare System',
 			'specialty' => 'Interventional Cardiologist',
 			'bio'       => 'Professor Adeleke is a Nigerian-born, US-trained interventional cardiologist. He founded Tristate Healthcare System to expand access to advanced cardiovascular care in Nigeria through clinical practice, teaching and collaboration.',
 		),
 		array(
 			'name'      => 'Dr Babalola Olusola Oluwole',
+			'photo'     => 'babalola-oluwole.jpg',
 			'title'     => 'Director of Clinical Operations, Tristate Hospital Lekki',
 			'specialty' => '',
 			'bio'       => 'Dr Oluwole’s experience spans clinical practice, research and hospital management in Nigeria and the United States. His responsibilities at Tristate Lekki include clinical operations, quality assurance and patient safety.',
@@ -32,6 +34,25 @@ function tristate_leaders() {
 /** Clinicians listed in the brief without a profile yet. */
 function tristate_clinicians() {
 	return array( 'Dr Banji Idowu', 'Dr Ogbonnaya', 'Dr Oludara' );
+}
+
+/**
+ * A person's portrait: their photo (assets/images/team) when one has been
+ * supplied, otherwise their initials on a burgundy disc.
+ */
+function tristate_portrait( $person, $class ) {
+	$name  = is_array( $person ) ? $person['name'] : $person;
+	$photo = is_array( $person ) && ! empty( $person['photo'] ) ? $person['photo'] : '';
+	if ( $photo ) {
+		printf(
+			'<span class="%1$s has-photo"><img src="%2$s" width="800" height="1000" alt="%3$s" loading="lazy"></span>',
+			esc_attr( $class ),
+			esc_url( TRISTATE_URI . '/assets/images/team/' . $photo ),
+			esc_attr( sprintf( 'Portrait of %s', $name ) )
+		);
+		return;
+	}
+	printf( '<span class="%s" aria-hidden="true">%s</span>', esc_attr( $class ), esc_html( tristate_initials( $name ) ) );
 }
 
 /** Initials for a portrait placeholder: "Dr Babalola Olusola Oluwole" → "BO". */

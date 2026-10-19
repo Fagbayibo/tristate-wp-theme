@@ -19,9 +19,9 @@
 		<ul class="home-team__people" data-reveal-stagger>
 			<?php foreach ( tristate_leaders() as $tristate_person ) : ?>
 				<li class="person-card">
-					<span class="person-card__portrait" aria-hidden="true"><?php echo esc_html( tristate_initials( $tristate_person['name'] ) ); ?></span>
+					<?php tristate_portrait( $tristate_person, 'person-card__portrait' ); ?>
 					<div>
-						<h3 class="person-card__name"><?php echo esc_html( $tristate_person['name'] ); ?></h3>
+						<h3 class="person-card__name"><a class="card-link" href="<?php echo esc_url( tristate_page_url( 'our-team' ) ); ?>"><?php echo esc_html( $tristate_person['name'] ); ?></a></h3>
 						<p class="person-card__role"><?php echo esc_html( $tristate_person['title'] ); ?></p>
 						<?php if ( $tristate_person['specialty'] ) : ?>
 							<p class="person-card__specialty"><?php echo esc_html( $tristate_person['specialty'] ); ?></p>

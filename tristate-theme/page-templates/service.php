@@ -177,17 +177,17 @@ get_header();
 				<li class="sd-enquire__item">
 					<span class="sd-enquire__icon" aria-hidden="true"><?php echo tristate_svg( 'mail' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 					<span class="sd-enquire__label">General enquiries</span>
-					<a class="sd-enquire__value" href="mailto:<?php echo esc_attr( tristate_contact( 'email' ) ); ?>"><?php echo esc_html( tristate_contact( 'email' ) ); ?></a>
+					<a class="sd-enquire__value card-link" href="mailto:<?php echo esc_attr( tristate_contact( 'email' ) ); ?>"><?php echo esc_html( tristate_contact( 'email' ) ); ?></a>
 				</li>
 				<li class="sd-enquire__item">
 					<span class="sd-enquire__icon" aria-hidden="true"><?php echo tristate_svg( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 					<span class="sd-enquire__label">Emergency line</span>
-					<a class="sd-enquire__value" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
+					<a class="sd-enquire__value card-link" href="tel:<?php echo esc_attr( tristate_contact( 'emergency_tel' ) ); ?>"><?php echo esc_html( tristate_contact( 'emergency' ) ); ?></a>
 				</li>
 				<li class="sd-enquire__item">
 					<span class="sd-enquire__icon" aria-hidden="true"><?php echo tristate_svg( 'map-pin' ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 					<span class="sd-enquire__label">Lekki and Ibadan</span>
-					<a class="sd-enquire__value" href="<?php echo esc_url( tristate_page_url( 'our-hospitals' ) ); ?>">Locations and Directions</a>
+					<a class="sd-enquire__value card-link" href="<?php echo esc_url( tristate_page_url( 'our-hospitals' ) ); ?>">Locations and Directions</a>
 				</li>
 			</ul>
 		</div>

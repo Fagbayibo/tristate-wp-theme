@@ -65,8 +65,18 @@ if ( ! isset( $tristate_bookable[ $tristate_service ] ) && 'help' !== $tristate_
 						<select class="field__control" id="appt-service" name="service" required>
 							<option value="" disabled<?php selected( $tristate_service, '' ); ?>><?php esc_html_e( 'Choose a service', 'tristate' ); ?></option>
 							<option value="help"<?php selected( $tristate_service, 'help' ); ?>><?php esc_html_e( 'Help me choose', 'tristate' ); ?></option>
-							<?php foreach ( $tristate_bookable as $tristate_slug => $tristate_name ) : ?>
-								<option value="<?php echo esc_attr( $tristate_slug ); ?>"<?php selected( $tristate_service, $tristate_slug ); ?>><?php echo esc_html( $tristate_name ); ?></option>
+							<?php foreach ( tristate_service_groups() as $tristate_group ) : ?>
+								<?php
+								$tristate_options = array_intersect( $tristate_group['services'], array_keys( $tristate_bookable ) );
+								if ( ! $tristate_options ) {
+									continue;
+								}
+								?>
+								<optgroup label="<?php echo esc_attr( $tristate_group['label'] ); ?>">
+									<?php foreach ( $tristate_options as $tristate_slug ) : ?>
+										<option value="<?php echo esc_attr( $tristate_slug ); ?>"<?php selected( $tristate_service, $tristate_slug ); ?>><?php echo esc_html( $tristate_bookable[ $tristate_slug ] ); ?></option>
+									<?php endforeach; ?>
+								</optgroup>
 							<?php endforeach; ?>
 						</select>
 					</div>

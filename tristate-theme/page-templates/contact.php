@@ -43,7 +43,7 @@ get_header();
 					<li class="ct-quick__card">
 						<span class="ct-quick__icon"><?php echo tristate_svg( $tristate_card[0] ); // phpcs:ignore WordPress.Security.EscapeOutput -- static SVG ?></span>
 						<span class="ct-quick__label"><?php echo esc_html( $tristate_card[1] ); ?></span>
-						<a class="ct-quick__value" href="<?php echo esc_url( $tristate_card[3], array( 'tel', 'mailto', 'http', 'https' ) ); ?>"><?php echo esc_html( $tristate_card[2] ); ?></a>
+						<a class="ct-quick__value card-link" href="<?php echo esc_url( $tristate_card[3], array( 'tel', 'mailto', 'http', 'https' ) ); ?>"><?php echo esc_html( $tristate_card[2] ); ?></a>
 					</li>
 				<?php endforeach; ?>
 			</ul>
