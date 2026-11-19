@@ -169,6 +169,28 @@ function tristate_flag_mail_failure( $post_id, $sent ) {
 	}
 }
 
+/**
+ * Whether a confirmation email may go to this visitor-supplied address.
+ *
+ * The address is unverified, so a script could aim the forms at strangers and
+ * make info@ send them mail. Caps it at 3 an hour per address and per IP; the
+ * staff notification and the saved entry are unaffected.
+ */
+function tristate_may_confirm( $email ) {
+	$ip   = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+	$keys = array( 'tristate_confirm_' . md5( strtolower( $email ) ), 'tristate_confirm_ip_' . md5( $ip ) );
+
+	foreach ( $keys as $key ) {
+		if ( (int) get_transient( $key ) >= 3 ) {
+			return false;
+		}
+	}
+	foreach ( $keys as $key ) {
+		set_transient( $key, (int) get_transient( $key ) + 1, HOUR_IN_SECONDS );
+	}
+	return true;
+}
+
 /** Admin list: a red label on entries whose notification email failed. */
 function tristate_mail_failed_label( $post_id ) {
 	if ( get_post_meta( $post_id, '_mail_failed', true ) ) {

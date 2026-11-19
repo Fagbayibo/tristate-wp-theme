@@ -138,18 +138,15 @@ function tristate_handle_message() {
 	tristate_flag_mail_failure( $post_id, $sent );
 
 	// To the sender.
-	if ( $post_id ) {
+	if ( $post_id && tristate_may_confirm( $email ) ) {
 		tristate_send_mail( array(
 			'to'       => $email,
 			'subject'  => 'We have received your message',
 			'heading'  => 'Thank you for reaching out',
+			// Nothing the visitor typed is echoed back: the address is unverified.
 			'paras'    => array(
-				sprintf( 'Dear %s,', $name ),
+				'Hello,',
 				'We have received your message and our team will get back to you by email or phone.',
-			),
-			'rows'     => array(
-				'Topic'   => $topic,
-				'Message' => $message,
 			),
 			'note'     => 'For emergencies, seek immediate medical care.',
 			'reply_to' => tristate_notify_email(),

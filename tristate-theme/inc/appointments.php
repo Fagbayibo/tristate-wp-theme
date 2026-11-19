@@ -136,13 +136,14 @@ function tristate_handle_appointment() {
 	tristate_flag_mail_failure( $post_id, $sent );
 
 	// To the patient, when they left an email (wording from the client's brief).
-	if ( $email && $post_id ) {
+	if ( $email && $post_id && tristate_may_confirm( $email ) ) {
 		tristate_send_mail( array(
 			'to'       => $email,
 			'subject'  => 'We have received your appointment request',
 			'heading'  => 'Your request has been received',
+			// Only values from the form's fixed lists: the address is unverified.
 			'paras'    => array(
-				sprintf( 'Dear %s,', $name ),
+				'Hello,',
 				'Your request has been received. We will contact you to arrange your appointment. Your appointment is confirmed only when you receive confirmation from us.',
 			),
 			'rows'     => array(
