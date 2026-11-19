@@ -167,14 +167,21 @@ update_post_meta( $legacy_id, '_elementor_data', wp_slash( $elementor_data ) );
    the theme picks their designed templates from the slug
    (tristate_current_landing_template()). */
 
-foreach ( array( 'About Us' => 'about-us', 'Our Services' => 'our-services', 'Contact Us' => 'contact-us' ) as $title => $slug ) {
-	$page_id = wp_insert_post( array(
+/* The theme creates its own pages on init (inc/pages.php), before this script
+   runs, so reuse a page that already exists instead of making a "-2" copy. */
+function tristate_seed_page( $title, $slug ) {
+	$page = get_page_by_path( $slug, OBJECT, 'page' );
+	return $page ? $page->ID : wp_insert_post( array(
 		'post_type'    => 'page',
 		'post_title'   => $title,
 		'post_name'    => $slug,
 		'post_status'  => 'publish',
 		'post_content' => 'Old Elementor content.',
 	) );
+}
+
+foreach ( array( 'About Us' => 'about-us', 'Our Services' => 'our-services', 'Contact Us' => 'contact-us' ) as $title => $slug ) {
+	$page_id = tristate_seed_page( $title, $slug );
 	update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
 	update_post_meta( $page_id, '_elementor_template_type', 'wp-page' );
 	update_post_meta( $page_id, '_elementor_version', '3.0.0' );
@@ -200,13 +207,7 @@ $service_pages = array(
 );
 
 foreach ( $service_pages as $title => $slug ) {
-	$page_id = wp_insert_post( array(
-		'post_type'    => 'page',
-		'post_title'   => $title,
-		'post_name'    => $slug,
-		'post_status'  => 'publish',
-		'post_content' => 'Old Elementor content.',
-	) );
+	$page_id = tristate_seed_page( $title, $slug );
 	update_post_meta( $page_id, '_elementor_edit_mode', 'builder' );
 	update_post_meta( $page_id, '_elementor_template_type', 'wp-page' );
 	update_post_meta( $page_id, '_elementor_version', '3.0.0' );
@@ -240,3 +241,8 @@ $add( 'News', '/our-blog/' );
 $add( 'Contact', '/contact-us/' );
 
 set_theme_mod( 'nav_menu_locations', array( 'primary' => $menu_id ) );
+
+/* Catch outgoing email locally (dev/mail-catcher.php) --------------------------- */
+
+wp_mkdir_p( WPMU_PLUGIN_DIR );
+copy( __DIR__ . '/mail-catcher.php', WPMU_PLUGIN_DIR . '/tristate-mail-catcher.php' );

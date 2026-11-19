@@ -111,21 +111,49 @@ function tristate_handle_appointment() {
 		),
 	) );
 
-	$body = sprintf(
-		"New appointment request\n\nName: %s\nPhone: %s\nEmail: %s\nService: %s\nWhere: %s\nPreferred date: %s\nPayment method: %s\n\nMessage:\n%s\n\nView all requests: %s",
-		$name,
-		$phone,
-		$email ? $email : '—',
-		$service_name,
-		$visit_name,
-		$date ? $date : '—',
-		$payment ? $payment : '—',
-		$message ? $message : '—',
-		admin_url( 'edit.php?post_type=tristate_appointment' )
-	);
-	// Lets staff answer straight from their inbox when the patient left an email.
-	$headers = $email ? array( 'Reply-To: ' . $email ) : array();
-	wp_mail( tristate_contact( 'email' ), sprintf( 'Appointment request: %s (%s)', $name, $service_name ), $body, $headers );
+	$date_text = $date ? wp_date( 'l j F Y', strtotime( $date ) ) : '';
+
+	// To staff. Replying goes straight to the patient when they left an email.
+	$sent = tristate_send_mail( array(
+		'to'       => tristate_notify_email(),
+		'subject'  => sprintf( 'Appointment request: %s, %s', $service_name, $visit_name ),
+		'heading'  => 'New appointment request',
+		'paras'    => array( sprintf( '%s asked for an appointment through the website.', $name ) ),
+		'rows'     => array(
+			'Name'           => $name,
+			'Phone'          => $phone,
+			'Email'          => $email,
+			'Service'        => $service_name,
+			'Where'          => $visit_name,
+			'Preferred date' => $date_text,
+			'Payment method' => $payment,
+			'Message'        => $message,
+		),
+		'button'   => array( 'Open appointment requests', admin_url( 'edit.php?post_type=tristate_appointment' ) ),
+		'note'     => $email ? 'Reply to this email to answer the patient directly.' : sprintf( 'No email was given: call the patient on %s.', $phone ),
+		'reply_to' => $email,
+	) );
+	tristate_flag_mail_failure( $post_id, $sent );
+
+	// To the patient, when they left an email (wording from the client's brief).
+	if ( $email && $post_id ) {
+		tristate_send_mail( array(
+			'to'       => $email,
+			'subject'  => 'We have received your appointment request',
+			'heading'  => 'Your request has been received',
+			'paras'    => array(
+				sprintf( 'Dear %s,', $name ),
+				'Your request has been received. We will contact you to arrange your appointment. Your appointment is confirmed only when you receive confirmation from us.',
+			),
+			'rows'     => array(
+				'Service'        => $service_name,
+				'Where'          => $visit_name,
+				'Preferred date' => $date_text,
+			),
+			'note'     => 'For emergencies, seek immediate medical care. Please do not send detailed medical records by email.',
+			'reply_to' => tristate_notify_email(),
+		) );
+	}
 
 	$respond( (bool) $post_id );
 }
@@ -153,6 +181,7 @@ add_action( 'manage_tristate_appointment_posts_custom_column', function ( $colum
 		if ( $email ) {
 			printf( '<br><a href="mailto:%1$s">%1$s</a>', esc_attr( $email ) );
 		}
+		tristate_mail_failed_label( $post_id );
 	} elseif ( 'visit' === $column ) {
 		$visit   = get_post_meta( $post_id, '_appt_visit', true );
 		$payment = get_post_meta( $post_id, '_appt_payment', true );

@@ -11,21 +11,30 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * The two hospitals, keyed for the appointment form: name, short name, area,
- * address (shown as selectable text and used for the map and directions).
+ * address (shown as selectable text and used for the map and directions), and
+ * the same address in parts for search engines (inc/seo.php).
  */
 function tristate_locations() {
 	return array(
 		'lekki'  => array(
-			'name'    => 'Tristate Hospital Lekki',
-			'short'   => 'Lekki',
-			'area'    => 'Lekki, Lagos',
-			'address' => 'Plot 6, Block 1A The Rock Dr, Lekki Phase 1, Lekki 106104, Lagos.',
+			'name'     => 'Tristate Hospital Lekki',
+			'short'    => 'Lekki',
+			'area'     => 'Lekki, Lagos',
+			'address'  => 'Plot 6, Block 1A The Rock Dr, Lekki Phase 1, Lekki 106104, Lagos.',
+			'street'   => 'Plot 6, Block 1A The Rock Dr, Lekki Phase 1',
+			'locality' => 'Lekki',
+			'region'   => 'Lagos',
+			'postcode' => '106104',
 		),
 		'ibadan' => array(
-			'name'    => 'Tristate Hospital Ibadan',
-			'short'   => 'Ibadan',
-			'area'    => 'Idi-Ape, Ibadan',
-			'address' => 'Tristate Hospital, American Quarters, Idi-Ape, Ibadan.',
+			'name'     => 'Tristate Hospital Ibadan',
+			'short'    => 'Ibadan',
+			'area'     => 'Idi-Ape, Ibadan',
+			'address'  => 'Tristate Hospital, American Quarters, Idi-Ape, Ibadan.',
+			'street'   => 'American Quarters, Idi-Ape',
+			'locality' => 'Ibadan',
+			'region'   => 'Oyo',
+			'postcode' => '',
 		),
 	);
 }
@@ -110,16 +119,42 @@ function tristate_handle_message() {
 		),
 	) );
 
-	$body = sprintf(
-		"New message from the website\n\nName: %s\nEmail: %s\nPhone: %s\nTopic: %s\n\n%s\n\nView all messages: %s",
-		$name,
-		$email,
-		$phone ? $phone : '—',
-		$topic,
-		$message,
-		admin_url( 'edit.php?post_type=tristate_message' )
-	);
-	wp_mail( tristate_contact( 'email' ), sprintf( 'Website message: %s', $topic ), $body, array( 'Reply-To: ' . $name . ' <' . $email . '>' ) );
+	// To staff; replying goes straight to the sender.
+	$sent = tristate_send_mail( array(
+		'to'       => tristate_notify_email(),
+		'subject'  => sprintf( 'Website message: %s, from %s', $topic, $name ),
+		'heading'  => 'New message from the website',
+		'rows'     => array(
+			'Name'    => $name,
+			'Email'   => $email,
+			'Phone'   => $phone,
+			'Topic'   => $topic,
+			'Message' => $message,
+		),
+		'button'   => array( 'Open messages', admin_url( 'edit.php?post_type=tristate_message' ) ),
+		'note'     => 'Reply to this email to answer the sender directly.',
+		'reply_to' => $email,
+	) );
+	tristate_flag_mail_failure( $post_id, $sent );
+
+	// To the sender.
+	if ( $post_id ) {
+		tristate_send_mail( array(
+			'to'       => $email,
+			'subject'  => 'We have received your message',
+			'heading'  => 'Thank you for reaching out',
+			'paras'    => array(
+				sprintf( 'Dear %s,', $name ),
+				'We have received your message and our team will get back to you by email or phone.',
+			),
+			'rows'     => array(
+				'Topic'   => $topic,
+				'Message' => $message,
+			),
+			'note'     => 'For emergencies, seek immediate medical care.',
+			'reply_to' => tristate_notify_email(),
+		) );
+	}
 
 	$respond( (bool) $post_id );
 }
@@ -141,6 +176,7 @@ add_action( 'manage_tristate_message_posts_custom_column', function ( $column, $
 	if ( 'email' === $column ) {
 		$email = get_post_meta( $post_id, '_msg_email', true );
 		printf( '<a href="mailto:%1$s">%1$s</a>', esc_attr( $email ) );
+		tristate_mail_failed_label( $post_id );
 	} elseif ( 'phone' === $column ) {
 		$phone = get_post_meta( $post_id, '_msg_phone', true );
 		echo $phone ? sprintf( '<a href="tel:%1$s">%1$s</a>', esc_attr( $phone ) ) : '—';

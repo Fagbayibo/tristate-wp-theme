@@ -31,9 +31,13 @@ function tristate_leaders() {
 	);
 }
 
-/** Clinicians listed in the brief without a profile yet. */
+/** Clinicians listed in the brief whose titles and biographies are still to come. */
 function tristate_clinicians() {
-	return array( 'Dr Banji Idowu', 'Dr Ogbonnaya', 'Dr Oludara' );
+	return array(
+		array( 'name' => 'Dr Banji Idowu', 'photo' => 'banji-idowu.jpg' ),
+		array( 'name' => 'Dr Ogbonnaya', 'photo' => 'ogbonnaya.jpg' ),
+		array( 'name' => 'Dr Oludara', 'photo' => 'oludara.jpg' ),
+	);
 }
 
 /**

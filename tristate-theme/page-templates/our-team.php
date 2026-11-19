@@ -44,12 +44,10 @@ get_header();
 			</ul>
 
 			<ul class="clinicians" data-reveal-stagger>
-				<?php foreach ( tristate_clinicians() as $tristate_name ) : ?>
-					<li class="person-card">
-						<?php tristate_portrait( $tristate_name, 'person-card__portrait' ); ?>
-						<div>
-							<h2 class="person-card__name"><?php echo esc_html( $tristate_name ); ?></h2>
-						</div>
+				<?php foreach ( tristate_clinicians() as $tristate_person ) : ?>
+					<li class="clinician">
+						<?php tristate_portrait( $tristate_person, 'clinician__photo' ); ?>
+						<h2 class="clinician__name"><?php echo esc_html( $tristate_person['name'] ); ?></h2>
 					</li>
 				<?php endforeach; ?>
 			</ul>
